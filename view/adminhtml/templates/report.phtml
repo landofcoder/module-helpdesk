@@ -1,0 +1,157 @@
+<?php 
+$list_ticket = $block->getSumTicket()->getData();
+$count = count($block->getSumTicket());   
+$ticketNetworks = $block->getlistTicket();
+$results = [];
+foreach ($ticketNetworks as $k => $v) {
+	foreach ($list_ticket as $_ticket) {
+		if($_ticket['status_id'] == $k){
+			$results[$k]['users'][] = $_ticket;
+			$results[$k]['value'] = count($results[$k]['users']); 
+			$results[$k]['label']  = $v;
+		}
+	}
+} 
+
+$items = array();
+foreach ($results as $key => $value) {
+	unset($value['users']);
+	array_push($items,$value);
+} 
+
+$data = json_encode($items);
+
+?>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<div class="mst_mv_wrapper">
+	<div class="fieldset mst_mv_fieldset">
+		<div class="col span_2_of_4">
+			<ul class="report_tickets">
+			    <li ><?php echo __('Total');?>: <span><?php echo $count; ?></span></li>
+			    <?php foreach ($items as $key => $_data) { ?>
+			    <li><?php echo $_data['label'];?>: <span><?php echo $_data['value'];  ?></span></li>
+			    <?php } ?>
+			</ul>
+
+		</div>
+		<div class="col span_2_of_4">
+			<div id="container">
+				<div id="tickets-status-chart"></div>
+			</div>
+		</div>	
+	</div>	
+	<div class="x_panel">
+	  <div class="x_title">
+	    <h2><?php echo __('Tickets Report Day '); ?></h2>
+	    <div class="clearfix"></div>
+	  </div>
+	  <div class="x_content2">
+	        <div id="ticketschart" style="width:100%; height:300px;"></div>
+	  </div>
+	</div>
+	<div class="x_panel">
+	  <div class="x_title">
+	    <h2><?php echo __('Tickets Report Month '); ?></h2>
+	    <div class="clearfix"></div>
+	  </div>
+	  <div class="x_content2">
+	        <div id="ticketschartmonth" style="width:100%; height:300px;"></div>
+	  </div>
+	</div>
+</div>
+<script>
+	require([
+		'jquery',
+		"Lof_HelpDesk/js/raphael",
+        "Lof_HelpDesk/js/morris",
+		'Lof_HelpDesk/js/highcharts' 
+		], function($){
+			jQuery(document).ready(function() { 
+				lineChart();
+		        lineChartMonth();
+		       // lineChartYear();
+		        $(window).resize(function() {
+		          window.lineChart.redraw();
+		          window.lineChartMonth.redraw();
+		          //window.lineChartYear.redraw();
+		        });
+		        function lineChart() {
+		          var day_data = JSON.parse('<?php echo $this->getTicketsReport(); ?>');
+		          window.lineChart =  Morris.Line({
+		            element: 'ticketschart',
+		            data: day_data,
+		            xkey: 'period',
+		            ykeys: ['tickets'],
+		            labels: ['Tickets'],
+		            parseTime: false,
+		            hoverCallback: function (index, options, default_content, data) {
+		                            return default_content;
+		            },
+		            xLabelMargin: 10,
+		            integerYLabels: true
+		          });           
+		        } 
+		        function lineChartMonth() {
+		          var day_data = JSON.parse('<?php echo $this->getTicketsReportMonth(); ?>');
+		          window.lineChart =  Morris.Line({
+		            element: 'ticketschartmonth',
+		            data: day_data,
+		            xkey: 'period',
+		            ykeys: ['tickets'],
+		            labels: ['Tickets'],
+		            parseTime: false,
+		            hoverCallback: function (index, options, default_content, data) {
+		                            return default_content;
+		            },
+		            xLabelMargin: 10,
+		            integerYLabels: true
+		          });           
+		        } 
+		        Morris.Donut({
+					element: 'tickets-status-chart',
+					data: <?php echo $data; ?>,
+					backgroundColor: '#ccc',
+					labelColor: '#060',
+					colors: [
+						'#9cca68',
+						'#6c96d0',
+						'#949fb1',
+						'#7c7c7c'
+					],
+					formatter: function (x) { return x + ""}
+				});
+				/*jQuery('#container').highcharts({
+					chart: {
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false,
+						type: 'pie'
+					},
+					title: {
+						text: '<?php //echo __('Ticket Report') ?>'
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: true,
+								format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+								style: {
+									color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+								}
+							}
+						}
+					},
+					series: [{
+						name: 'Total',
+						colorByPoint: true,
+						data: <?php //echo $data;?>
+					}]
+				});
+*/			});
+		});
+	</script>

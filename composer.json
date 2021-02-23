@@ -1,0 +1,35 @@
+{
+    "name": "landofcoder/module-helpdesk",
+    "description": "HelpDesk Extension for magento2",
+    "require": {
+        "landofcoder/module-all" : "1.*",
+        "landofcoder/module-setup" : "1.*"
+      },
+      "type": "magento2-module",
+      "version": "1.0.4",
+      "keywords": [
+        "landofcoder",
+        "landofcoder HelpDesk",
+        "HelpDesk magento 2",
+        "magento 2 HelpDesk",
+        "helpdesk magento 2",
+        "question and answers for magento 2"
+      ],
+      "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+      ],
+      "authors": [
+        {
+            "name": "Landofcoder",
+            "email": "landofcoder@gmail.com",
+            "role": "Magento 2 Lof HelpDesk"
+        }
+    ],
+    "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+        "Lof\\HelpDesk\\": ""
+    }
+    }
+}

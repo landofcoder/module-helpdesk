@@ -1,0 +1,32 @@
+<!--@subject {{var ticket.getEmailSubject()}} @-->
+{{var preheader_text | raw}}
+
+{{template config_path="design/email/header_template"}}
+
+{{var hidden_separator|raw}}
+<p>
+{{var ticket.subject}}<br>
+------------------------------<br><br>
+
+Ticket ID: {{var ticket.code}}<br>
+Name: {{var customer.name}}<br>
+Email address: {{var customer.email}}<br>
+Store: {{var store.getFrontendName()}}<br>
+Department: {{var ticket.department}}<br>
+Staff (Owner): {{var ticket.user_name}}<br>
+Status: {{var ticket.status}}<br>
+Priority: {{var ticket.priority}}<br>
+Created: {{var ticket.getCreatedAtFormated()}}<br>
+Updated: {{var ticket.getUpdatedAtFormated()}}<br>
+<br>
+
+{{depend ticket.getLastMessage().isInternal()}}
+== INTERNAL NOTE ==
+{{/depend}}
+</p>
+
+{{var ticket.getLastMessageHtmlText()|raw}}
+{{var ticket.getHistoryHtml()|raw}}
+{{var ticket.getHiddenCodeHtml()|raw}}
+
+{{template config_path="design/email/footer_template"}}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::helpdesk_elements" title="Lof HelpDesk">
+                    <resource id="Lof_HelpDesk::ticket" title="Ticket" sortOrder="10">
+                        <resource id="Lof_HelpDesk::ticket_edit" title="Edit Ticket" sortOrder="10" />
+                        <resource id="Lof_HelpDesk::ticket_save" title="Save Ticket" sortOrder="20" />
+                        <resource id="Lof_HelpDesk::ticket_delete" title="Delete Ticket" sortOrder="30" />
+                    </resource>
+                    <resource id="Lof_HelpDesk::spam" title="Spam" sortOrder="20">
+                        <resource id="Lof_HelpDesk::spam_edit" title="Edit Spam" sortOrder="10" />
+                        <resource id="Lof_HelpDesk::spam_save" title="Save Spam" sortOrder="20" />
+                        <resource id="Lof_HelpDesk::spam_delete" title="Delete Spam" sortOrder="30" />
+                    </resource>
+                    <resource id="Lof_HelpDesk::department" title="Department" sortOrder="30">
+                        <resource id="Lof_HelpDesk::department_edit" title="Edit Department" sortOrder="10" />
+                        <resource id="Lof_HelpDesk::department_save" title="Save Department" sortOrder="20" />
+                        <resource id="Lof_HelpDesk::department_delete" title="Delete Department" sortOrder="30" />
+                    </resource>
+                    <resource id="Lof_HelpDesk::permission" title="Permission" sortOrder="40">
+                        <resource id="Lof_HelpDesk::permission_edit" title="Edit Permission" sortOrder="10" />
+                        <resource id="Lof_HelpDesk::permission_save" title="Save Permission" sortOrder="20" />
+                        <resource id="Lof_HelpDesk::permission_delete" title="Delete Permission" sortOrder="30" />
+                    </resource>
+                     <resource id="Lof_HelpDesk::quickanswer" title="Quick Answer" sortOrder="50">
+                        <resource id="Lof_HelpDesk::quickanswer_edit" title="Edit Quick Answer" sortOrder="10" />
+                        <resource id="Lof_HelpDesk::quickanswer_save" title="Save Quick Answer" sortOrder="20" />
+                        <resource id="Lof_HelpDesk::quickanswer_delete" title="Delete Quick Answer" sortOrder="30" />
+                    </resource>
+                     <resource id="Lof_HelpDesk::chat" title="Chat" sortOrder="55">
+                        <resource id="Lof_HelpDesk::chat_edit" title="Edit Chat" sortOrder="10" />
+                        <resource id="Lof_HelpDesk::chat_save" title="Save Chat" sortOrder="20" />
+                        <resource id="Lof_HelpDesk::chat_delete" title="Delete Chat" sortOrder="30" />
+                    </resource>
+                    <resource id="Lof_HelpDesk::category" title="Category" sortOrder="60">
+                        <resource id="Lof_HelpDesk::category_edit" title="Edit Category" sortOrder="10" />
+                        <resource id="Lof_HelpDesk::category_save" title="Save Category" sortOrder="20" />
+                        <resource id="Lof_HelpDesk::category_delete" title="Delete Category" sortOrder="30" />
+                    </resource>
+                     <resource id="Lof_HelpDesk::report" title="Report" sortOrder="70" />
+                </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Lof_HelpDesk::config_helpdesk" title="Lof HelpDesk" sortOrder="1000"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

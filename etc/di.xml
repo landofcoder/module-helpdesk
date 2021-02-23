@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Landofcoder
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Landofcoder.com license that is
+ * available through the world-wide-web at this URL:
+ * http://landofcoder.com/license
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category   Landofcoder
+ * @package    Lof_HelpDesk
+ * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
+ * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Lof\HelpDesk\Api\TicketRepositoryInterface" type="Lof\HelpDesk\Model\TicketRepository" />
+    <preference for="Lof\HelpDesk\Api\TicketRepositoryInterface" type="Lof\HelpDesk\Model\TicketRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\TicketInterface" type="Lof\HelpDesk\Model\Data\Ticket"/>
+    <preference for="Lof\HelpDesk\Api\Data\TicketSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Lof\HelpDesk\Api\CategoryRepositoryInterface" type="Lof\HelpDesk\Model\CategoryRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\CategoryInterface" type="Lof\HelpDesk\Model\Data\Category"/>
+    <preference for="Lof\HelpDesk\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Lof\HelpDesk\Api\DepartmentRepositoryInterface" type="Lof\HelpDesk\Model\DepartmentRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\DepartmentInterface" type="Lof\HelpDesk\Model\Data\Department"/>
+    <preference for="Lof\HelpDesk\Api\Data\DepartmentSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Lof\HelpDesk\Api\QuickanswerRepositoryInterface" type="Lof\HelpDesk\Model\QuickanswerRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\QuickanswerInterface" type="Lof\HelpDesk\Model\Data\Quickanswer"/>
+    <preference for="Lof\HelpDesk\Api\Data\QuickanswerSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Lof\HelpDesk\Api\SpamRepositoryInterface" type="Lof\HelpDesk\Model\SpamRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\SpamInterface" type="Lof\HelpDesk\Model\Data\Spam"/>
+    <preference for="Lof\HelpDesk\Api\Data\SpamSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Lof\HelpDesk\Api\PermissionRepositoryInterface" type="Lof\HelpDesk\Model\PermissionRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\PermissionInterface" type="Lof\HelpDesk\Model\Data\Permission"/>
+    <preference for="Lof\HelpDesk\Api\Data\PermissionSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Lof\HelpDesk\Api\MessageRepositoryInterface" type="Lof\HelpDesk\Model\MessageRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\MessageInterface" type="Lof\HelpDesk\Model\Data\Message"/>
+    <preference for="Lof\HelpDesk\Api\Data\MessageSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+
+    <preference for="Lof\HelpDesk\Api\AttachmentRepositoryInterface" type="Lof\HelpDesk\Model\AttachmentRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\AttachmentInterface" type="Lof\HelpDesk\Model\Data\Attachment"/>
+    <preference for="Lof\HelpDesk\Api\Data\AttachmentSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Lof\HelpDesk\Api\LikeRepositoryInterface" type="Lof\HelpDesk\Model\LikeRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\LikeInterface" type="Lof\HelpDesk\Model\Data\Like"/>
+    <preference for="Lof\HelpDesk\Api\Data\LikeSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Lof\HelpDesk\Api\ChatRepositoryInterface" type="Lof\HelpDesk\Model\ChatRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\ChatInterface" type="Lof\HelpDesk\Model\Data\Chat"/>
+    <preference for="Lof\HelpDesk\Api\Data\ChatSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Lof\HelpDesk\Api\ChatMessageRepositoryInterface" type="Lof\HelpDesk\Model\ChatMessageRepository"/>
+    <preference for="Lof\HelpDesk\Api\Data\ChatMessageInterface" type="Lof\HelpDesk\Model\Data\ChatMessage"/>
+    <preference for="Lof\HelpDesk\Api\Data\ChatMessageSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+    <arguments>
+        <argument name="collections" xsi:type="array">
+            <item name="lofhelpdesk_ticket_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Ticket\Grid\Collection</item>
+            <item name="lofhelpdesk_category_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Category\Grid\Collection</item>
+            <item name="lofhelpdesk_department_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Department\Grid\Collection</item>
+            <item name="lofhelpdesk_permission_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Permission\Grid\Collection</item>
+            <item name="lofhelpdesk_spam_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Spam\Grid\Collection</item>
+            <item name="lofhelpdesk_quickanswer_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Quickanswer\Grid\Collection</item>
+            <item name="lofhelpdesk_chat_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Chat\Grid\Collection</item>
+        </argument>
+    </arguments>
+</type>
+    <type name="Lof\HelpDesk\Model\ResourceModel\Ticket\Grid\Collection">
+    <arguments>
+        <argument name="mainTable" xsi:type="string">lof_helpdesk_ticket</argument>
+        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_ticket_grid_collection</argument>
+        <argument name="eventObject" xsi:type="string">ticket_grid_collection</argument>
+        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Ticket</argument>
+    </arguments>
+    </type>
+    <type name="Lof\HelpDesk\Model\ResourceModel\Category\Grid\Collection">
+    <arguments>
+        <argument name="mainTable" xsi:type="string">lof_helpdesk_category</argument>
+        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_category_grid_collection</argument>
+        <argument name="eventObject" xsi:type="string">category_grid_collection</argument>
+        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Category</argument>
+    </arguments>
+    </type>
+    <type name="Lof\HelpDesk\Model\ResourceModel\Department\Grid\Collection">
+    <arguments>
+        <argument name="mainTable" xsi:type="string">lof_helpdesk_department</argument>
+        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_department_grid_collection</argument>
+        <argument name="eventObject" xsi:type="string">department_grid_collection</argument>
+        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Department</argument>
+    </arguments>
+    </type>
+    <type name="Lof\HelpDesk\Model\ResourceModel\Permission\Grid\Collection">
+    <arguments>
+        <argument name="mainTable" xsi:type="string">lof_helpdesk_permission</argument>
+        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_permission_grid_collection</argument>
+        <argument name="eventObject" xsi:type="string">permission_grid_collection</argument>
+        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Permission</argument>
+    </arguments>
+    </type>
+    <type name="Lof\HelpDesk\Model\ResourceModel\Spam\Grid\Collection">
+    <arguments>
+        <argument name="mainTable" xsi:type="string">lof_helpdesk_spam</argument>
+        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_spam_grid_collection</argument>
+        <argument name="eventObject" xsi:type="string">spam_grid_collection</argument>
+        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Spam</argument>
+    </arguments>
+    </type>
+    <type name="Lof\HelpDesk\Model\ResourceModel\Quickanswer\Grid\Collection">
+    <arguments>
+        <argument name="mainTable" xsi:type="string">lof_helpdesk_quickanswer</argument>
+        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_quickanswer_grid_collection</argument>
+        <argument name="eventObject" xsi:type="string">quickanswer_grid_collection</argument>
+        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Quickanswer</argument>
+    </arguments>
+    </type>
+    <type name="Lof\HelpDesk\Model\ResourceModel\Chat\Grid\Collection">
+    <arguments>
+        <argument name="mainTable" xsi:type="string">lof_helpdesk_chat</argument>
+        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_chat_grid_collection</argument>
+        <argument name="eventObject" xsi:type="string">chat_grid_collection</argument>
+        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Chat</argument>
+    </arguments>
+    </type>
+    <virtualType name="HelpDeskGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+    <arguments>
+        <argument name="appliers" xsi:type="array">
+            <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+            <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+        </argument>
+    </arguments>
+    </virtualType>
+    <virtualType name="TicketGridDataProvider" type="Lof\HelpDesk\Ui\DataProvider\HelpDesk\TicketDataProvider">
+    <arguments>
+        <argument name="filterPool" xsi:type="object" shared="false">HelpDeskGirdFilterPool</argument>
+    </arguments>
+    </virtualType>
+    <virtualType name="CategoryGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    <arguments>
+        <argument name="collection" xsi:type="object" shared="false">Lof\HelpDesk\Model\ResourceModel\Category\Collection</argument>
+        <argument name="filterPool" xsi:type="object" shared="false">HelpDeskGirdFilterPool</argument>
+    </arguments>
+    </virtualType>
+    <virtualType name="DepartmentGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    <arguments>
+        <argument name="collection" xsi:type="object" shared="false">Lof\HelpDesk\Model\ResourceModel\Department\Collection</argument>
+        <argument name="filterPool" xsi:type="object" shared="false">HelpDeskGirdFilterPool</argument>
+    </arguments>
+    </virtualType>
+    <virtualType name="PermissionGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    <arguments>
+        <argument name="collection" xsi:type="object" shared="false">Lof\HelpDesk\Model\ResourceModel\Permission\Collection</argument>
+        <argument name="filterPool" xsi:type="object" shared="false">HelpDeskGirdFilterPool</argument>
+    </arguments>
+    </virtualType>
+    <virtualType name="SpamGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    <arguments>
+        <argument name="collection" xsi:type="object" shared="false">Lof\HelpDesk\Model\ResourceModel\Spam\Collection</argument>
+        <argument name="filterPool" xsi:type="object" shared="false">HelpDeskGirdFilterPool</argument>
+    </arguments>
+    </virtualType>
+    <virtualType name="QuickanswerGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    <arguments>
+        <argument name="collection" xsi:type="object" shared="false">Lof\HelpDesk\Model\ResourceModel\Quickanswer\Collection</argument>
+        <argument name="filterPool" xsi:type="object" shared="false">HelpDeskGirdFilterPool</argument>
+    </arguments>
+    </virtualType>
+    <virtualType name="ChatGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    <arguments>
+        <argument name="collection" xsi:type="object" shared="false">Lof\HelpDesk\Model\ResourceModel\Chat\Collection</argument>
+        <argument name="filterPool" xsi:type="object" shared="false">HelpDeskGirdFilterPool</argument>
+    </arguments>
+    </virtualType>
+</config>

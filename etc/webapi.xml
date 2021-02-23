@@ -1,0 +1,333 @@
+<?xml version="1.0" ?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route method="POST" url="/V1/lof-helpdesk/lof_helpdesk_ticket/save">
+        <service class="Lof\HelpDesk\Api\TicketRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_ticket_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_ticket/search">
+        <service class="Lof\HelpDesk\Api\TicketRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_ticket_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_ticket/:TicketId">
+        <service class="Lof\HelpDesk\Api\TicketRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_ticket_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/lof_helpdesk_ticket/save/:TicketId">
+        <service class="Lof\HelpDesk\Api\TicketRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_ticket_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/lof_helpdesk_ticket/:TicketId">
+        <service class="Lof\HelpDesk\Api\TicketRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_ticket_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/lof_helpdesk_category">
+        <service class="Lof\HelpDesk\Api\CategoryRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_category_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_category/search">
+        <service class="Lof\HelpDesk\Api\CategoryRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_category_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_category/:CategoryId">
+        <service class="Lof\HelpDesk\Api\CategoryRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_category_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/lof_helpdesk_category/:CategoryId">
+        <service class="Lof\HelpDesk\Api\CategoryRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_category_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/lof_helpdesk_category/:CategoryId">
+        <service class="Lof\HelpDesk\Api\CategoryRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_category_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/lof_helpdesk_department">
+        <service class="Lof\HelpDesk\Api\DepartmentRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_department_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_department/search">
+        <service class="Lof\HelpDesk\Api\DepartmentRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_department_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_department/:DepartmentId">
+        <service class="Lof\HelpDesk\Api\DepartmentRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_department_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/lof_helpdesk_department/:DepartmentId">
+        <service class="Lof\HelpDesk\Api\DepartmentRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_department_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/lof_helpdesk_department/:DepartmentId">
+        <service class="Lof\HelpDesk\Api\DepartmentRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_department_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/lof_helpdesk_quickanswer">
+        <service class="Lof\HelpDesk\Api\QuickanswerRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_quickanswer_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_quickanswer/search">
+        <service class="Lof\HelpDesk\Api\QuickanswerRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_quickanswer_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_quickanswer/:QuickanswerId">
+        <service class="Lof\HelpDesk\Api\QuickanswerRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_quickanswer_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/lof_helpdesk_quickanswer/:QuickanswerId">
+        <service class="Lof\HelpDesk\Api\QuickanswerRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_quickanswer_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/lof_helpdesk_quickanswer/:QuickanswerId">
+        <service class="Lof\HelpDesk\Api\QuickanswerRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_quickanswer_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/lof_helpdesk_spam">
+        <service class="Lof\HelpDesk\Api\SpamRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_spam_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_spam/search">
+        <service class="Lof\HelpDesk\Api\SpamRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_spam_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_spam/:SpamId">
+        <service class="Lof\HelpDesk\Api\SpamRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_spam_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/lof_helpdesk_spam/:SpamId">
+        <service class="Lof\HelpDesk\Api\SpamRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_spam_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/lof_helpdesk_spam/:SpamId">
+        <service class="Lof\HelpDesk\Api\SpamRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_spam_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/lof_helpdesk_permission">
+        <service class="Lof\HelpDesk\Api\PermissionRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_permission_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_permission/search">
+        <service class="Lof\HelpDesk\Api\PermissionRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_permission_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_permission/:PermissionId">
+        <service class="Lof\HelpDesk\Api\PermissionRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_permission_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/lof_helpdesk_permission/:PermissionId">
+        <service class="Lof\HelpDesk\Api\PermissionRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_permission_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/lof_helpdesk_permission/:PermissionId">
+        <service class="Lof\HelpDesk\Api\PermissionRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_permission_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/lof_helpdesk_message">
+        <service class="Lof\HelpDesk\Api\MessageRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_message_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_message/search">
+        <service class="Lof\HelpDesk\Api\MessageRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_message_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/lof_helpdesk_message/:MessageId">
+        <service class="Lof\HelpDesk\Api\MessageRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_message_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/lof_helpdesk_message/:MessageId">
+        <service class="Lof\HelpDesk\Api\MessageRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_message_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/lof_helpdesk_message/:MessageId">
+        <service class="Lof\HelpDesk\Api\MessageRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::lof_helpdesk_message_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/attachment">
+        <service class="Lof\HelpDesk\Api\AttachmentRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::attachment_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/attachment/search">
+        <service class="Lof\HelpDesk\Api\AttachmentRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::attachment_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/attachment/:attachmentId">
+        <service class="Lof\HelpDesk\Api\AttachmentRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::attachment_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/attachment/:attachmentId">
+        <service class="Lof\HelpDesk\Api\AttachmentRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::attachment_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/attachment/:attachmentId">
+        <service class="Lof\HelpDesk\Api\AttachmentRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::attachment_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/like">
+        <service class="Lof\HelpDesk\Api\LikeRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::like_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/like/search">
+        <service class="Lof\HelpDesk\Api\LikeRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::like_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/like/:likeId">
+        <service class="Lof\HelpDesk\Api\LikeRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::like_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/like/:likeId">
+        <service class="Lof\HelpDesk\Api\LikeRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::like_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/like/:likeId">
+        <service class="Lof\HelpDesk\Api\LikeRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::like_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/chat">
+        <service class="Lof\HelpDesk\Api\ChatRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/chat/search">
+        <service class="Lof\HelpDesk\Api\ChatRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/chat/:chatId">
+        <service class="Lof\HelpDesk\Api\ChatRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/chat/:chatId">
+        <service class="Lof\HelpDesk\Api\ChatRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/chat/:chatId">
+        <service class="Lof\HelpDesk\Api\ChatRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_delete"/>
+        </resources>
+    </route>
+    <route method="POST" url="/V1/lof-helpdesk/chat_message">
+        <service class="Lof\HelpDesk\Api\ChatMessageRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_message_save"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/chat_message/search">
+        <service class="Lof\HelpDesk\Api\ChatMessageRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_message_view"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/lof-helpdesk/chat_message/:chatMessageId">
+        <service class="Lof\HelpDesk\Api\ChatMessageRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_message_view"/>
+        </resources>
+    </route>
+    <route method="PUT" url="/V1/lof-helpdesk/chat_message/:chatMessageId">
+        <service class="Lof\HelpDesk\Api\ChatMessageRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_message_update"/>
+        </resources>
+    </route>
+    <route method="DELETE" url="/V1/lof-helpdesk/chat_message/:chatMessageId">
+        <service class="Lof\HelpDesk\Api\ChatMessageRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Lof_HelpDesk::chat_message_delete"/>
+        </resources>
+    </route>
+</routes>

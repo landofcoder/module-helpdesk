@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Landofcoder
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Landofcoder.com license that is
+ * available through the world-wide-web at this URL:
+ * http://landofcoder.com/license
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   Landofcoder
+ * @package    Lof_HelpDesk
+ * @copyright  Copyright (c) 2017 Landofcoder (http://www.landofcoder.com/)
+ * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<lofhelpdesk>
+			<general_settings>
+				<enable>1</enable>
+			</general_settings>
+			<email_settings>
+				<enable_testmode>1</enable_testmode>
+				<sender_email_identity>general</sender_email_identity>
+				<new_ticket_template>lofhelpdesk_email_settings_new_message_template</new_ticket_template>
+				<new_message_template>lofhelpdesk_email_settings_new_message_template</new_message_template>
+				<status_ticket_template>lofhelpdesk_email_settings_status_ticket_template</status_ticket_template>
+				<reminder_template>lofhelpdesk_email_settings_reminder_template</reminder_template>
+				<assign_ticket_template>lofhelpdesk_email_settings_assign_ticket_template</assign_ticket_template>
+			</email_settings>
+			<automation>
+				<auto_close_ticket>7</auto_close_ticket>
+				<auto_reminder_ticket>3</auto_reminder_ticket>
+			</automation>
+			<chat>
+				<enable>1</enable>
+				<text_label>Chat With Us</text_label>
+				<background_color>#293239</background_color>
+			</chat>
+		</lofhelpdesk>
+	</default>
+</config>	

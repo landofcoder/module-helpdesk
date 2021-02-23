@@ -1,0 +1,13 @@
+<!--@subject {{var ticket.getEmailSubject()}} @-->
+{{var preheader_text | raw}}
+
+{{template config_path="design/email/header_template"}}
+
+The ticket {{var data.nameticket}} is change status on the support ticket in the <b>{{var data.category}}</b> category from <i>{{var data.namestore}}</i>. Here's what they said:
+<div style="padding-left:20px;margin:0;border-left:2px solid #ccc;color:#888">
+Status :{{var data.status|raw}}
+</div>
+<p style="padding:20px 0 0 0;margin:0"><b>'.__('Do not reply to this email!').'</b></p>
+<br>
+<a style="color:#5ac17f" href="{{var data.urllogin}}">Click here to sign in and reply to this ticket</a>
+{{template config_path="design/email/footer_template"}}

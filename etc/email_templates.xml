@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Landofcoder
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Landofcoder.com license that is
+ * available through the world-wide-web at this URL:
+ * http://landofcoder.com/license
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   Landofcoder
+ * @package    Lof_HelpDesk
+ * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
+ * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="lofhelpdesk_email_settings_new_ticket_template" label="New Ticket" file="notification_new_ticket_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
+    <template id="lofhelpdesk_email_settings_new_message_template" label="New Message" file="notification_new_message_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
+    <template id="lofhelpdesk_email_settings_status_ticket_template" label="Status Message" file="notification_status_ticket_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
+    <template id="lofhelpdesk_email_settings_reminder_template" label="Ticket Reminder" file="notification_reminder_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
+    <template id="lofhelpdesk_email_settings_assign_ticket_template" label="Assign Ticket" file="notification_assign_ticket_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
+</config>

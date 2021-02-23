@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Landofcoder
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Landofcoder.com license that is
+ * available through the world-wide-web at this URL:
+ * http://landofcoder.com/license
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   Landofcoder
+ * @package    Lof_HelpDesk
+ * @copyright  Copyright (c) 2017 Landofcoder (http://www.landofcoder.com/)
+ * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+	<menu>
+		<add id="Lof_HelpDesk::helpdesk" sortOrder="130" title="Help Desk" module="Lof_HelpDesk" resource="Magento_Backend::helpdesk_elements" parent="Lof_All::lof_all"/>  
+		<add id="Lof_HelpDesk::ticket" title="Ticket" module="Lof_HelpDesk" sortOrder="20" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/ticket/index" resource="Lof_HelpDesk::ticket"/>
+		<add id="Lof_HelpDesk::category" title="Category" module="Lof_HelpDesk" sortOrder="30" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/category/index" resource="Lof_HelpDesk::category"/>
+		<add id="Lof_HelpDesk::department" title="Department" module="Lof_HelpDesk" sortOrder="40" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/department/index" resource="Lof_HelpDesk::department"/>
+		<add id="Lof_HelpDesk::permission" title="Permission" module="Lof_HelpDesk" sortOrder="50" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/permission/index" resource="Lof_HelpDesk::permission"/>
+		<add id="Lof_HelpDesk::spam" title="Spam" module="Lof_HelpDesk" sortOrder="60" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/spam/index" resource="Lof_HelpDesk::spam"/>
+		<add id="Lof_HelpDesk::quickanswer" title="Quick Answer" module="Lof_HelpDesk" sortOrder="70" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/quickanswer/index" resource="Lof_HelpDesk::quickanswer"/>
+		<add id="Lof_HelpDesk::chat" title="Chat" module="Lof_HelpDesk" sortOrder="75" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/chat/index" resource="Lof_HelpDesk::chat"/>
+		<add id="Lof_HelpDesk::report_helpdesk" title="Report" module="Lof_HelpDesk" sortOrder="80" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/report/index" resource="Lof_HelpDesk::report"/>
+		<add id="Lof_HelpDesk::settings" title="Configuration" module="Lof_HelpDesk" sortOrder="150" action="adminhtml/system_config/edit/section/lofhelpdesk" resource="Lof_HelpDesk::config_helpdesk" parent="Lof_HelpDesk::helpdesk"/>
+		</menu>
+</config>
