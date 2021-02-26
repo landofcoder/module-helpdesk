@@ -16,7 +16,7 @@
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2021 Landofcoder (https://landofcoder.com/)
- * @license    https://landofcoder.com/LICENSE-1.0.html
+ * @license    https://landofcoder.com/license-1-0
  */
 
 namespace Lof\HelpDesk\Block\Adminhtml\Ticket;
