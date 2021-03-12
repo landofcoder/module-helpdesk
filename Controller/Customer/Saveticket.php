@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2021 Landofcoder (https://landofcoder.com/)
@@ -22,6 +22,7 @@
 namespace Lof\HelpDesk\Controller\Customer;
 
 use Magento\Customer\Model\CustomerFactory;
+use Magento\Framework\Filesystem;
 
 class Saveticket extends \Magento\Framework\App\Action\Action
 {
@@ -35,7 +36,7 @@ class Saveticket extends \Magento\Framework\App\Action\Action
      */
     protected $session;
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $_fileSystem;
     /**
@@ -66,10 +67,9 @@ class Saveticket extends \Magento\Framework\App\Action\Action
         \Lof\HelpDesk\Model\Sender $sender,
         \Lof\HelpDesk\Helper\Data $helper,
         \Lof\HelpDesk\Model\Spam $spam,
-        \Magento\Framework\Filesystem $filesystem,
+        Filesystem $filesystem,
         CustomerFactory $customerFactory
-    )
-    {
+    ) {
         $this->spam = $spam;
         $this->helper = $helper;
         $this->resultPageFactory = $resultPageFactory;
@@ -82,14 +82,13 @@ class Saveticket extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-
         $customerSession = $this->session;
-         $customerId = $customerSession->getId();
+        $customerId = $customerSession->getId();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $data = $this->getRequest()->getPostValue();
 
         if ($data) {
-             $data['customer_id'] = $customerId;
+            $data['customer_id'] = $customerId;
             $data['customer_name'] = $customerSession->getCustomer()->getName();
             $data['customer_email'] = $customerSession->getCustomer()->getEmail();
             $data['customer_name'] = $data['name'];
@@ -100,11 +99,11 @@ class Saveticket extends \Magento\Framework\App\Action\Action
             $user = $objectManager->create('\Magento\User\Model\User');
             $store = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
             $customerObj = $this->customerFactory->create()->getCollection()->addFieldToFilter('email', $data['email']);
-            if($customerObj->getSize()>0){
-                foreach ($customerObj->getData() as $customer){
+            if ($customerObj->getSize()>0) {
+                foreach ($customerObj->getData() as $customer) {
                     $data['customer_id'] =$customer['entity_id'];
                 }
-            }else{
+            } else {
                 $data['customer_id'] = $customerId;
             }
             $data['store_id'] = $store->getStore()->getId();
@@ -129,7 +128,6 @@ class Saveticket extends \Magento\Framework\App\Action\Action
             }
 
             foreach ($this->spam->getCollection()->addFieldToFilter('is_active', 1) as $key => $spam) {
-
                 if ($this->helper->checkSpam($spam, $data)) {
                     $this->messageManager->addError(__('You are spamer'));
                     $this->_redirect('lofhelpdesk/ticket');
@@ -141,5 +139,4 @@ class Saveticket extends \Magento\Framework\App\Action\Action
             $this->_redirect($data['url']);
         }
     }
-
 }

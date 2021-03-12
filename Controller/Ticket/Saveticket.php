@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2021 Landofcoder (https://landofcoder.com/)
@@ -68,8 +68,7 @@ class Saveticket extends \Magento\Framework\App\Action\Action
         \Magento\User\Model\UserFactory $userFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManagement,
         \Lof\HelpDesk\Model\DepartmentFactory $departmentFactory
-    )
-    {
+    ) {
         $this->spam = $spam;
         $this->helper = $helper;
         $this->resultPageFactory = $resultPageFactory;
@@ -86,7 +85,6 @@ class Saveticket extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-
         $customerSession = $this->session;
         $customerId = $customerSession->getId();
 
@@ -120,7 +118,6 @@ class Saveticket extends \Magento\Framework\App\Action\Action
                 }
             }
 
-
             $mediaDirectory = $this->_fileSystem->getDirectoryRead(DirectoryList::MEDIA);
             $mediaFolder = 'lof/helpdesk/';
             $path = $mediaDirectory->getAbsolutePath($mediaFolder);
@@ -136,12 +133,10 @@ class Saveticket extends \Magento\Framework\App\Action\Action
                 unset($data['attachment']);
             }
             if ($image = $this->uploadImage('attachment')) {
-
                 $data['attachment'] = $image['attachment'];
                 $data['attachment_name'] = $image['attachment_name'];
             }
             foreach ($this->spam->getCollection()->addFieldToFilter('is_active', 1) as $key => $spam) {
-
                 if ($this->helper->checkSpam($spam, $data)) {
                     $this->messageManager->addError(__('You are spamer'));
                     $this->_redirect('lofhelpdesk/ticket');
@@ -178,17 +173,16 @@ class Saveticket extends \Magento\Framework\App\Action\Action
             $mediaDirectory = $this->_fileSystem->getDirectoryRead(DirectoryList::MEDIA);
             $mediaFolder = 'lof/helpdesk/';
             try {
-
                 $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
                 $uploader->setAllowRenameFiles(true);
                 $uploader->setFilesDispersion(false);
-                $result = $uploader->save($mediaDirectory->getAbsolutePath($mediaFolder)
+                $result = $uploader->save(
+                    $mediaDirectory->getAbsolutePath($mediaFolder)
                 );
                 $image['attachment'] = $mediaFolder . str_replace(' ', '_', $result['name']);
                 $image['attachment_name'] = str_replace(' ', '_', $result['name']);
                 return $image;
             } catch (\Exception $e) {
-
                 $this->_logger->critical($e);
                 $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('*/*/edit', ['ticket_id' => $this->getRequest()->getParam('ticket_id')]);

@@ -21,7 +21,7 @@
 
 namespace Lof\HelpDesk\Model;
 
-use Magento\TestFramework\Inspection\Exception;
+use Magento\Store\Model\ScopeInterface;
 
 class Sender
 {
@@ -73,9 +73,7 @@ class Sender
         \Lof\HelpDesk\Model\Config $config,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Lof\HelpDesk\Helper\Data $helper
-
-    )
-    {
+    ) {
         $this->messageManager = $messageManager;
         $this->config = $config;
         $this->inlineTranslation = $inlineTranslation;
@@ -84,14 +82,13 @@ class Sender
         $this->helper = $helper;
     }
 
-
     public function sendEmailTicket($data)
     {
         try {
             $postObject = new \Magento\Framework\DataObject();
 
             $postObject->setData($data);
-            $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+            $storeScope = ScopeInterface::SCOPE_STORE;
 
             $transport = $this->_transportBuilder
                 ->setTemplateIdentifier($this->helper->getConfig('email_settings/new_message_template'))
@@ -99,7 +96,8 @@ class Sender
                     [
                         'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                         'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                    ])
+                    ]
+                )
                 ->setTemplateVars(['data' => $postObject])
                 ->setFrom($this->helper->getConfig('email_settings/sender_email_identity'))
                 ->addTo($data['customer_email'], $data['customer_name'])
@@ -119,12 +117,11 @@ class Sender
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
             return;
-        };
+        }
     }
 
     public function sendEmail($data)
     {
-
         $arg = $emailData = [];
         $emailData['store_id'] = $data['store_id'];
         $emailData['saved_subject'] = $data['subject'];
@@ -154,17 +151,14 @@ class Sender
 
         $transport = $this->transportBuilder->getTransport();
         return $transport;
-
-
     }
 
     public function statusTicket($data)
     {
-
         try {
             $postObject = new \Magento\Framework\DataObject();
             $postObject->setData($data);
-            $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+            $storeScope = ScopeInterface::SCOPE_STORE;
 
             $transport = $this->_transportBuilder
                 ->setTemplateIdentifier($this->helper->getConfig('email_settings/status_ticket_template'))
@@ -172,7 +166,8 @@ class Sender
                     [
                         'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                         'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                    ])
+                    ]
+                )
                 ->setTemplateVars(['data' => $postObject])
                 ->setFrom($this->helper->getConfig('email_settings/sender_email_identity'))
                 ->addTo($data['customer_email'])
@@ -194,16 +189,14 @@ class Sender
             );
             return;
         }
-
     }
 
     public function assignTicket($data)
     {
-
         try {
             $postObject = new \Magento\Framework\DataObject();
             $postObject->setData($data);
-            $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+            $storeScope = ScopeInterface::SCOPE_STORE;
 
             $transport = $this->_transportBuilder
                 ->setTemplateIdentifier($this->helper->getConfig('email_settings/assign_ticket_template'))
@@ -211,7 +204,8 @@ class Sender
                     [
                         'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                         'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                    ])
+                    ]
+                )
                 ->setTemplateVars(['data' => $postObject])
                 ->setFrom($this->helper->getConfig('email_settings/sender_email_identity'))
                 ->addTo($data['customer_email'])
@@ -233,18 +227,16 @@ class Sender
             );
             return;
         }
-
     }
 
     public function reminderTicket($data)
     {
-
         foreach ($data['email_to'] as $key => $email_to) {
             try {
                 $postObject = new \Magento\Framework\DataObject();
 
                 $postObject->setData($data);
-                $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+                $storeScope = ScopeInterface::SCOPE_STORE;
 
                 $transport = $this->_transportBuilder
                     ->setTemplateIdentifier($this->helper->getConfig('email_settings/reminder_template'))
@@ -252,7 +244,8 @@ class Sender
                         [
                             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                             'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                        ])
+                        ]
+                    )
                     ->setTemplateVars(['data' => $postObject])
                     ->setFrom($this->helper->getConfig('email_settings/sender_email_identity'))
                     ->addTo($email_to)
@@ -280,59 +273,57 @@ class Sender
 
     public function newTicket($data)
     {
-        foreach ($data['email_to'] as $key => $email_to) {
-            if ($email_to) {
-                try {
-                    $postObject = new \Magento\Framework\DataObject();
-                    $data['title'] = __('Send Ticket');
-                    $postObject->setData($data);
-                    $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+        if ($data) {
+            try {
+                $postObject = new \Magento\Framework\DataObject();
+                $data['title'] = __('Send Ticket');
+                $postObject->setData($data);
+                $storeScope = ScopeInterface::SCOPE_STORE;
 
-                    $transport = $this->_transportBuilder
+                $transport = $this->_transportBuilder
                         ->setTemplateIdentifier($this->helper->getConfig('email_settings/new_ticket_template'))
                         ->setTemplateOptions(
                             [
                                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND, // this is using frontend area to get the template file
                                 'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                            ])
+                            ]
+                        )
                         ->setTemplateVars(['data' => $postObject])
-                        ->setFrom($this->helper->getConfig('email_settings/sender_email_identity'))
-                        ->addTo($email_to)
-                        ->setReplyTo($email_to)
+                        ->setFrom('landofcoder@gmail')
+                        ->addTo($this->helper->getConfig('email_settings/sender_email_identity'))
+                        ->setReplyTo($this->helper->getConfig('email_settings/sender_email_identity'))
                         ->getTransport();
 
-                    try {
-                        $transport->sendMessage();
-                        $this->inlineTranslation->resume();
-                        $this->messageManager->addSuccess(
-                            __('Thank you for send ticket')
-                        );
-
-                    } catch (\Exception $e) {
-                        $error = true;
-                        $this->messageManager->addError(
-                            __('We can\'t process your request right now. Sorry, that\'s all we know.')
-                        );
-                    }
-                } catch (\Exception $e) {
+                try {
+                    $transport->sendMessage();
                     $this->inlineTranslation->resume();
+                    $this->messageManager->addSuccess(
+                        __('Thank you for send ticket')
+                    );
+                } catch (\Exception $e) {
+                    $error = true;
                     $this->messageManager->addError(
                         __('We can\'t process your request right now. Sorry, that\'s all we know.')
                     );
-                    return;
                 }
+            } catch (\Exception $e) {
+                $this->inlineTranslation->resume();
+                $this->messageManager->addError(
+                    __('We can\'t process your request right now. Sorry, that\'s all we know.')
+                );
+                return;
             }
         }
     }
 
     public function newMessage($data)
     {
-        foreach ($data['email_to'] as $key => $email_to) {
+        if ($data) {
             try {
                 $postObject = new \Magento\Framework\DataObject();
 
                 $postObject->setData($data);
-                $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+                $storeScope = ScopeInterface::SCOPE_STORE;
 
                 $transport = $this->_transportBuilder
                     ->setTemplateIdentifier($this->helper->getConfig('email_settings/new_message_template'))
@@ -340,11 +331,12 @@ class Sender
                         [
                             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
                             'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                        ])
+                        ]
+                    )
                     ->setTemplateVars(['data' => $postObject])
                     ->setFrom($this->helper->getConfig('email_settings/sender_email_identity'))
-                    ->addTo($email_to)
-                    ->setReplyTo($email_to)
+                    ->addTo($data['email'])
+                    ->setReplyTo($data['email'])
                     ->getTransport();
                 try {
                     $transport->sendMessage();
@@ -364,7 +356,6 @@ class Sender
             }
         }
     }
-
 
     /**
      * Get email body
@@ -387,7 +378,6 @@ class Sender
      */
     public function getEmailSubject($queue)
     {
-
         if ($this->emailSubject == null) {
             $this->getPreviewEmail($queue);
             return $this->transportBuilder->getMessageSubject();
@@ -416,7 +406,6 @@ class Sender
      */
     public function getMessageSubject($queue)
     {
-
         if ($this->messageSubject == null) {
             $this->getPreview($queue);
             return $this->transportBuilder->getMessageSubject();
