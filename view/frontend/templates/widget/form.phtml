@@ -14,7 +14,7 @@ $submit_background_color = $this->getData('submit_background_color');
 $display_type            = $this->getData('display_type');
 $position                = $this->getData('position');
 if(!$position) {
-	$position                = $this->getData('position_popup');	
+	$position                = $this->getData('position_popup');
 }
 $category  				 = $this->getData('category');
 $status 				 = $this->getData('status');
@@ -41,7 +41,7 @@ if($width && $display_type =='tab_animation'){
 
 if($style!='') $style = 'style="' . $style . '"';
 
-$url = $helper->getStoreUrl(); 
+$url = $helper->getStoreUrl();
 ?>
 
 
@@ -71,7 +71,7 @@ $url = $helper->getStoreUrl();
 		<div class="before-form-content">
 			<?php echo $before_form_content; ?>
 		</div>
-	<?php } ?>	
+	<?php } ?>
 		<form id="helpdesk<?php echo $modId ?>" class="helpdesk form" action="<?php echo $block->getFormAction(); ?>" id="helpdesk-form<?php echo $modId ?>" method="post" data-hasrequired="<?php echo __('* Required Fields') ?>" data-mage-init='{"validation":{}}' enctype="multipart/form-data">
 			<div class="form-list row">
 				<div class="field col-sm-12 ">
@@ -225,12 +225,12 @@ require([
 					$('#lofform<?php echo $modId ?>').css({'width':orgFormWidth+'px','right':'-'+blockWidth+'px'});
 					<?php } ?>
 					<?php if($position == 'left'){ ?>
-					$('#lofform<?php echo $modId ?>').css({'width':orgFormWidth+'px','left':'-'+blockWidth+'px'});			
+					$('#lofform<?php echo $modId ?>').css({'width':orgFormWidth+'px','left':'-'+blockWidth+'px'});
 					<?php } ?>
 				}
 
 			}).resize();
 			<?php } ?>
 		});
-	});	
+	});
 </script>

@@ -40,7 +40,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_filterProvider;
 
-
     /**
      * Core registry
      *
@@ -87,8 +86,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Lof\HelpDesk\Model\Department $department,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Framework\Registry $registry
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->department = $department;
         $this->_storeManager = $storeManager;
@@ -117,7 +115,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         foreach ($department->getCollection() as $key => $_department) {
             if (is_array($_department->getCategoryId()) && in_array($category_id, $_department->getCategoryId())) {
-
                 return $_department->getDepartmentId();
             }
         }
@@ -180,7 +177,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getOrderTicket($orderid)
     {
-
         $order = $this->orderCollectionFactory->create()->addFieldToFilter('entity_id', $orderid)->getFirstItem();
         if (!is_object($order)) {
             $order = $this->orderFactory->create()->load($order);
@@ -338,7 +334,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $result = $this->scopeConfig->getValue(
             'lofhelpdesk/' . $key,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store);
+            $store
+        );
         return $result;
     }
 
@@ -367,8 +364,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $format = \IntlDateFormatter::SHORT,
         $showTime = false,
         $timezone = null
-    )
-    {
+    ) {
         $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date);
         return $this->_localeDate->formatDateTime(
             $date,
@@ -381,7 +377,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function subString($text, $length = 100, $replacer = '...', $is_striped = true)
     {
-        if ($length == 0) return $text;
+        if ($length == 0) {
+            return $text;
+        }
         $text = ($is_striped == true) ? strip_tags($text) : $text;
         if (strlen($text) <= $length) {
             return $text;
@@ -395,7 +393,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $link = '';
         $route = $this->getConfig('general_settings/route');
-        if ($route) $link = $route . '/';
+        if ($route) {
+            $link = $route . '/';
+        }
         if (is_array($cat)) {
             $link .= $cat['identifier'];
         } else {
@@ -408,7 +408,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $link = '';
         $route = $this->getConfig('general_settings/route');
-        if ($route) $link = $route . '/';
+        if ($route) {
+            $link = $route . '/';
+        }
         $link .= 'question/id';
         return $this->_getUrl($link) . $_question->getId();
     }
@@ -423,7 +425,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         return $url . $urlPrefix . 'tag/' . $alias;
     }
-
 
     public function nicetime($timestamp, $detailLevel = 1)
     {
@@ -496,9 +497,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function formatDateTime($time)
     {
         return $this->formatDate(
-                $time,
-                \IntlDateFormatter::MEDIUM
-            ) . ' ' . $this->formatTime(
+            $time,
+            \IntlDateFormatter::MEDIUM
+        ) . ' ' . $this->formatTime(
                 $time,
                 \IntlDateFormatter::SHORT
             );
