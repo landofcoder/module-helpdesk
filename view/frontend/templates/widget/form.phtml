@@ -13,8 +13,8 @@ $submit_text_color       = $this->getData('submit_text_color');
 $submit_background_color = $this->getData('submit_background_color');
 $display_type            = $this->getData('display_type');
 $position                = $this->getData('position');
-if(!$position) {
-	$position                = $this->getData('position_popup');
+if (!$position) {
+    $position                = $this->getData('position_popup');
 }
 $category  				 = $this->getData('category');
 $status 				 = $this->getData('status');
@@ -22,56 +22,66 @@ $priority 				 = $this->getData('priority');
 
 $popup_width = 500;
 $popup_height = 600;
-if(!$priority) {
- $priority = 0;
+if (!$priority) {
+    $priority = 0;
 }
-$before_form_content     = $helper->filter($this->getData('before_form_content'));
-$after_form_content      = $helper->filter($this->getData('after_form_content'));
+//$before_form_content     = $helper->filter($this->getData('before_form_content'));
+//$after_form_content      = $helper->filter($this->getData('after_form_content'));
 $modId                   = time() . rand();
 $width = 600;
 $style                   = '';
-if($width && $display_type =='tab_animation'){
-	$style .= 'width: ' . $width . 'px;';
-	if($position == 'right'){
-		$style .= 'right: -' . ($width*2) . 'px';
-	} else {
-		$style .= 'left: -' . ($width*2) . 'px';
-	}
+if ($width && $display_type =='tab_animation') {
+    $style .= 'width: ' . $width . 'px;';
+    if ($position == 'right') {
+        $style .= 'right: -' . ($width*2) . 'px';
+    } else {
+        $style .= 'left: -' . ($width*2) . 'px';
+    }
 }
 
-if($style!='') $style = 'style="' . $style . '"';
+if ($style!='') {
+    $style = 'style="' . $style . '"';
+}
 
 $url = $helper->getStoreUrl();
 ?>
 
 
-<div id="lofform<?php echo $modId ?>" class="helpdesk-form <?php if($display_type == 'tab_animation') { echo 'animation animation-' . $position; }?>  <?php echo $prefix_class ?>"  <?php echo $style ?> >
-	<?php if($display_type == 'tab_animation' || $display_type == 'tab_popup') { ?>
-	<div class="helpdesk_button <?php if($display_type != 'button_popup') echo 'panelbutton ';  ?> <?php if($display_type == 'tab_popup')  echo 'tab_popup '.$position;  ?>">
-		<span><?php if($button_text) {
-			echo $button_text;
-		} else {
-			echo "Contact Us";
-		} ?></span>
+<div id="lofform<?php echo $modId ?>" class="helpdesk-form <?php if ($display_type == 'tab_animation') {
+    echo 'animation animation-' . $position;
+}?>  <?php echo $prefix_class ?>"  <?php echo $style ?> >
+	<?php if ($display_type == 'tab_animation' || $display_type == 'tab_popup') { ?>
+	<div class="helpdesk_button <?php if ($display_type != 'button_popup') {
+    echo 'panelbutton ';
+}  ?> <?php if ($display_type == 'tab_popup') {
+    echo 'tab_popup ' . $position;
+}  ?>">
+		<span><?php if ($button_text) {
+    echo $button_text;
+} else {
+    echo "Contact Us";
+} ?></span>
 	</div>
 	<?php } elseif ($display_type == 'button_popup') { ?>
 	<button class="helpdesk_button tab_popup <?php  echo $position;  ?>">
-		<span><?php if($button_text) {
-			echo $button_text;
-		} else {
-			echo "Contact Us";
-		} ?></span>
+		<span><?php if ($button_text) {
+    echo $button_text;
+} else {
+    echo "Contact Us";
+} ?></span>
 	</button>
 	<?php } ?>
-	<div class="form-content" style="<?php if($display_type == 'tab_popup' || $display_type == 'button_popup') echo 'display:none;'; ?>">
-	<?php if($title) { ?>
-		<h2 class="text-center" <?php if($title_color){ ?>style="color: <?php echo $title_color ?>"<?php }?>><?php echo $title ?></h2>
+	<div class="form-content" style="<?php if ($display_type == 'tab_popup' || $display_type == 'button_popup') {
+    echo 'display:none;';
+} ?>">
+	<?php if ($title) { ?>
+		<h2 class="text-center" <?php if ($title_color) { ?>style="color: <?php echo $title_color ?>"<?php }?>><?php echo $title ?></h2>
 	<?php } ?>
-	<?php if($show_text_before && ($before_form_content!='')){ ?>
-		<div class="before-form-content">
-			<?php echo $before_form_content; ?>
-		</div>
-	<?php } ?>
+<!--	--><?php //if ($show_text_before && ($before_form_content!='')) {?>
+<!--		<div class="before-form-content">-->
+<!--			--><?php //echo $before_form_content;?>
+<!--		</div>-->
+<!--	--><?php //}?>
 		<form id="helpdesk<?php echo $modId ?>" class="helpdesk form" action="<?php echo $block->getFormAction(); ?>" id="helpdesk-form<?php echo $modId ?>" method="post" data-hasrequired="<?php echo __('* Required Fields') ?>" data-mage-init='{"validation":{}}' enctype="multipart/form-data">
 			<div class="form-list row">
 				<div class="field col-sm-12 ">
@@ -106,7 +116,7 @@ $url = $helper->getStoreUrl();
 						</div>
 					</div>
 				</div>
-				<?php if($helper->isLoggedIn() == false) { ?>
+				<?php if ($helper->isLoggedIn() == false) { ?>
 				<div class="field col-sm-6 ">
 					<div class="response-field-text">
 						<div class="subtemplate-wrapper">
@@ -150,8 +160,8 @@ $url = $helper->getStoreUrl();
 			</div>
 			<div class="row">
 				<div class="buttons-set col-sm-12">
-					<button type="submit" title="<?php echo __('Submit') ?>" style="<?php echo isset($submit_text_color)?'color:'.$submit_text_color.';':' '; ?><?php echo isset($submit_background_color)?'background-color:'.$submit_background_color.';':' '; ?> " class="helpdesk-button button"><span><span>
-					<?php if($submit_button_text) { ?>
+					<button type="submit" title="<?php echo __('Submit') ?>" style="<?php echo isset($submit_text_color) ? 'color:' . $submit_text_color . ';' : ' '; ?><?php echo isset($submit_background_color) ? 'background-color:' . $submit_background_color . ';' : ' '; ?> " class="helpdesk-button button"><span><span>
+					<?php if ($submit_button_text) { ?>
 					<?php echo $submit_button_text; ?>
 					<?php } else { ?>
 					<?php echo __('Submit') ?>
@@ -160,41 +170,41 @@ $url = $helper->getStoreUrl();
 				</div>
 			</div>
 		</form>
-		<?php if($show_text_after && ($after_form_content!='')){ ?>
-		<div class="before-form-content">
-			<?php echo $after_form_content; ?>
-		</div>
-		<?php } ?>
+<!--		--><?php //if ($show_text_after && ($after_form_content!='')) {?>
+<!--		<div class="before-form-content">-->
+<!--			--><?php //echo $after_form_content;?>
+<!--		</div>-->
+<!--		--><?php //}?>
 	</div>
 </div>
 <script type="text/javascript">
 require([
 	'jquery',
-	<?php if($display_type == 'tab_popup' || $display_type == 'button_popup'){ ?>
+	<?php if ($display_type == 'tab_popup' || $display_type == 'button_popup') { ?>
 		'Lof_All/lib/fancybox/jquery.fancybox.pack',<?php } ?>
 	'mage/validation'
 	], function($){
 		jQuery(document).ready(function($) {
-			<?php if($width && ($display_type =='tab_animation')){ ?>
+			<?php if ($width && ($display_type =='tab_animation')) { ?>
 				var blockWidth = $('#lofform<?php echo $modId ?>').outerWidth();
-				<?php if($position == 'left'){ ?>
+				<?php if ($position == 'left') { ?>
 					$('#lofform<?php echo $modId ?>').css({'left':'-' + blockWidth + 'px'});
 				<?php } ?>
-				<?php if($position == 'right'){ ?>
+				<?php if ($position == 'right') { ?>
 					$('#lofform<?php echo $modId ?>').css({'right':'-' + (blockWidth+2) + 'px'});
 				<?php } ?>
 			<?php } ?>
-			<?php if($display_type == 'tab_popup' || $display_type == 'button_popup'){ ?>
+			<?php if ($display_type == 'tab_popup' || $display_type == 'button_popup') { ?>
 			jQuery(".helpdesk_button").fancybox({
 				'href'   : '#helpdesk<?php echo $modId ?>',
 				'titleShow'  : false,
 				'transitionIn'  : 'elastic',
 				'transitionOut' : 'elastic',
-				<?php if((int)$popup_width>0){ ?>'maxWidth': '<?php echo $popup_width ?>',<?php } ?>
-				<?php if((int)$popup_height>0){ ?>'maxHeight': '<?php echo $popup_height ?>',<?php } ?>
+				<?php if ((int)$popup_width>0) { ?>'maxWidth': '<?php echo $popup_width ?>',<?php } ?>
+				<?php if ((int)$popup_height>0) { ?>'maxHeight': '<?php echo $popup_height ?>',<?php } ?>
 			});
 			<?php } ?>
-			<?php if($width && $display_type =='tab_animation'){ ?>
+			<?php if ($width && $display_type =='tab_animation') { ?>
 
 			jQuery("#lofform<?php echo $modId ?> .panelbutton").click( function(){
 					jQuery(this).parent().toggleClass("active");
@@ -214,17 +224,17 @@ require([
 					$('#lofform<?php echo $modId ?>').css({'height':''});
 				}
 				if($(window).width() < newFormWidth){
-					<?php if($position == 'right'){ ?>
+					<?php if ($position == 'right') { ?>
 					$('#lofform<?php echo $modId ?>').css({'width':($(window).width()-50)+'px','right':'-'+newFormWidth+'px'});
 					<?php } ?>
-					<?php if($position == 'left'){ ?>
+					<?php if ($position == 'left') { ?>
 					$('#lofform<?php echo $modId ?>').css({'width':($(window).width()-50)+'px','left':'-'+newFormWidth+'px'});
 					<?php } ?>
 				}else{
-					<?php if($position == 'right'){ ?>
+					<?php if ($position == 'right') { ?>
 					$('#lofform<?php echo $modId ?>').css({'width':orgFormWidth+'px','right':'-'+blockWidth+'px'});
 					<?php } ?>
-					<?php if($position == 'left'){ ?>
+					<?php if ($position == 'left') { ?>
 					$('#lofform<?php echo $modId ?>').css({'width':orgFormWidth+'px','left':'-'+blockWidth+'px'});
 					<?php } ?>
 				}
