@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2021 Landofcoder (https://landofcoder.com/)
@@ -58,41 +58,41 @@ class Edit extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
     /**
      * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        $id = $this->getRequest()->getParam('ticket_id');
-        $user = $this->authSession->getUser();
-        $role = $user->getRole();
-        $model = $this->_objectManager->create('Lof\HelpDesk\Model\Ticket');
-
-        if ($id) {
-            $model->load($id);
-            $department_id = $model->getDepartmentId();
-            $department = $this->_objectManager->create('Lof\HelpDesk\Model\Department')->load($department_id);
-            $permission = $this->_objectManager->create('Lof\HelpDesk\Model\Permission')->load($role->getRoleId(), 'role_id');
-
-            if (is_array($department->getData('user_id'))) {
-                if (in_array($user->getUserId(), $department->getData('user_id'))) {
-                    return 1;
-                } else {
-                    if (count($permission->getData())) {
-                        if (in_array($department_id, $permission->getData('department_id'))) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    } else {
-                        return 0;
-                    }
-                }
-            } else {
-                return 0;
-            }
-
-        } else {
-            return $this->_authorization->isAllowed('Lof_HelpDesk::spam_edit');
-        }
-    }
+//    protected function _isAllowed()
+//    {
+//        $id = $this->getRequest()->getParam('ticket_id');
+//        $user = $this->authSession->getUser();
+//        $role = $user->getRole();
+//        $model = $this->_objectManager->create('Lof\HelpDesk\Model\Ticket');
+//
+//        if ($id) {
+//            $model->load($id);
+//            $department_id = $model->getDepartmentId();
+//            $department = $this->_objectManager->create('Lof\HelpDesk\Model\Department')->load($department_id);
+//            $permission = $this->_objectManager->create('Lof\HelpDesk\Model\Permission')->load($role->getRoleId(), 'role_id');
+//
+//            if (is_array($department->getData('user_id'))) {
+//                if (in_array($user->getUserId(), $department->getData('user_id'))) {
+//                    return 1;
+//                } else {
+//                    if (count($permission->getData())) {
+//                        if (in_array($department_id, $permission->getData('department_id'))) {
+//                            return 1;
+//                        } else {
+//                            return 0;
+//                        }
+//                    } else {
+//                        return 0;
+//                    }
+//                }
+//            } else {
+//                return 0;
+//            }
+//
+//        } else {
+//            return $this->_authorization->isAllowed('Lof_HelpDesk::spam_edit');
+//        }
+//    }
 
     /**
      * Edit HelpDesk Form

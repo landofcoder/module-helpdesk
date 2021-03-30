@@ -338,6 +338,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
         return $result;
     }
+    public function getConfigs($key, $store = null)
+    {
+        $store = $this->_storeManager->getStore($store);
+        $websiteId = $store->getWebsiteId();
+
+        $result = $this->scopeConfig->getValue(
+            $key,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        return $result;
+    }
 
     public function getFormatDate($date, $type = 'full')
     {
