@@ -26,6 +26,10 @@ use Magento\Store\Model\ScopeInterface;
 class Sender
 {
     /**
+     * Sender email
+     */
+    const SENDER_EMAIL='trans_email/ident_general/email';
+    /**
      * @var \Lof\HelpDesk\Helper\Data
      */
     protected $helper;
@@ -58,6 +62,8 @@ class Sender
 
     protected $_transportBuilder;
 
+    protected $helpData;
+
     protected $config;
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface
@@ -65,6 +71,7 @@ class Sender
     protected $inlineTranslation;
 
     protected $messageManager;
+    protected $_url;
 
     public function __construct(
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
@@ -72,21 +79,26 @@ class Sender
         \Magento\Framework\Mail\Template\TransportBuilder $_transportBuilder,
         \Lof\HelpDesk\Model\Config $config,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Lof\HelpDesk\Helper\Data $helper
+        \Lof\HelpDesk\Helper\Data $helper,
+        \Magento\Backend\Helper\Data $helpData,
+        \Magento\Framework\Url $url
     ) {
         $this->messageManager = $messageManager;
         $this->config = $config;
+        $this->helpData = $helpData;
         $this->inlineTranslation = $inlineTranslation;
         $this->_transportBuilder = $_transportBuilder;
         $this->transportBuilder = $transportBuilder;
         $this->helper = $helper;
+        $this->_url = $url;
     }
 
     public function sendEmailTicket($data)
     {
         try {
             $postObject = new \Magento\Framework\DataObject();
-
+            $data['urllogin'] = $this->_url->getUrl('lofhelpdesk/ticket/index');
+            $data['description'] = $data['message'];
             $postObject->setData($data);
             $storeScope = ScopeInterface::SCOPE_STORE;
 
@@ -277,7 +289,16 @@ class Sender
             try {
                 $postObject = new \Magento\Framework\DataObject();
                 $data['title'] = __('Send Ticket');
+                $sender =[];
+                $sender ['email'] = $this->helper->getConfigs(
+                    self::SENDER_EMAIL
+                );
+                $sender['name'] = 'admin';
+
+                $url = $this->helpData->getHomePageUrl();
+                $data['urllogin'] = $url;
                 $postObject->setData($data);
+
                 $storeScope = ScopeInterface::SCOPE_STORE;
 
                 $transport = $this->_transportBuilder
@@ -289,9 +310,9 @@ class Sender
                             ]
                         )
                         ->setTemplateVars(['data' => $postObject])
-                        ->setFrom('landofcoder@gmail')
-                        ->addTo($this->helper->getConfig('email_settings/sender_email_identity'))
-                        ->setReplyTo($this->helper->getConfig('email_settings/sender_email_identity'))
+                        ->setFrom($sender)
+                        ->addTo($sender['email'])
+                        ->setReplyTo($sender['email'])
                         ->getTransport();
 
                 try {

@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2021 Landofcoder (https://landofcoder.com/)
@@ -21,10 +21,10 @@
 
 namespace Lof\HelpDesk\Controller\Adminhtml\Ticket;
 
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
 use Lof\HelpDesk\Model\ResourceModel\Ticket\CollectionFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassDelete
@@ -52,8 +52,7 @@ class MassDelete extends \Magento\Backend\App\Action
         Filter $filter,
         CollectionFactory $collectionFactory,
         \Magento\Backend\Model\Auth\Session $authSession
-    )
-    {
+    ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         $this->authSession = $authSession;
@@ -95,22 +94,22 @@ class MassDelete extends \Magento\Backend\App\Action
             $department_id = $model->getDepartmentId();
             $department = $this->_objectManager->create('Lof\HelpDesk\Model\Department')->load($department_id);
             $permission = $this->_objectManager->create('Lof\HelpDesk\Model\Permission')->load($role->getRoleId(), 'role_id');
-
-            if (in_array($user->getUserId(), $department->getData('user_id'))) {
-                return 1;
-            } else {
-                if (count($permission->getData())) {
-                    if (in_array($department_id, $permission->getData('department_id')) && $permission->getData('ticket_is_ticket_remove_allowed')) {
-                        return 1;
+            if ($department->getData('user_id')) {
+                if (in_array($user->getUserId(), $department->getData('user_id'))) {
+                    return 1;
+                } else {
+                    if (count($permission->getData())) {
+                        if (in_array($department_id, $permission->getData('department_id')) && $permission->getData('ticket_is_ticket_remove_allowed')) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
                     } else {
                         return 0;
                     }
-                } else {
-                    return 0;
                 }
+
             }
-
-
         }
     }
 }

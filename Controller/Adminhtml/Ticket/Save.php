@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2021 Landofcoder (https://landofcoder.com/)
@@ -47,8 +47,7 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
         \Magento\Backend\Helper\Js $jsHelper,
         \Lof\HelpDesk\Helper\Data $helper,
         \Magento\Framework\Filesystem $filesystem
-    )
-    {
+    ) {
         $this->helper = $helper;
         $this->_fileSystem = $filesystem;
         $this->jsHelper = $jsHelper;
@@ -104,7 +103,6 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                 unset($data['attachment']);
             }
             if ($image = $this->uploadImage('attachment')) {
-
                 $data['attachment'] = $image['attachment'];
                 $data['attachment_name'] = $image['attachment_name'];
             }
@@ -137,7 +135,6 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                         $this->messageManager->addException($e, __('Something went wrong while duplicating the ticket.'));
                     }
                 }
-
 
                 // check if 'Save and Continue'
                 if ($this->getRequest()->getParam('back')) {
@@ -178,17 +175,21 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                 ->getDirectoryRead(DirectoryList::MEDIA);
             $mediaFolder = 'lof/helpdesk/';
             try {
-
+                $path = $_FILES[$fieldId]['name'];
+                $ext = pathinfo($path, PATHINFO_EXTENSION);
+                $randomImageName = "image_" . date("YmdHis") . "." . $ext;
                 $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
                 $uploader->setAllowRenameFiles(true);
                 $uploader->setFilesDispersion(false);
-                $result = $uploader->save($mediaDirectory->getAbsolutePath($mediaFolder)
+                $result = $uploader->save(
+                    $mediaDirectory->getAbsolutePath($mediaFolder),
+                    $randomImageName
                 );
-                $image['attachment'] = $mediaFolder . str_replace(' ', '_', $result['name']);
-                $image['attachment_name'] = str_replace(' ', '_', $result['name']);
+
+                $image['attachment'] = $mediaFolder . str_replace(' ', '_', $result['file']);
+                $image['attachment_name'] = str_replace(' ', '_', $result['file']);
                 return $image;
             } catch (\Exception $e) {
-
                 $this->_logger->critical($e);
                 $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('*/*/edit', ['ticket_id' => $this->getRequest()->getParam('ticket_id')]);
