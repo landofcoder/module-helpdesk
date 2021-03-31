@@ -175,15 +175,19 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                 ->getDirectoryRead(DirectoryList::MEDIA);
             $mediaFolder = 'lof/helpdesk/';
             try {
+                $path = $_FILES[$fieldId]['name'];
+                $ext = pathinfo($path, PATHINFO_EXTENSION);
+                $randomImageName = "image_" . date("YmdHis") . "." . $ext;
                 $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
                 $uploader->setAllowRenameFiles(true);
                 $uploader->setFilesDispersion(false);
                 $result = $uploader->save(
-                    $mediaDirectory->getAbsolutePath($mediaFolder)
+                    $mediaDirectory->getAbsolutePath($mediaFolder),
+                    $randomImageName
                 );
 
-                $image['attachment'] = $mediaFolder . str_replace(' ', '_', $result['name']);
-                $image['attachment_name'] = str_replace(' ', '_', $result['name']);
+                $image['attachment'] = $mediaFolder . str_replace(' ', '_', $result['file']);
+                $image['attachment_name'] = str_replace(' ', '_', $result['file']);
                 return $image;
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
