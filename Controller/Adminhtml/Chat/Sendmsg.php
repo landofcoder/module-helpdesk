@@ -62,22 +62,35 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
      */
     protected $resultForwardFactory;
 
-    protected $_message;
+    /**
+     * @var \Lof\HelpDesk\Model\ChatMessageFactory
+     */
+    protected $_messageFactory;
+
+    /**
+     * @var \Lof\HelpDesk\Model\ChatFactory
+     */
+    protected $chatFactory;
 
     /**
      * @param Context $context
      * @param \Magento\Store\Model\StoreManager $storeManager
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Lof\HelpDesk\Helper\Data $helper
+     * @param \Lof\HelpDesk\Model\ChatMessageFactory $messageFactory
+     * @param \Lof\HelpDesk\Model\ChatFactory $chatFactory
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         Context $context,
         \Magento\Store\Model\StoreManager $storeManager,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Lof\HelpDesk\Helper\Data $helper,
-        \Lof\HelpDesk\Model\ChatMessage $message,
+        \Lof\HelpDesk\Model\ChatMessageFactory $messageFactory,
+        \Lof\HelpDesk\Model\ChatFactory $chatFactory,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
@@ -86,7 +99,8 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
     {
         $this->resultPageFactory = $resultPageFactory;
         $this->_helper = $helper;
-        $this->_message = $message;
+        $this->_messageFactory = $messageFactory;
+        $this->_chatFactory = $chatFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->_coreRegistry = $registry;
         $this->_cacheTypeList = $cacheTypeList;
@@ -104,21 +118,60 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
     {
         $data = $this->_request->getPostValue();
         if (!empty($data)) {
-            $responseData = [];
-            $message = $this->_message;
-
-            try {
-                $message->setData($data)->save();
-                $chat = $this->_objectManager->create('Lof\HelpDesk\Model\Chat')->load($data['chat_id']);
-                $number_message = $chat->getData('number_message') + 1;
-                $chat->setData('is_read', 3)->setData('number_message', $number_message)->save();
-                $this->_cacheTypeList->cleanType('full_page');
-            } catch (\Exception $e) {
-                $this->messageManager->addError(
-                    __('We can\'t process your request right now. Sorry, that\'s all we know.')
-                );
-                return;
+            $data['is_read'] =1;
+            $data['current_time'] = $this->_helper->getCurrentTime();
+            if($customer_email = $this->_customerSession->getCustomer()->getEmail()) {
+                $customer_id = $this->_customerSession->getCustomerId();
+                if(!isset($data["customer_id"]) || (empty($data["customer_id"]))){
+                    $data["customer_id"] = (int)$customer_id;
+                }
+                if(!isset($data["customer_email"]) || ($data["customer_email"] != $customer_email)){
+                    $data["customer_email"] = $customer_email;
+                }
+                if(!isset($data["customer_name"]) || (empty($data["customer_name"]))){
+                    $data["customer_name"] =  $this->_customerSession->getCustomer()->getData("firstname").' '. $this->_customerSession->getCustomer()->getData("lastname");
+                }
             }
+            if(empty($data['customer_name'])) {
+                $data['customer_name'] = __('Guest');
+            }
+            $data = $this->_helper->xss_clean_array($data);
+            $responseData = [];
+            $message = $this->_messageFactory->create();
+
+            if(!empty($data) && !empty($data['body_msg'])){
+                try {
+                    $client_ip = $this->remoteAddress->getRemoteAddress();
+                    $data['chat_id'] = isset($data['chat_id'])?$data['chat_id']:null;
+                    $message->setData($data)->save();
+                    $chat = $this->_chatFactory->create()->load($data['chat_id']);
+                    $enable_auto_assign_user = $this->_helper->getConfig('automation/enable_auto_assign_user');
+                    $admin_user_id = $this->_helper->getConfig('automation/admin_user_id');
+                    if($enable_auto_assign_user && $admin_user_id){
+                        $data["user_id"] = (int)$admin_user_id;
+                    }else {
+                        $data["user_id"] = 0;
+                    }
+                    $number_message = $chat->getData('number_message') + 1;
+                    $chat
+                        ->setData('user_id', (int)$data["user_id"])
+                        ->setData('is_read',3)
+                        ->setData('answered',1)
+                        ->setData('status',1)
+                        ->setData('number_message',$number_message)
+                        ->setData('current_url',$data['current_url'])
+                        ->setData('ip', $this->_helper->getIp())
+                        ->save();
+                    $this->_cacheTypeList->cleanType('full_page');
+                } catch (\Exception $e) {
+                    $this->messageManager->addError(
+                        __('We can\'t process your request right now. Sorry, that\'s all we know.')
+                    );
+                    $this->messageManager->addError($e->getMessage());
+                    return;
+                }
+            }
+            return;
         }
     }
 }

@@ -58,6 +58,14 @@
                 <field id="auto_reminder_ticket" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Auto Reminder Ticket For, days</label>
                 </field>
+                <field id="enable_auto_assign_user" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Auto Assign Admin User</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="admin_user_id" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Admin User Id</label>
+                    <comment>Input default admin user Id will been assigned new chat message, and will receive notification email.</comment>
+                </field>
              </group>
              <group id="chat" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Chat</label>
