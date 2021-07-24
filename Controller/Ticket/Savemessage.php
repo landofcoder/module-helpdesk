@@ -22,6 +22,7 @@
 namespace Lof\HelpDesk\Controller\Ticket;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Controller\ResultFactory;
 
 class Savemessage extends \Magento\Framework\App\Action\Action
 {

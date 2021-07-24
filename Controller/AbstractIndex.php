@@ -7,7 +7,6 @@
 namespace Lof\HelpDesk\Controller;
 
 use Magento\Framework\App\Action;
-use Magento\Wishlist\Controller\IndexInterface;
 
 /**
  * Class AbstractIndex
