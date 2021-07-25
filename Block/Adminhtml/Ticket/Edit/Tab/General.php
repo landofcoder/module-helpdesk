@@ -236,8 +236,8 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
             $user_name = $newUser->getFirstname() . ' ' . $newUser->getLastname();
             $user_email = $newUser->getEmail();
         }else {
-            $user_name = $model?$model->getUserName():($user->getFirstname() . ' ' . $user->getLastname());
-            $user_email = $model?$model->getUserEmail():$user->getEmail();
+            $user_name = $user->getFirstname() . ' ' . $user->getLastname();
+            $user_email = $user->getEmail();
         }
         $fieldset->addField(
             'user_id',
