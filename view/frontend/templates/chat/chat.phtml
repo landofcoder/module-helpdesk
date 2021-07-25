@@ -168,8 +168,8 @@ if($this->isLogin()){
                         chat_id : $chat_id,
                         customer_id : $customer_id,
                         customer_name : $customer_name,
-                        customer_email : $customer_email
-                    
+                        customer_email : $customer_email,
+                        current_url: $current_url
                     }, success : function() {
                         $('#formSendMsg input[type="text"]').val(''); 
                         var div = document.getElementById('main-chat')
