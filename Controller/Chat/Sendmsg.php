@@ -228,13 +228,13 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
                     ->save();
                 $this->_cacheTypeList->cleanType('full_page');  
                 
-                // if($this->_helper->getConfig('email_settings/enable_email')) {
-                //     $chatId = $chat->getId();
-                //     if(!$data['chat_id'] || ($data['chat_id'] != $chatId)){ //only send email at first chat
-                //         $data['url'] = $data['current_url'];
-                //         $this->sender->sendEmailChat($data);
-                //     }
-                // }
+                if($this->_helper->getConfig('email_settings/email_admin_chat')) {
+                    $chatId = $chat->getId();
+                    if(!$data['chat_id'] || ($data['chat_id'] != $chatId)){ //only send email at first chat
+                        $data['url'] = $data['current_url'];
+                        $this->sender->sendEmailChat($data);
+                    }
+                }
             }catch(\Exception $e){
                 $this->messageManager->addError(
                     __('We can\'t process your request right now. Sorry, that\'s all we know.')

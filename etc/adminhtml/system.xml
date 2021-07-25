@@ -49,6 +49,22 @@
                     <label>Template of Assign Ticket</label>
                     <source_model>\Lof\HelpDesk\Model\Config\Source\EmailTemplate</source_model>
                 </field>
+
+                <field id="enable_email_customer_chat" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Send Mail to customer</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="email_admin_chat" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email Notification to admin</label>
+                </field>
+                <field id="customer_chat_template" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Template of Customer Chat Email</label>
+                    <source_model>\Lof\HelpDesk\Model\Config\Source\EmailTemplate</source_model>
+                </field>
+                <field id="admin_reply_template" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Template of Admin Reply Chat Email</label>
+                    <source_model>\Lof\HelpDesk\Model\Config\Source\EmailTemplate</source_model>
+                </field>
             </group>
              <group id="automation" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Automation</label>

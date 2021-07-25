@@ -34,6 +34,10 @@
 				<status_ticket_template>lofhelpdesk_email_settings_status_ticket_template</status_ticket_template>
 				<reminder_template>lofhelpdesk_email_settings_reminder_template</reminder_template>
 				<assign_ticket_template>lofhelpdesk_email_settings_assign_ticket_template</assign_ticket_template>
+				<enable_email_customer_chat>0</enable_email_customer_chat>
+				<email_admin_chat>0</email_admin_chat>
+				<customer_chat_template>lofhelpdesk_email_settings_customer_chat_template</customer_chat_template>
+				<admin_reply_template>lofhelpdesk_email_settings_admin_reply_template</admin_reply_template>
 			</email_settings>
 			<automation>
 				<auto_close_ticket>7</auto_close_ticket>
