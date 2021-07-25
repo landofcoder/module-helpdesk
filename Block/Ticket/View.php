@@ -159,9 +159,9 @@ class View extends \Magento\Framework\View\Element\Template
         return end($id);
     }
 
-    public function getOrderTicket($orderid)
+    public function getOrderTicket($orderid, $order_url = "")
     {
-        return $this->helper->getOrderTicket($orderid);
+        return $this->helper->getOrderTicket($orderid, $order_url);
     }
 
     /**

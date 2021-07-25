@@ -225,17 +225,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * by customer email or id.
      *
      * @param string $customerEmail
+     * @param string $order_url
      * @param bool $customerId
      *
      * @return array
      */
-    public function getOrderTicket($orderid)
+    public function getOrderTicket($orderid, $order_url = "")
     {
         $order = $this->orderCollectionFactory->create()->addFieldToFilter('entity_id', $orderid)->getFirstItem();
         if (!is_object($order)) {
             $order = $this->orderFactory->create()->load($order);
         }
         $res = "#{$order->getRealOrderId()}";
+        if($order_url){
+            $res = '<a href="'.$order_url.'" target="_BLANK">'.$res.'</a>';
+        }
         $res .= __(
             ' at %1 (%2) - %3',
             $this->formatDate($order->getCreatedAt(), \IntlDateFormatter::MEDIUM),
