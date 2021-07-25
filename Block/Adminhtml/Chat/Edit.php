@@ -60,6 +60,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
         $this->buttonList->remove('save');
 
+        $this->buttonList->add(
+            'blacklist',
+            [
+                'label' => __('Add to Blacklist'),
+                'class' => 'save primary',
+                'onclick' => 'setLocation(\'' . $this->getUrl('lofhelpdesk/*/addBlacklist', ["chat_id"=>(int)$chat_id]) . '\')'
+            ]
+            
+);
+
 
     }
 
