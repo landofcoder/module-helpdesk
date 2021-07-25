@@ -239,6 +239,7 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
                 $this->messageManager->addError(
                     __('We can\'t process your request right now. Sorry, that\'s all we know.')
                     );
+                $this->messageManager->addError($e->getMessage());
                 return;
             }
         }
