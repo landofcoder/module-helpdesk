@@ -39,7 +39,13 @@
                         <resource id="Lof_HelpDesk::category_save" title="Save Category" sortOrder="20" />
                         <resource id="Lof_HelpDesk::category_delete" title="Delete Category" sortOrder="30" />
                     </resource>
-                     <resource id="Lof_HelpDesk::report" title="Report" sortOrder="70" />
+                    <resource id="Lof_HelpDesk::blacklist" title="Chat Blacklist" sortOrder="60">
+                        <resource id="Lof_HelpDesk::blacklist_edit" title="Edit Blacklist" sortOrder="10" />
+                        <resource id="Lof_HelpDesk::blacklist_save" title="Save Blacklist" sortOrder="20" />
+                        <resource id="Lof_HelpDesk::blacklist_delete" title="Delete Blacklist" sortOrder="30" />
+                    </resource>
+                    <resource id="Lof_HelpDesk::report" title="Report" sortOrder="70" />
+                    <resource id="Lof_HelpDesk::chat_delete" title="Delete Chat" sortOrder="75" />
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">

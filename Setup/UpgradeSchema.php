@@ -24,6 +24,7 @@ namespace Lof\HelpDesk\Setup;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\DB\Ddl\Table;
 
 /**
  * @codeCoverageIgnore
@@ -67,9 +68,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
          */
         if (version_compare($context->getVersion(), '1.0.5', '<')) {
             /**
-             * add new table lof_chatsystem_blacklist
+             * add new table lof_helpdesk_blacklist
              */
-            $lof_chatsystem_blacklist = $installer->getConnection()->newTable(
+            $lof_helpdesk_blacklist = $installer->getConnection()->newTable(
                     $installer->getTable('lof_helpdesk_blacklist')
                 )->addColumn(
                     'blacklist_id',
@@ -125,7 +126,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
                     'Modification Time'
                 );
-                $installer->getConnection()->createTable($lof_chatsystem_blacklist);
+                $installer->getConnection()->createTable($lof_helpdesk_blacklist);
 
                 /**
                  * update table lof_helpdesk_chat

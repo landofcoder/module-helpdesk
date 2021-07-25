@@ -116,6 +116,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $date = $this->date->gmtDate();
     }
 
+    public function getTimezoneDateTime($dateTime = "today"){
+        if($dateTime === "today" || !$dateTime){
+            $dateTime = $this->date->gmtDate();
+        }
+        
+        $today = $this->_localeDate
+            ->date(
+                new \DateTime($dateTime)
+            )->format('Y-m-d H:i:s');
+        return $today;
+    }
+
+    public function getTimezoneName(){
+        return $this->_localeDate->getConfigTimezone(\Magento\Store\Model\ScopeInterface::SCOPE_STORES);
+    }
+
     /**
      * @return string
      */

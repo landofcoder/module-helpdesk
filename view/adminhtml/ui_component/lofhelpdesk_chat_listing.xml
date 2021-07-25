@@ -111,6 +111,19 @@
                     <item name="indexField" xsi:type="string">chat_id</item>
                 </item>
             </argument>
+            <action name="cleanlogs">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">cleanlogs</item>
+                        <item name="label" xsi:type="string" translate="true">Clean Message Logs</item>
+                        <item name="url" xsi:type="url" path="lofhelpdesk/chat/massCleanlog"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Clean Messages of items</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to clean messages of selected items?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
             <action name="delete">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">

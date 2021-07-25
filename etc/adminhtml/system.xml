@@ -66,6 +66,14 @@
                     <label>Default Admin User Id</label>
                     <comment>Input default admin user Id will been assigned new chat message, and will receive notification email.</comment>
                 </field>
+                <field id="enable_clean_log" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Auto Clean Chat Logs</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="clean_older_day" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Clean Logs older number days</label>
+                    <comment>Input number older days will been clean. Empty to clean all. Example: 30 - it's mean clean all chat logs from 30 days ago or older.</comment>
+                </field>
              </group>
              <group id="chat" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Chat</label>
@@ -73,15 +81,33 @@
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                 <field id="text_label" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_guest" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Guest Chat</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends><field id="enable">1</field></depends>
+                </field>
+                <field id="enable_blacklist" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enabled Check Blacklist</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+                <field id="text_label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Text Label</label>
                 </field>
-                <field id="background_color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="background_color" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Background Color</label>
                 </field>
-                <field id="store" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="store" translate="label" type="multiselect" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Store</label>
                     <source_model>Magento\Config\Model\Config\Source\Store</source_model>
+                </field>
+                <field id="welcome_message" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Welcome Message show on first chat</label>
+                </field>
+                <field id="auto_message" translate="label" type="textarea" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Automatic Message show on first chat</label>
+                </field>
+                <field id="auto_user_name" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Automatic User Name</label>
                 </field>
              </group>
         </section>
