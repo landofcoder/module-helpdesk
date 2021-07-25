@@ -131,7 +131,11 @@ class Message extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
         $fieldset->addField(
             'message',
             'textarea',
-            ['name' => 'message', 'label' => __('Message'), 'title' => __('Message'), 'required' => true,
+            [
+                'name' => 'message', 
+                'label' => __('Message'), 
+                'title' => __('Message'), 
+                'required' => false,
                 //'style' => 'height:10em;',
                 'disabled' => $isElementDisabled,
                 //'config' => $wysiwygConfig,
@@ -175,6 +179,7 @@ class Message extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
     {
         if ($ticket_id) {
             $message = $this->message->getCollection()->addFieldToFilter('ticket_id', $ticket_id);
+            $message->setOrder('created_at','desc');
             $data = '';
             $class = '';
             foreach ($message as $_message) {

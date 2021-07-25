@@ -8,9 +8,8 @@ $currentPage = $block->getCurrentPage();
 $start       = $size - (($currentPage - 1) * $limit);
 $modId       = time() . rand();
 $helper = $this->helper("Lof\HelpDesk\Helper\Data");
-
 ?>
-<?php if($count){ ?>
+<?php if($count): ?>
 <div class="block lrw-block lrw-account-summary-listing">
 	<div class="block-content">
 		<div class="table-wrapper orders-recent">
@@ -27,9 +26,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 				</thead>
 				<tbody>
 					<?php $i = 0; ?>
-					<?php foreach ($collection as $_ticket) {
-
-					?>
+					<?php foreach ($collection as $_ticket): ?>
 					<?php $amount = $_ticket->getAmount(); ?>
 					<tr class="<?= $i % 2 ? 'odd' : 'even' ?> <?= ($i == $count-1) ? 'last' : '' ?>">
 						<td><?= $_ticket->getId(); ?></td>
@@ -41,14 +38,14 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 							<?= $this->getStatus($_ticket->getStatusId()); ?>
 						</td>
 						<td>
-							<?php  if($this->getUnreadMessageCount($_ticket->getData('ticket_id')) >0 ) { ?><i class="fa fa-circle unread" aria-hidden="true"></i>
-							<?php } else { ?>
+							<?php  if($this->getUnreadMessageCount($_ticket->getData('ticket_id')) >0 ): ?><i class="fa fa-circle unread" aria-hidden="true"></i>
+							<?php else: ?>
 							<i class="fa fa-circle" aria-hidden="true"></i>
-							<?php } ?>
+							<?php endif; ?>
 						</td>
 					</tr>
 					<?php $i++; ?>
-					<?php } ?>
+					<?php endforeach; ?>
 				</tbody>
 			</table>
 		</div>
@@ -56,7 +53,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 	</div>
 </div>
 
-<?php } ?>
+<?php endif; ?>
 <div class="block lrw-block lrw-account-summary-listing">
 	<div class="block-title">
 		<strong><?= __('Create New Ticket');?></strong>
@@ -93,14 +90,15 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 													<select id="category_id" name="category_id" class="form-control select2 required-entry" style="width: 100%;">
 														<option value><?= __('Select a category'); ?></option>
 								                  		<?php
-								                  		foreach ($block->getCategory() as $key => $category) {
+								                  		foreach ($block->getCategory() as $key => $category):
                                                             $category->load($category->getId());
-									                  		if(in_array($helper->getStoreId(), $category->getStoreId()) || in_array(0, $category->getStoreId()))  {
+									                  		if(in_array($helper->getStoreId(), $category->getStoreId()) || in_array(0, $category->getStoreId())):
 									                  			?>
 
 										                  		<option value="<?= $category->getData('category_id'); ?>"><?= $category->getData('title'); ?></option>
-										                  		<?php }
-										                  	}?>
+										                  		<?php
+															endif;
+										                endforeach; ?>
 								                	</select>
 												</div>
 											</div>
@@ -118,9 +116,9 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 												<div class="subtemplate-inner">
 													<select id="priority_id" name="priority_id" class="form-control select2 required-entry" style="width: 100%;">
 														<option value><?= __('Select a priority'); ?></option>
-								                  		<?php foreach ($block->getPriority() as $key => $priority) { ?>
+								                  		<?php foreach ($block->getPriority() as $key => $priority): ?>
 								                  		<option value="<?= $priority['id']; ?>"><?= $priority['title']; ?></option>
-								                  		<?php } ?>
+								                  		<?php endforeach; ?>
 								                	</select>
 												</div>
 											</div>
@@ -153,7 +151,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 									</div>
 								</div>
 							</div>
-							<?php if(count($block->getOrder()) > 0) { ?>
+							<?php if(count($block->getOrder()) > 0): ?>
 							<div class="field col-sm-6">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper" style="">
@@ -164,9 +162,9 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 												<div class="subtemplate-inner">
 													<select id="order_id" name="order_id" class="form-control select2 required-entry">
 													<option value><?= __('Select an order'); ?></option>
-							                  		<?php foreach ($block->getOrder() as $key => $order) { ?>
+							                  		<?php foreach ($block->getOrder() as $key => $order): ?>
 							                  		<option value="<?= $order['id']; ?>"><?= $order['name']; ?></option>
-							                  		<?php } ?>
+							                  		<?php endforeach; ?>
 								                	</select>
 												</div>
 											</div>
@@ -194,7 +192,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 									</div>
 								</div>
 							</div>
-							<?php } ?>
+							<?php endif; ?>
 						</div>
 						<div class="row">
 							<div class="buttons-set col-sm-12">

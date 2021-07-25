@@ -47,11 +47,24 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic implements \
     protected $authSession;
 
     /**
+     * @var \Magento\User\Model\UserFactory
+     */
+    protected $userFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Store\Model\System\Store $systemStore
-     * @param array $data
+     * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
+     * @param \Lof\HelpDesk\Model\Message $message
+     * @param \Lof\HelpDesk\Model\Category $category
+     * @param \Lof\HelpDesk\Helper\Data $helper
+     * @param \Lof\HelpDesk\Model\Department $department
+     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param   array $data = []
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -65,6 +78,7 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic implements \
         \Lof\HelpDesk\Helper\Data $helper,
         \Lof\HelpDesk\Model\Department $department,
         \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\User\Model\UserFactory $userFactory,
         array $data = []
     )
     {
@@ -76,10 +90,27 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic implements \
         $this->_wysiwygConfig = $wysiwygConfig;
         $this->_category = $category;
         $this->authSession = $authSession;
+        $this->userFactory = $userFactory;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
-
+    protected function getUserList() {
+        $model = $this->_coreRegistry->registry('lofhelpdesk_ticket');
+        $user_id = $model?$model->getUserId():0;
+        $collection = $this->userFactory->create()->getCollection();
+        $collection->addFieldToFilter("main_table.is_active", 1);
+        if($user_id){
+            $collection->addFieldToFilter("main_table.user_id", ["neq" => $user_id]);
+        }
+        $options = [];
+        $options[0] = __("--- Choose an User ---");
+        if($collection->count()){
+            foreach($collection as $user){
+                $options[$user->getUserId()] = $user->getFirstname()." ".$user->getLastname()." <".$user->getEmail().">";
+            }
+        }
+        return $options;
+    }
     /**
      * Prepare form
      *
@@ -185,6 +216,28 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic implements \
             ]
         );
 
+        $fieldset->addField(
+            'fb_user_id',
+            'select',
+            [
+                'label' => __('Assign to Other User'),
+                'title' => __('Assign to Other User'),
+                'name' => 'fb_user_id',
+                'options' => $this->getUserList()
+            ]
+        );
+
+        $fieldset->addField(
+            'admin_note',
+            'textarea',
+            [
+                'name' => 'admin_note',
+                'label' => __('Admin Note'),
+                'title' => __('Admin Note'),
+                'note' => __('Admin Note for this ticket.'),
+                'required' => false
+            ]
+        );
 
         if (!$model->getId()) {
             $model->setData('is_active', '1');

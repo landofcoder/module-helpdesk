@@ -1,7 +1,7 @@
 <?php 
 $ticket = $block->getTicket();
 $this->isRead();
-$message = $this->getMessage($ticket->getTicketId());
+$messageCollection = $this->getMessage($ticket->getTicketId());
 $modId       = time() . rand();
 $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 ?>
@@ -131,50 +131,52 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 	</div>
 	<div class="block-content">
 		<div class="orders-recent">
-		<?php 
+		<?php
 			$data = '';
             $class = '';
-			foreach ($message->setOrder('created_at','desc') as $key => $_message):
-                if($_message->getData('user_name')):
-                    $name = $_message->getData('user_name');
-                    $class = 'user';
-                    $countlike = $this->getSumLike('user_id',$_message->getData('user_id'));
-                else:
-                    $name = $_message->getData('customer_name');
-                    $class = '';
-                    $countlike = $this->getSumLike('customer_id',$_message->getData('customer_id'));
-				endif;
-                $data .= '<div class="lof-ticket-history">';
-				$data .= '<div class="lof-message">';
-				$data .= '<div class="lof-message-header">';
-				$data .= '<strong>'.$name.'</strong>';
-				$data .= '<span class="minor">'.__('added %1 (%2)', $helper->nicetime($_message->getCreatedAt()), $_message->getCreatedAt()).'</span>';
-				$data .= '<span class="like"><i class="fa fa-thumbs-up like_id_'.$_message->getMessageId().'" aria-hidden="true" data-countlike="'.$countlike.'">'.$countlike.'</i></span>';
-				$data .= '</div>';
-				$data .= '<div class="lof-message-body '.$class.'">';
-				$data .= $_message->getBody();
-				foreach ($this->getAttachment($_message->getMessageId()) as $key => $attachment):
-					$data .= '<div class="lof-message-attachments">';
-					$data .='<a href="'.$attachment->getImageUrl().'">'.$attachment->getName().'</a>
-								</div>';
-				endforeach;
-					
-				$data .= '</div>';
-				if($_message->getData('user_name')):
-				$data .= '<div class="comment-buttons">';
-					$data .= '<span class="like-button">';
-						$data .= '<a  class="like-comment button tiny" data-userid="'.$_message->getData('user_id').'" data-messageid="'.$_message->getData('message_id').'">';
-							$data .= '<i class="fa fa-thumbs-up" aria-hidden="true"></i><span>'.__('Like').'</span>';
-						$data .= '</a>';	
-					$data .= '</span>';
-					$data .= '<div class="thank-like message_id_'.$_message->getMessageId().'">';
-
+			if($messageCollection->count()):
+				foreach ($messageCollection as $key => $_message):
+					if($_message->getData('user_name')):
+						$name = $_message->getData('user_name');
+						$class = 'user';
+						$countlike = $this->getSumLike('user_id',$_message->getId());
+					else:
+						$name = $_message->getData('customer_name');
+						$class = '';
+						$countlike = $this->getSumLike('customer_id',$_message->getId());
+					endif;
+					$data .= '<div class="lof-ticket-history">';
+					$data .= '<div class="lof-message">';
+					$data .= '<div class="lof-message-header">';
+					$data .= '<strong>'.$name.'</strong>';
+					$data .= '<span class="minor">'.__('added %1 (%2)', $helper->nicetime($_message->getCreatedAt()), $_message->getCreatedAt()).'</span>';
+					$data .= '<span class="like"><i class="fa fa-thumbs-up like_id_'.$_message->getMessageId().'" aria-hidden="true" data-countlike="'.$countlike.'">'.$countlike.'</i></span>';
 					$data .= '</div>';
-				$data .= '</div>';
-				endif;
-				$data .= '</div>';
-                $data .= '</div>';
-			endforeach;
+					$data .= '<div class="lof-message-body '.$class.'">';
+					$data .= $_message->getBody();
+					foreach ($this->getAttachment($_message->getMessageId()) as $key => $attachment):
+						$data .= '<div class="lof-message-attachments">';
+						$data .='<a href="'.$attachment->getImageUrl().'">'.$attachment->getName().'</a>
+									</div>';
+					endforeach;
+						
+					$data .= '</div>';
+					if($_message->getData('user_name')):
+					$data .= '<div class="comment-buttons">';
+						$data .= '<span class="like-button">';
+							$data .= '<a  class="like-comment button tiny" data-userid="'.$_message->getData('user_id').'" data-messageid="'.$_message->getData('message_id').'">';
+								$data .= '<i class="fa fa-thumbs-up" aria-hidden="true"></i><span>'.__('Like').'</span>';
+							$data .= '</a>';	
+						$data .= '</span>';
+						$data .= '<div class="thank-like message_id_'.$_message->getMessageId().'">';
+
+						$data .= '</div>';
+					$data .= '</div>';
+					endif;
+					$data .= '</div>';
+					$data .= '</div>';
+				endforeach;
+			endif;
             echo $data;
 		?>
 		</div>

@@ -58,8 +58,19 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Store\Model\System\Store $systemStore
-     * @param array $data
+     * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
+     * @param \Lof\HelpDesk\Model\Message $message
+     * @param \Lof\HelpDesk\Model\Category $category
+     * @param \Lof\HelpDesk\Helper\Data $helper
+     * @param \Lof\HelpDesk\Model\Quickanswer $quickanswer
+     * @param \Lof\HelpDesk\Model\Department $department
+     * @param \Lof\HelpDesk\Model\Attachment $attachment
+     * @param \Lof\HelpDesk\Model\TicketFactory $ticket
+     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\User\Model\User $user
+     * @param array $data = []
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
