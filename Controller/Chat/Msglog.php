@@ -51,16 +51,23 @@ class Msglog extends \Magento\Framework\App\Action\Action
     /**
      * @var \Lof\HelpDesk\Helper\Data
      */
-    protected $_helper;
+    protected $helper;
 
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory
      */
     protected $resultForwardFactory;
 
-    protected $_message;
+    /**
+     * @var \Lof\HelpDesk\Model\ChatMessageFactory
+     */
+    protected $_messageFactory;
 
-    protected $chat;
+    /**
+     * @var \Lof\HelpDesk\Model\ChatFactory
+     */
+    protected $_chatFactory;
+
     protected $httpRequest;
 
     /**
@@ -68,27 +75,30 @@ class Msglog extends \Magento\Framework\App\Action\Action
      */
     protected $remoteAddress;
 
+    /**
+     * @var \Lof\HelpDesk\Model\BlacklistFactory
+     */
     protected $blacklistFactory;
 
     /**
-     * @param Context $context,
-     * @param   \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-     * @param   \Lof\HelpDesk\Helper\Data $helper,
-     * @param   \Lof\HelpDesk\Model\ChatMessage $message,
-     * @param   \Lof\HelpDesk\Model\Chat $chat,
-     * @param   \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
-     * @param   \Magento\Framework\Registry $registry,
-     * @param   \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList, 
-     * @param   \Magento\Customer\Model\Session $customerSession,
-     * @param   \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
-     * @param   \Lof\HelpDesk\Model\BlacklistFactory $blacklistFactory         
+     * @param Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Lof\HelpDesk\Helper\Data $helper
+     * @param \Lof\HelpDesk\Model\ChatMessageFactory $messageFactory
+     * @param \Lof\HelpDesk\Model\ChatFactory $chatFactory
+     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+     * @param \Lof\HelpDesk\Model\BlacklistFactory $blacklistFactory         
      */
     public function __construct(
         Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Lof\HelpDesk\Helper\Data $helper,
-        \Lof\HelpDesk\Model\ChatMessage $message,
-        \Lof\HelpDesk\Model\Chat $chat,
+        \Lof\HelpDesk\Model\ChatMessageFactory $messageFactory,
+        \Lof\HelpDesk\Model\ChatFactory $chatFactory,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList, 
@@ -96,10 +106,10 @@ class Msglog extends \Magento\Framework\App\Action\Action
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Lof\HelpDesk\Model\BlacklistFactory $blacklistFactory
         ) {
-        $this->chat                 = $chat;
+        $this->_chatFactory                 = $chatFactory;
         $this->resultPageFactory    = $resultPageFactory;
-        $this->_helper              = $helper;
-        $this->_message             = $message;
+        $this->helper              = $helper;
+        $this->_messageFactory             = $messageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->_coreRegistry        = $registry;
         $this->_cacheTypeList       = $cacheTypeList;
@@ -117,7 +127,13 @@ class Msglog extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $enable_blacklist = $this->_helper->getConfig('chat/enable_blacklist');
+        $enable_blacklist = $this->helper->getConfig('chat/enable_blacklist');
+        $enabled = $this->helper->getConfig('chat/enable');
+        $enable_guest = $this->helper->getConfig('chat/enable_guest');
+        if(!$enabled){
+            exit;
+            return;
+        }
         //check if enabled config blacklist, then check if ip in blacklist, then redirect it to home, else continue action
         if ($enable_blacklist) {
             $client_ip = $this->remoteAddress->getRemoteAddress();
@@ -125,7 +141,7 @@ class Msglog extends \Magento\Framework\App\Action\Action
             if ($client_ip) {
                 $blacklist_model->loadByIp($client_ip);
                 if ((0 < $blacklist_model->getId()) && $blacklist_model->getStatus()) {
-                    print __('Your IP was blocked in our blacklist. So, you will not get any messages.');
+                    echo __('Your IP was blocked in our blacklist. So, you will not get any messages.');
                     exit;
                 }
             }
@@ -133,51 +149,76 @@ class Msglog extends \Magento\Framework\App\Action\Action
                 $customer_id = $this->_customerSession->getCustomerId();
                 $blacklist_model->loadByCustomerId((int)$customer_id);
                 if ((0 < $blacklist_model->getId()) && $blacklist_model->getStatus()) {
-                    print __('Your Account was blocked in our blacklist. So, you will not get any messages.');
+                    echo __('Your Account was blocked in our blacklist. So, you will not get any messages.');
                     exit;
                 }
                 $blacklist_model2 = $this->blacklistFactory->create();
                 $blacklist_model2->loadByEmail($customer_email);
                 if ((0 < $blacklist_model2->getId()) && $blacklist_model2->getStatus()) {
-                    print __('Your Email Address was blocked in our blacklist. So, you will not get any messages.');
+                    echo __('Your Email Address was blocked in our blacklist. So, you will not get any messages.');
                     exit;
                 }
             }
         }
+        $message = null;
         if($this->_customerSession->getCustomer()->getEmail()) {
-            $message = $this->_message->getCollection()->addFieldToFilter('customer_email',$this->_customerSession->getCustomer()->getEmail());
-        } else {
-            $chat = $this->chat->load($this->_helper->getIp(),'ip');
-            $message = $this->_message->getCollection()->addFieldToFilter('chat_id',$chat->getId()); 
+            $message = $this->_messageFactory->create()
+            ->getCollection()
+            ->addFieldToFilter('customer_id',$this->_customerSession->getCustomerId());
+        } elseif($enable_guest) {
+            $chatCollection = $this->_chatFactory->create()->getCollection()
+                                ->addFieldToFilter('ip', $this->helper->getIp())
+                                ->addFieldToFilter('customer_id',
+                                [
+                                    ['null' => true],
+                                    ['eq' => 0],
+                                    ['eq' => '']
+                                ]);
+            if ($chatCollection->count() > 0) {
+                $chat_id = $chatCollection->getFirstItem()->getData('chat_id');
+                $message = $this->_messageFactory->create()
+                            ->getCollection()
+                            ->addFieldToFilter('chat_id',$chat_id)
+                            ->addFieldToFilter('customer_id', 
+                            [
+                                ['null' => true],
+                                ['eq' => 0],
+                                ['eq' => '']
+                            ]);
+            }
         }
-        $count = count($message);
+        if(!$message){
+            exit;
+            return;
+        }
+        $count = $message->count();
         $i=0;
-        $auto_user_name = $this->_helper->getConfig('chat/auto_user_name');
-        $auto_message = $this->_helper->getConfig('chat/auto_message');
-        $welcome_message = $this->_helper->getConfig('chat/welcome_message');
+        $auto_user_name = $this->helper->getConfig('chat/auto_user_name');
+        $auto_message = $this->helper->getConfig('chat/auto_message');
+        $welcome_message = $this->helper->getConfig('chat/welcome_message');
         $auto_user_name = $auto_user_name?$auto_user_name:__("Bot");
         $auto_message = trim($auto_message);
         $welcome_message = trim($welcome_message);
         $count_found_user_replied = 0;
         foreach ($message as $_message1) {
-            if($_message1["user_id"]){
+            if($_message1->getUserId()){
                 $count_found_user_replied++;
-                break;
+                continue;
             }
         }
         foreach ($message as $key => $_message) {
             $i++;
-            $date_sent = $_message['created_at'];
+            $date_sent = $_message->getCreatedAt();
             $day_sent = substr($date_sent, 8, 2); 
             $month_sent = substr($date_sent, 5, 2); 
             $year_sent = substr($date_sent, 0, 4); 
             $hour_sent = substr($date_sent, 11, 2); 
             $min_sent = substr($date_sent, 14, 2); 
-            $body_msg = $this->_helper->xss_clean($_message['body_msg']);
+            $body_msg = $this->helper->xss_clean($_message['body_msg']);
             
             if (!$_message['user_id'])
             {
-                print '<div class="msg-user">
+                echo '<div class="msg-user">
                         <p>'.$body_msg.'</p>
                         <div class="info-msg-user">
                             '.__("You").'
@@ -185,8 +226,7 @@ class Msglog extends \Magento\Framework\App\Action\Action
                     </div> ';
 
             } else {
-      
-                print '<div class="msg">
+                echo '<div class="msg">
                     <p>'.$body_msg.'</p>
                     <div class="info-msg">
                         '.$_message['user_name'].'
@@ -197,11 +237,10 @@ class Msglog extends \Magento\Framework\App\Action\Action
                     <script>require(['jquery'],function($) { $('.chat-message-counter').css('display','inline'); });</script>
                     ";
                 }
-
             }
 
             if($i == 1 && !$count_found_user_replied && $auto_message){
-                print '<div class="msg">
+                echo '<div class="msg">
                     <p>'.$auto_message.'</p>
                     <div class="info-msg">
                         '.$auto_user_name.'
@@ -210,7 +249,7 @@ class Msglog extends \Magento\Framework\App\Action\Action
             }
         }
         if(!$count && $welcome_message) {
-            print '<div class="msg">
+            echo '<div class="msg">
                     <p>'.$welcome_message.'</p>
                     <div class="info-msg">
                         '.$auto_user_name.'

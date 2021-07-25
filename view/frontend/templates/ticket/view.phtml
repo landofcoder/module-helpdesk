@@ -11,6 +11,10 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 			<table class="data-table table">
 				<tbody>
 					<tr>
+						<th><?= __('Ticket ID:'); ?></th>
+						<td><strong><?= $ticket->getId(); ?></strong></td>
+					</tr>
+					<tr>
 						<th><?= __('Department'); ?></th>
 						<td><?= $helper->getDepartmentById($ticket->getDepartmentId())->getTitle(); ?></td>
 					</tr> 
