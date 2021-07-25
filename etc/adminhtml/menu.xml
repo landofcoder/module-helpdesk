@@ -31,7 +31,7 @@
 		<add id="Lof_HelpDesk::quickanswer" title="Quick Answer" module="Lof_HelpDesk" sortOrder="70" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/quickanswer/index" resource="Lof_HelpDesk::quickanswer"/>
 		<add id="Lof_HelpDesk::chat" title="Chat" module="Lof_HelpDesk" sortOrder="75" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/chat/index" resource="Lof_HelpDesk::chat"/>
 		<add id="Lof_HelpDesk::report_helpdesk" title="Report" module="Lof_HelpDesk" sortOrder="80" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/report/index" resource="Lof_HelpDesk::report"/>
-		<add id="Lof_HelpDesk::blacklist_manage" title="Manage Blacklist" module="Lof_HelpDesk" sortOrder="76" parent="Lof_HelpDesk::chatsystem" action="lofhelpdesk/blacklist/index" resource="Lof_HelpDesk::blacklist"/>
+		<add id="Lof_HelpDesk::blacklist_manage" title="Manage Blacklist" module="Lof_HelpDesk" sortOrder="76" parent="Lof_HelpDesk::helpdesk" action="lofhelpdesk/blacklist/index" resource="Lof_HelpDesk::blacklist"/>
 		<add id="Lof_HelpDesk::settings" title="Configuration" module="Lof_HelpDesk" sortOrder="150" action="adminhtml/system_config/edit/section/lofhelpdesk" resource="Lof_HelpDesk::config_helpdesk" parent="Lof_HelpDesk::helpdesk"/>
 		</menu>
 </config>
