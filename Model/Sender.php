@@ -100,8 +100,6 @@ class Sender
             $data['urllogin'] = $this->_url->getUrl('lofhelpdesk/ticket/index');
             $data['description'] = $data['message'];
             $postObject->setData($data);
-            $storeScope = ScopeInterface::SCOPE_STORE;
-
             $transport = $this->_transportBuilder
                 ->setTemplateIdentifier($this->helper->getConfig('email_settings/new_message_template'))
                 ->setTemplateOptions(
@@ -118,16 +116,21 @@ class Sender
                 $transport->sendMessage();
                 $this->inlineTranslation->resume();
             } catch (\Exception $e) {
-                $error = true;
                 $this->messageManager->addError(
                     __('We can\'t process your request right now. Sorry, that\'s all we know.')
                 );
+                $this->messageManager->addError(
+                    $e->getMessage()
+                    );
             }
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
             $this->messageManager->addError(
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
+            $this->messageManager->addError(
+                $e->getMessage()
+                );
             return;
         }
     }
@@ -170,7 +173,6 @@ class Sender
         try {
             $postObject = new \Magento\Framework\DataObject();
             $postObject->setData($data);
-            $storeScope = ScopeInterface::SCOPE_STORE;
 
             $transport = $this->_transportBuilder
                 ->setTemplateIdentifier($this->helper->getConfig('email_settings/status_ticket_template'))
@@ -189,16 +191,21 @@ class Sender
                 $transport->sendMessage();
                 $this->inlineTranslation->resume();
             } catch (\Exception $e) {
-                $error = true;
                 $this->messageManager->addError(
                     __('We can\'t process your request right now. Sorry, that\'s all we know.')
                 );
+                $this->messageManager->addError(
+                    $e->getMessage()
+                    );
             }
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
             $this->messageManager->addError(
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
+            $this->messageManager->addError(
+                $e->getMessage()
+                );
             return;
         }
     }
@@ -208,8 +215,6 @@ class Sender
         try {
             $postObject = new \Magento\Framework\DataObject();
             $postObject->setData($data);
-            $storeScope = ScopeInterface::SCOPE_STORE;
-
             $transport = $this->_transportBuilder
                 ->setTemplateIdentifier($this->helper->getConfig('email_settings/assign_ticket_template'))
                 ->setTemplateOptions(
@@ -227,16 +232,21 @@ class Sender
                 $transport->sendMessage();
                 $this->inlineTranslation->resume();
             } catch (\Exception $e) {
-                $error = true;
                 $this->messageManager->addError(
                     __('We can\'t process your request right now. Sorry, that\'s all we know.')
                 );
+                $this->messageManager->addError(
+                    $e->getMessage()
+                    );
             }
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
             $this->messageManager->addError(
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
+            $this->messageManager->addError(
+                $e->getMessage()
+                );
             return;
         }
     }
@@ -248,8 +258,6 @@ class Sender
                 $postObject = new \Magento\Framework\DataObject();
 
                 $postObject->setData($data);
-                $storeScope = ScopeInterface::SCOPE_STORE;
-
                 $transport = $this->_transportBuilder
                     ->setTemplateIdentifier($this->helper->getConfig('email_settings/reminder_template'))
                     ->setTemplateOptions(
@@ -268,16 +276,21 @@ class Sender
                     $transport->sendMessage();
                     $this->inlineTranslation->resume();
                 } catch (\Exception $e) {
-                    $error = true;
                     $this->messageManager->addError(
                         __('We can\'t process your request right now. Sorry, that\'s all we know.')
                     );
+                    $this->messageManager->addError(
+                        $e->getMessage()
+                        );
                 }
             } catch (\Exception $e) {
                 $this->inlineTranslation->resume();
                 $this->messageManager->addError(
                     __('We can\'t process your request right now. Sorry, that\'s all we know.')
                 );
+                $this->messageManager->addError(
+                    $e->getMessage()
+                    );
                 return;
             }
         }
@@ -298,8 +311,6 @@ class Sender
                 $url = $this->helpData->getHomePageUrl();
                 $data['urllogin'] = $url;
                 $postObject->setData($data);
-
-                $storeScope = ScopeInterface::SCOPE_STORE;
 
                 $transport = $this->_transportBuilder
                         ->setTemplateIdentifier($this->helper->getConfig('email_settings/new_ticket_template'))
@@ -322,16 +333,21 @@ class Sender
                         __('Thank you for send ticket')
                     );
                 } catch (\Exception $e) {
-                    $error = true;
                     $this->messageManager->addError(
                         __('We can\'t process your request right now. Sorry, that\'s all we know.')
                     );
+                    $this->messageManager->addError(
+                        $e->getMessage()
+                        );
                 }
             } catch (\Exception $e) {
                 $this->inlineTranslation->resume();
                 $this->messageManager->addError(
                     __('We can\'t process your request right now. Sorry, that\'s all we know.')
                 );
+                $this->messageManager->addError(
+                    $e->getMessage()
+                    );
                 return;
             }
         }
@@ -363,18 +379,139 @@ class Sender
                     $transport->sendMessage();
                     $this->inlineTranslation->resume();
                 } catch (\Exception $e) {
-                    $error = true;
                     $this->messageManager->addError(
                         __('We can\'t process your request right now. Sorry, that\'s all we know.')
                     );
+                    $this->messageManager->addError(
+                        $e->getMessage()
+                        );
                 }
             } catch (\Exception $e) {
                 $this->inlineTranslation->resume();
                 $this->messageManager->addError(
                     __('We can\'t process your request right now. Sorry, that\'s all we know.')
                 );
+                $this->messageManager->addError(
+                    $e->getMessage()
+                    );
                 return;
             }
+        }
+    }
+
+    public function sendEmailChat($data)
+    {       
+         try {
+            $postObject = new \Magento\Framework\DataObject();
+            $postObject->setData($data);
+            $admin_email = $this->helper->getConfig('email_settings/email_admin');
+            $default_admin_email = "";
+            if(isset($data["user_id"]) && $data["user_id"]){
+                $user = $this->userFactory->create()->load((int)$data["user_id"]);
+                $default_admin_email = $user->getEmail();
+            }
+            $transport = $this->_transportBuilder
+            ->setTemplateIdentifier($this->helper->getConfig('email_settings/customer_chat_template'))
+
+            ->setTemplateOptions(
+                [
+                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            ])
+            ->setTemplateVars(['data' => $postObject])
+            ->setFrom($this->helper->getConfig('email_settings/sender_email_identity'))
+            ->addTo($admin_email)
+            ->setReplyTo($admin_email)
+            ->getTransport();
+ 
+            try  {
+                $transport->sendMessage();
+                $this->inlineTranslation->resume();
+            } catch(\Exception $e){
+                $error = true;
+                $this->messageManager->addError(
+                    __('We can\'t process your request right now. Sorry, that\'s all we know.')
+                    );
+            }
+            //Send same email to default assigned admin user email.
+            if($default_admin_email){
+                $transport = $this->_transportBuilder
+                ->setTemplateIdentifier($this->helper->getConfig('email_settings/customer_chat_template'))
+
+                ->setTemplateOptions(
+                    [
+                    'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                ])
+                ->setTemplateVars(['data' => $postObject])
+                ->setFrom($this->helper->getConfig('email_settings/sender_email_identity'))
+                ->addTo($default_admin_email)
+                ->setReplyTo($default_admin_email)
+                ->getTransport();
+    
+                try  {
+                    $transport->sendMessage();
+                    $this->inlineTranslation->resume();
+                } catch(\Exception $e){
+                    $this->messageManager->addError(
+                        __('We can\'t process your request right now. Sorry, that\'s all we know.')
+                        );
+                    $this->messageManager->addError(
+                        $e->getMessage()
+                        );
+                }
+            }
+        } catch (\Exception $e) {
+            $this->inlineTranslation->resume();
+            $this->messageManager->addError(
+                __('We can\'t process your request right now. Sorry, that\'s all we know.')
+                );
+            $this->messageManager->addError(
+                $e->getMessage()
+                );
+            return;
+        }
+    }
+
+    public function sendAdminChat($data)
+    {       
+         try {
+            $postObject = new \Magento\Framework\DataObject();
+            $postObject->setData($data);
+            $customer_email = $data['customer_email'];
+            $transport = $this->_transportBuilder
+            ->setTemplateIdentifier($this->helper->getConfig('email_settings/admin_reply_template'))
+
+            ->setTemplateOptions(
+                [
+                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            ])
+            ->setTemplateVars(['data' => $postObject])
+            ->setFrom($this->helper->getConfig('email_settings/sender_email_identity'))
+            ->addTo($customer_email)
+            ->setReplyTo($customer_email)
+            ->getTransport();
+            try  {
+                $transport->sendMessage();
+                $this->inlineTranslation->resume();
+            } catch(\Exception $e){
+                $this->messageManager->addError(
+                    __('We can\'t process your request right now. Sorry, that\'s all we know.')
+                    );
+                $this->messageManager->addError(
+                    $e->getMessage()
+                    );
+            }
+        } catch (\Exception $e) {
+            $this->inlineTranslation->resume();
+            $this->messageManager->addError(
+                __('We can\'t process your request right now. Sorry, that\'s all we know.')
+                );
+            $this->messageManager->addError(
+                $e->getMessage()
+                );
+            return;
         }
     }
 
