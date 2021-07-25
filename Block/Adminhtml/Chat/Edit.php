@@ -59,7 +59,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
         $this->buttonList->remove('save');
-
+        $chat = $this->_coreRegistry->registry('lofhelpdesk_chat');
+        $chat_id = $chat?$chat->getId():0;
         $this->buttonList->add(
             'blacklist',
             [

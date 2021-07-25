@@ -5,7 +5,7 @@
 $this->isRead();
 $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 $current_url = $block->escapeUrl($this->getCurrentChat()->getData('current_url'));
-?>>
+?>
 <p><?= __('Chat message sent on') . ' ' . ($current_url ? ('<a href="' . $current_url . '" target="_BLANK">' . $current_url . '</a>') : ""); ?></p>
 <input type="hidden" name="chat_id" value="<?= $this->getCurrentChat()->getData('chat_id'); ?>">
 <div class="main-chat" id="main-chat">
