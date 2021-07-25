@@ -82,7 +82,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('lofhelpdesk_chat')->getId()) {
-            return __("Edit Chat '%1'", $this->escapeHtml($this->_coreRegistry->registry('lofhelpdesk_chat')->getTitle()));
+            return __("Edit Chat '%1'", $this->escapeHtml($this->_coreRegistry->registry('lofhelpdesk_chat')->getCustomerName()));
         } else {
             return __('New Chat');
         }

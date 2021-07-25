@@ -121,10 +121,10 @@ class View extends \Magento\Framework\View\Element\Template
     {
         parent::_prepareLayout();
         $ticket = $this->getTicket();
-        $this->pageConfig->getTitle()->set(__($ticket->getSubject()));
+        $this->pageConfig->getTitle()->set(__("Ticket: ").$ticket->getSubject());
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle(__($ticket->getSubject()));
+            $pageMainTitle->setPageTitle(__("Ticket: ").$ticket->getSubject());
         }
     }
 

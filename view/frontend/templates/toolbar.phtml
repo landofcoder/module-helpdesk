@@ -1,4 +1,4 @@
-<?php if($this->getCollection()->getSize()): ?>
+<?php if($size = $this->getCollection()->getSize()): ?>
 <div class="toolbar">
 	<div class="pager">
 		<p class="toolbar-amount"><span class="toolbar-number"><?= __('%1 Item(s)', $size); ?></span></p>

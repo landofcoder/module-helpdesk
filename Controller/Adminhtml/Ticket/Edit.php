@@ -134,7 +134,7 @@ class Edit extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
             $id ? __('Edit Ticket') : __('New Ticket')
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Tickets'));
-        $resultPage->getConfig()->getTitle()->prepend($model->getId() ? $model->getTitle() : __('New Ticket'));
+        $resultPage->getConfig()->getTitle()->prepend($model->getId() ? $model->getSubject() : __('New Ticket'));
         return $resultPage;
     }
 }

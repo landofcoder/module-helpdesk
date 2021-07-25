@@ -62,22 +62,23 @@ class Like extends \Magento\Framework\App\Action\Action
      */
     protected $resultForwardFactory;
 
-    protected $_like;
+    protected $_likeFactory;
 
     /**
      * @param Context $context
-     * @param \Magento\Store\Model\StoreManager $storeManager
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Lof\HelpDesk\Helper\Data $helper
+     * @param \Lof\HelpDesk\Model\LikeFactory $likeFactory
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         Context $context,
-        \Magento\Store\Model\StoreManager $storeManager,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Lof\HelpDesk\Helper\Data $helper,
-        \Lof\HelpDesk\Model\Like $like,
+        \Lof\HelpDesk\Model\LikeFactory $likeFactory,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
@@ -86,7 +87,7 @@ class Like extends \Magento\Framework\App\Action\Action
     {
         $this->resultPageFactory = $resultPageFactory;
         $this->_helper = $helper;
-        $this->_like = $like;
+        $this->_likeFactory = $likeFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->_coreRegistry = $registry;
         $this->_cacheTypeList = $cacheTypeList;
@@ -107,13 +108,14 @@ class Like extends \Magento\Framework\App\Action\Action
         if (!empty($data)) {
             $responseData = [];
             $count = $data['countlike'];
-            $like = $this->_like->load($data['messageid'], 'message_id');
-
-            if (count($like->getData()) == 0) {
+            $collection = $this->_likeFactory->create()->getCollection();
+            $collection->addFieldToFilter("message_id", (int)$data['messageid']);
+            $collection->addFieldToFilter("customer_id", (int)$data['customerid']);
+            if ($collection->count() == 0) {
                 try {
                     $message = __('Thanks for your like!');
                     $count = $data['countlike'] + 1;
-
+                    $like = $this->_likeFactory->create();
                     $like->setData('customer_id', $data['customerid'])->setData('message_id', $data['messageid'])->save();
                     $this->_cacheTypeList->cleanType('full_page');
                 } catch (\Exception $e) {

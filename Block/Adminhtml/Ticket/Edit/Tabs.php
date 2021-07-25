@@ -50,19 +50,27 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             ]
         );
         $this->addTab(
-            'additional',
-            [
-                'label' => __('Additional'),
-                'content' => $this->getLayout()->createBlock('Lof\HelpDesk\Block\Adminhtml\Ticket\Edit\Tab\Additional')->toHtml()
-            ]
-        );
-        $this->addTab(
             'message',
             [
                 'label' => __('Message'),
                 'content' => $this->getLayout()->createBlock('Lof\HelpDesk\Block\Adminhtml\Ticket\Edit\Tab\Message')->toHtml()
             ]
         );
+        $this->addTab(
+            'customer_information',
+            [
+                'label' => __('Customer Information'),
+                'content' => $this->getLayout()->createBlock('Lof\HelpDesk\Block\Adminhtml\Ticket\Edit\Tab\Customer')->toHtml()
+            ]
+        );
+        $this->addTab(
+            'additional',
+            [
+                'label' => __('Additional'),
+                'content' => $this->getLayout()->createBlock('Lof\HelpDesk\Block\Adminhtml\Ticket\Edit\Tab\Additional')->toHtml()
+            ]
+        );
+        
         $this->addTab(
             'other_ticket',
             [
