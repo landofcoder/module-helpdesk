@@ -101,6 +101,7 @@ class Blacklist extends \Magento\Backend\Block\Widget\Form\Generic implements
                     'name' => 'customer_id',
                     'label' => __('Customer Id'),
                     'required' => false,
+                    'disabled' => true,
                     'title' => __('Customer Id')
                 ]
         );
@@ -112,6 +113,7 @@ class Blacklist extends \Magento\Backend\Block\Widget\Form\Generic implements
                 'label'    => __('IP address'),
                 'title'    => __('IP address'),
                 'required' => false,
+                'disabled' => true,
                 'class' => 'ip'
             ]
         );
@@ -121,7 +123,8 @@ class Blacklist extends \Magento\Backend\Block\Widget\Form\Generic implements
                 [
                     'name' => 'customer_email',
                     'label' => __('Customer Email'),
-                    'title' => __('Customer Email')
+                    'title' => __('Customer Email'),
+                    'disabled' => true
                 ]
         );
         $form->setValues($model->getData());
