@@ -82,6 +82,11 @@ class Menu extends \Magento\Backend\Block\Template
                     'url' => $this->getUrl('*/quickanswer/index'),
                     'resource' => 'Lof_HelpDesk::quickanswer'
                 ],
+                'blacklist' => [
+                    'title' => __('Manage Blacklist'),
+                    'url' => $this->getUrl('*/blacklist/index'),
+                    'resource' => 'Lof_HelpDesk::blacklist'
+                ],
                 'settings' => [
                     'title' => __('Settings'),
                     'url' => $this->getUrl('adminhtml/system_config/edit/section/lofhelpdesk'),
