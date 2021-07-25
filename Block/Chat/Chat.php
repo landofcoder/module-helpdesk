@@ -41,9 +41,9 @@ class Chat extends \Magento\Framework\View\Element\Template
     protected $category;
     /**
      *
-     * @var \Magento\Customer\Model\Url
+     * @var \Lof\HelpDesk\Model\ChatFactory
      */
-    protected $chat;
+    protected $chatFactory;
     /**
      *
      * @var \Lof\HelpDesk\Helper\Data
@@ -58,6 +58,10 @@ class Chat extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Lof\HelpDesk\Model\Category $category
+     * @param \Lof\HelpDesk\Helper\Url $customerUrl
+     * @param \Lof\HelpDesk\Helper\Data $helper
+     * @param \Lof\HelpDesk\Model\ChatFactory $chatFactory
      * @param array $data
      */
     public function __construct(
@@ -66,12 +70,12 @@ class Chat extends \Magento\Framework\View\Element\Template
         \Lof\HelpDesk\Model\Category $category,
         \Lof\HelpDesk\Helper\Url $customerUrl,
         \Lof\HelpDesk\Helper\Data $helper,
-        \Lof\HelpDesk\Model\Chat $chat,
+        \Lof\HelpDesk\Model\ChatFactory $chatFactory,
         array $data = []
     )
     {
         $this->helper = $helper;
-        $this->chat = $chat;
+        $this->chatFactory = $chatFactory;
         $this->_customerSession = $customerSession;
         $this->category = $category;
         $this->_customerUrl = $customerUrl;
@@ -84,6 +88,10 @@ class Chat extends \Magento\Framework\View\Element\Template
             return true;
         }
         return false;
+    }
+
+    public function getChatModel(){
+        return $this->chatFactory->create();
     }
 
     public function getChatId()

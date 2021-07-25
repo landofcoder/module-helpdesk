@@ -1,33 +1,35 @@
 <?php
- $helper = $this->helper("Lof\HelpDesk\Helper\Data");
- $store = $helper->getConfig('chat/store');
+$helper = $this->helper("Lof\HelpDesk\Helper\Data");
+$store = $helper->getConfig('chat/store');
 $store = explode(",",$store);
-$objectManager = \Magento\Framework\App\ObjectManager::getInstance ();
-$chat = $objectManager->create('Lof\HelpDesk\Model\Chat');
+$chat = $this->getChatModel();
 $is_read = 0;
-
-if($this->isLogin()) { 
-$chat_message = $chat->load($this->getCustomer()->getData('email'),'customer_email');
-
-$is_read = $chat_message->getData('is_read');
+$enable = $helper->getConfig('general_settings/enable');
+$enable_guest = $helper->getConfig('chat/enable_guest');
+if (!$enable) {
+    return;
 }
-
-if(in_array($helper->getStoreId(), $store) && $store && $helper->getConfig('general_settings/enable'))  {
+if ($store && !in_array($helper->getStoreId(), $store)) {
+    return;
+}
+if($this->isLogin()){
+    $chat_message = $chat->load($this->getCustomer()->getData('email'),'customer_email');
+    $is_read = $chat_message->getData('is_read');
+}
 ?>
-
 <div id="live-chat"> 
     <header class="clearfix" <?php if($helper->getConfig('chat/background_color')) echo 'style="background-color:'.$helper->getConfig('chat/background_color').'"'; ?>>
         <a href="#" class="chat-close">x</a>
         <h4><?php echo $helper->getConfig('chat/text_label');?></h4>
-        <?php if($is_read == 3) { ?>
+        <?php if($is_read == 3): ?>
         <span class="chat-message-counter" style="display: inline;">1</span>
-        <?php } ?>
+        <?php endif; ?>
     </header>
     <div class="chat">
-        <?php if(!$this->isLogin()) { ?>
+        <?php if(!$this->isLogin() && $enable_guest): ?>
         <ul class="tabs">
-            <li class="tab-link current" data-tab="tab-1"><?php echo __('Guest Chat'); ?></li>
-            <li class="tab-link" data-tab="tab-2"><?php echo __('Login Chat'); ?></li>
+            <li class="tab-link current" data-tab="tab-1"><?= __('Guest Chat'); ?></li>
+            <li class="tab-link" data-tab="tab-2"><?= __('Login Chat'); ?></li>
         </ul>
         <div id="tab-1" class="tab-content current">
              <div class="form-chat">
@@ -35,12 +37,17 @@ if(in_array($helper->getStoreId(), $store) && $store && $helper->getConfig('gene
                 </div>
                 <div class="box-chat">
                     <form method="post" id="formSendMsg" onsubmit="return false;">
-                        <input type="hidden" name="form_key" value="<?php echo $this->getFormKey(); ?>">
-                        <input type="hidden" name="chat_id" value="<?php echo $this->getChatId();?>">
-                        <input type="hidden" name="customer_id" value="<?php echo $this->getCustomerSession()->getCustomerId();?>">
-                        <input type="hidden" name="customer_name" value="<?php echo $this->getCustomer()->getData('firstname').' '.$this->getCustomer()->getData('lastname');?>">
-                        <input type="hidden" name="customer_email" value="<?php echo $this->getCustomer()->getData('email');?>">
-                        <input type="text" name="body_msg" placeholder="<?php echo __('Please enter a message'); ?> ...">
+                        <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($this->getFormKey()); ?>">
+                        <input type="hidden" name="chat_id" value="<?= $block->escapeHtmlAttr($this->getChatId()); ?>">
+                        <input type="hidden" name="current_url"
+                                value="<?= $block->escapeUrl($helper->getCurrentUrl()); ?>">
+                        <input type="hidden" name="customer_id"
+                                value="<?= $block->escapeHtmlAttr($this->getCustomerSession()->getCustomerId()); ?>">
+                        <input type="hidden" name="customer_name"
+                                value="<?= $block->escapeHtmlAttr($this->getCustomer()->getData('firstname') . ' ' . $this->getCustomer()->getData('lastname')); ?>">
+                        <input type="hidden" name="customer_email"
+                                value="<?= $block->escapeHtmlAttr($this->getCustomer()->getData('email')); ?>">
+                        <input type="text" name="body_msg" placeholder="<?= $block->escapeHtml(__('Please enter a message')); ?> ...">
                     </form>
                 </div>
             </div> 
@@ -96,23 +103,27 @@ if(in_array($helper->getStoreId(), $store) && $store && $helper->getConfig('gene
                 </form>
             </div>
         </div>    
-        <?php } else { ?>
+        <?php else: ?>
         <div class="form-chat">
             <div class="main-chat" id="main-chat">
 
             </div>
             <div class="box-chat">
                 <form method="post" id="formSendMsg" onsubmit="return false;">
-                    <input type="hidden" name="form_key" value="<?php echo $this->getFormKey(); ?>">
-                    <input type="hidden" name="chat_id" value="<?php echo $this->getChatId();?>">
-                    <input type="hidden" name="customer_id" value="<?php echo $this->getCustomerSession()->getCustomerId();?>">
-                    <input type="hidden" name="customer_name" value="<?php echo $this->getCustomer()->getData('firstname').' '.$this->getCustomer()->getData('lastname');?>">
-                    <input type="hidden" name="customer_email" value="<?php echo $this->getCustomer()->getData('email');?>">
-                    <input type="text" name="body_msg" placeholder="<?php echo __('Please enter a message'); ?> ...">
+                    <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($this->getFormKey()); ?>">
+                    <input type="hidden" name="chat_id" value="<?= $block->escapeHtmlAttr($this->getChatId()); ?>">
+                    <input type="hidden" name="current_url" value="<?= $block->escapeUrl($helper->getCurrentUrl()); ?>">
+                    <input type="hidden" name="customer_id"
+                            value="<?= $block->escapeHtmlAttr($this->getCustomerSession()->getCustomerId()); ?>">
+                    <input type="hidden" name="customer_name"
+                            value="<?= $block->escapeHtmlAttr($this->getCustomer()->getData('firstname') . ' ' . $this->getCustomer()->getData('lastname')); ?>">
+                    <input type="hidden" name="customer_email"
+                            value="<?= $block->escapeHtmlAttr($this->getCustomer()->getData('email')); ?>">
+                    <input type="text" name="body_msg" placeholder="<?= $block->escapeHtml(__('Please enter a message')); ?> ...">
                 </form>
             </div>
         </div> 
-        <?php } ?>   
+        <?php endif; ?>   
     </div> <!-- end chat -->
 </div> <!-- end live-chat -->
 <script type="text/javascript">
@@ -152,7 +163,7 @@ if(in_array($helper->getStoreId(), $store) && $store && $helper->getConfig('gene
             $customer_email = $('#formSendMsg input[name="customer_email"]').val();
             if($.trim($body_msg) && $.trim($chat_id)) {
                 $('#formSendMsg input[type="text"]').val('');
-                $('.main-chat').append('<div class="msg-user"><p>'+$body_msg+'</p><div class="info-msg-user">You</div></div>');  
+                $('.main-chat').append('<div class="msg-user"><p>'+$body_msg+'</p><div class="info-msg-user"><?= $block->escapeHtml(__("You"));?></div></div>');  
 
                 $.ajax({
                     url : '<?php echo $this->getUrl('lofhelpdesk/chat/sendmsg'); ?>', 
@@ -204,5 +215,3 @@ if(in_array($helper->getStoreId(), $store) && $store && $helper->getConfig('gene
 
     });
 </script>
-
-<?php } ?>
