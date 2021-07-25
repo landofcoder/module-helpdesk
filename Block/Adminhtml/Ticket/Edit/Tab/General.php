@@ -50,7 +50,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
 
     protected $authSession;
 
-    protected $user;
+    protected $userFactory;
 
     protected $quickanswer;
 
@@ -69,7 +69,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
      * @param \Lof\HelpDesk\Model\Attachment $attachment
      * @param \Lof\HelpDesk\Model\TicketFactory $ticket
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\User\Model\User $user
+     * @param \Magento\User\Model\UserFactory $userFactory
      * @param array $data = []
      */
     public function __construct(
@@ -87,13 +87,13 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
         \Lof\HelpDesk\Model\Attachment $attachment,
         \Lof\HelpDesk\Model\TicketFactory $ticket,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\User\Model\User $user,
+        \Magento\User\Model\UserFactory $userFactory,
         array $data = []
     )
     {
         $this->ticket = $ticket;
         $this->quickanswer = $quickanswer;
-        $this->_user = $user;
+        $this->userFactory = $userFactory;
         $this->attachment = $attachment;
         $this->department = $department;
         $this->authSession = $authSession;
@@ -231,8 +231,14 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
 
         $user = $this->authSession->getUser();
         $ticket_user_id = $model?$model->getUserId():$user->getUserId();
-        $user_name = $model?$model->getUserName():($user->getFirstname() . ' ' . $user->getLastname());
-        $user_email = $model?$model->getUserEmail():$user->getEmail();
+        if($model && $ticket_user_id !== $user->getUserId()){
+            $newUser = $this->userFactory->create()->load($ticket_user_id);
+            $user_name = $newUser->getFirstname() . ' ' . $newUser->getLastname();
+            $user_email = $newUser->getEmail();
+        }else {
+            $user_name = $model?$model->getUserName():($user->getFirstname() . ' ' . $user->getLastname());
+            $user_email = $model?$model->getUserEmail():$user->getEmail();
+        }
         $fieldset->addField(
             'user_id',
             'hidden',
@@ -250,7 +256,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
             ['name' => 'user_email', 'label' => __('User Email'), 'title' => __('User Email'), 'value' => $user_email]
         );
 
-        $model->setData('user_id', $ticket_user_id);
+        // $model->setData('user_id', $ticket_user_id);
         $model->setData('user_name', $user_name);
         $model->setData('user_email', $user_email);
 

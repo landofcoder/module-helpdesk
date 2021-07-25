@@ -102,11 +102,11 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                 }
                 if(isset($data["fp_user_id"]) && $data["fp_user_id"]){
                     if($data["fp_user_id"] != $model->getUserId()){
-                        $assignUser = $this->userFactory->create()->load((int)$data["user_id"]);
+                        $assignUser = $this->userFactory->create()->load((int)$data["fp_user_id"]);
                         if($assignUser && $assignUser->getUserId()){
                             $data["user_id"] = $data["fp_user_id"];
                             $data["user_name"] = $assignUser->getFirstname() . ' ' . $assignUser->getLastname();
-                            $data["user_email"] = $assignUser->getMail();
+                            $data["user_email"] = $assignUser->getEmail();
                             //get Department Id by User Id
                             $collection = $this->departmentFactory->create()->getCollection();
                             $department_user = $collection->getTable('lof_helpdesk_department_user');
@@ -120,7 +120,7 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                             }
                         }
                     }
-                    //unset($data["fp_user_id"]);
+                    unset($data["fp_user_id"]);
                 }
                 if ($data['department_id'] != $model->getDepartmentId()) {
                     $sender->assignTicket($data);

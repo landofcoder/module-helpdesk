@@ -184,8 +184,14 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic implements \
 
         $user = $this->authSession->getUser();
         $ticket_user_id = $model?$model->getUserId():$user->getUserId();
-        $user_name = $model?$model->getUserName():($user->getFirstname() . ' ' . $user->getLastname());
-        $user_email = $model?$model->getUserEmail():$user->getEmail();
+        if($model && $ticket_user_id !== $user->getUserId()){
+            $newUser = $this->userFactory->create()->load($ticket_user_id);
+            $user_name = $newUser->getFirstname() . ' ' . $newUser->getLastname();
+            $user_email = $newUser->getEmail();
+        }else {
+            $user_name = $model?$model->getUserName():($user->getFirstname() . ' ' . $user->getLastname());
+            $user_email = $model?$model->getUserEmail():$user->getEmail();
+        }
 
         $fieldset->addField(
             'user_id',
