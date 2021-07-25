@@ -224,6 +224,45 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 );
         }
 
+        /**
+         * Upgrade version 1.0.6
+         */
+        if (version_compare($context->getVersion(), '1.0.6', '<')) {
+            $lof_helpdesk_chat = $installer->getTable('lof_helpdesk_chat');
+            $installer->getConnection()->addColumn(
+                $lof_helpdesk_chat,
+                'category_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'unsigned' => true,
+                    'nullable' => true,
+                    'default' => 0,
+                    'comment' => 'Ticket Category Id'
+                ]
+            );
+            $installer->getConnection()->addColumn(
+                $lof_helpdesk_chat,
+                'ticket_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'unsigned' => true,
+                    'nullable' => true,
+                    'default' => 0,
+                    'comment' => 'Linked to Ticket Id'
+                ]
+            );
+            $installer->getConnection()->addColumn(
+                $lof_helpdesk_chat,
+                'department_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'unsigned' => true,
+                    'nullable' => true,
+                    'default' => 0,
+                    'comment' => 'Ticket Department Id'
+                ]
+            );
+        }
         $installer->endSetup();
     }
 }
