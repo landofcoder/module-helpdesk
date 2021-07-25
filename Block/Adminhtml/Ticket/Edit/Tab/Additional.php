@@ -183,21 +183,24 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic implements \
         );
 
         $user = $this->authSession->getUser();
+        $ticket_user_id = $model?$model->getUserId():$user->getUserId();
+        $user_name = $model?$model->getUserName():($user->getFirstname() . ' ' . $user->getLastname());
+        $user_email = $model?$model->getUserEmail():$user->getEmail();
 
         $fieldset->addField(
             'user_id',
             'note',
-            ['name' => 'user_id', 'label' => __('User Id'), 'title' => __('User Id'), 'text' => $user->getUserId()]
+            ['name' => 'user_id', 'label' => __('User Id'), 'title' => __('User Id'), 'text' => $ticket_user_id]
         );
         $fieldset->addField(
             'user_name',
             'note',
-            ['name' => 'user_name', 'label' => __('User Name'), 'title' => __('User Name'), 'text' => $user->getFirstname() . ' ' . $user->getLastname()]
+            ['name' => 'user_name', 'label' => __('User Name'), 'title' => __('User Name'), 'text' => $user_name]
         );
         $fieldset->addField(
             'user_email',
             'note',
-            ['name' => 'user_email', 'label' => __('User Email'), 'title' => __('User Email'), 'text' => $user->getEmail()]
+            ['name' => 'user_email', 'label' => __('User Email'), 'title' => __('User Email'), 'text' => $user_email]
         );
 
         $fieldset->addField(
@@ -217,12 +220,12 @@ class Additional extends \Magento\Backend\Block\Widget\Form\Generic implements \
         );
 
         $fieldset->addField(
-            'fb_user_id',
+            'fp_user_id',
             'select',
             [
                 'label' => __('Assign to Other User'),
                 'title' => __('Assign to Other User'),
-                'name' => 'fb_user_id',
+                'name' => 'fp_user_id',
                 'options' => $this->getUserList()
             ]
         );

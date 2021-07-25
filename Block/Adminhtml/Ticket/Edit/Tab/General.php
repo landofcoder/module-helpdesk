@@ -230,28 +230,29 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
         );
 
         $user = $this->authSession->getUser();
-
+        $ticket_user_id = $model?$model->getUserId():$user->getUserId();
+        $user_name = $model?$model->getUserName():($user->getFirstname() . ' ' . $user->getLastname());
+        $user_email = $model?$model->getUserEmail():$user->getEmail();
         $fieldset->addField(
             'user_id',
             'hidden',
-            ['name' => 'user_id', 'label' => __('User Id'), 'title' => __('User Id'), 'value' => $user->getUserId()]
+            ['name' => 'user_id', 'label' => __('User Id'), 'title' => __('User Id'), 'value' => $ticket_user_id]
         );
 
         $fieldset->addField(
             'user_name',
             'hidden',
-            ['name' => 'user_name', 'label' => __('User Name'), 'title' => __('User Name'), 'value' => $user->getFirstname() . ' ' . $user->getLastname()]
+            ['name' => 'user_name', 'label' => __('User Name'), 'title' => __('User Name'), 'value' => $user_name]
         );
         $fieldset->addField(
             'user_email',
             'hidden',
-            ['name' => 'user_email', 'label' => __('User Email'), 'title' => __('User Email'), 'value' => $user->getEmail()]
+            ['name' => 'user_email', 'label' => __('User Email'), 'title' => __('User Email'), 'value' => $user_email]
         );
 
-
-        $model->setData('user_id', $user->getUserId());
-        $model->setData('user_name', $user->getFirstname() . ' ' . $user->getLastname());
-        $model->setData('user_email', $user->getEmail());
+        $model->setData('user_id', $ticket_user_id);
+        $model->setData('user_name', $user_name);
+        $model->setData('user_email', $user_email);
 
         $form->setValues($model->getData());
         $this->setForm($form);

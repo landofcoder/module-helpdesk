@@ -47,6 +47,11 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
     protected $departmentFactory;
 
     /**
+     * @var \Magento\User\Model\UserFactory
+     */
+    protected $userFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Filesystem $filesystem
@@ -59,7 +64,8 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
         \Magento\Framework\Filesystem $filesystem,
         \Lof\HelpDesk\Model\SenderFactory $senderFactory,
         \Lof\HelpDesk\Model\TicketFactory $ticketFactory,
-        \Lof\HelpDesk\Model\DepartmentFactory $departmentFactory
+        \Lof\HelpDesk\Model\DepartmentFactory $departmentFactory,
+        \Magento\User\Model\UserFactory $userFactory
     ) {
         $this->helper = $helper;
         $this->_fileSystem = $filesystem;
@@ -67,6 +73,7 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
         $this->senderFactory = $senderFactory;
         $this->ticketFactory = $ticketFactory;
         $this->departmentFactory = $departmentFactory;
+        $this->userFactory = $userFactory;
         parent::__construct($context, $coreRegistry);
     }
 
@@ -88,27 +95,32 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
             $id = $this->getRequest()->getParam('ticket_id');
             $model = $this->ticketFactory->create()->load($id);
             if ($id && $model->getId()) {
-                
                 if ($data['status_id'] != $model->getStatusId()) {
                     $data['status'] = $this->helper->getStatus($data['status_id'])->getText();
                     $data['urllogin'] = $this->helper->getStoreUrl('/customer/account/login');
                     $sender->statusTicket($data);
                 }
-                if(isset($data["fp_user_id"])){
+                if(isset($data["fp_user_id"]) && $data["fp_user_id"]){
                     if($data["fp_user_id"] != $model->getUserId()){
-                        $data["user_id"] = $data["fp_user_id"];
-                        //get Department Id by User Id
-                        $collection = $this->departmentFactory->create()->getCollection();
-                        $department_user = $collection->getTable('lof_helpdesk_department_user');
-                        $collection->getSelect()->join(['dpuser' => $department_user], 'dpuser.department_id  = main_table.department_id ', [
-                            "user_id"
-                        ])->where('dpuser.user_id = ' . (int)$data["fp_user_id"]);
-                        $foundDepartment = $collection->getFirstItem();
-                        if($foundDepartment && $foundDepartment->getId()){
-                            $data['department_id'] = $foundDepartment->getId();
+                        $assignUser = $this->userFactory->create()->load((int)$data["user_id"]);
+                        if($assignUser && $assignUser->getUserId()){
+                            $data["user_id"] = $data["fp_user_id"];
+                            $data["user_name"] = $assignUser->getFirstname() . ' ' . $assignUser->getLastname();
+                            $data["user_email"] = $assignUser->getMail();
+                            //get Department Id by User Id
+                            $collection = $this->departmentFactory->create()->getCollection();
+                            $department_user = $collection->getTable('lof_helpdesk_department_user');
+                            $collection->getSelect()->join(['dpuser' => $department_user], 'dpuser.department_id  = main_table.department_id ', [
+                                "user_id"
+                            ])->where('dpuser.user_id = ' . (int)$data["fp_user_id"]);
+                            $collection->setOrder('position','asc');
+                            $foundDepartment = $collection->getFirstItem();
+                            if($foundDepartment && $foundDepartment->getId()){
+                                $data['department_id'] = $foundDepartment->getId();
+                            }
                         }
                     }
-                    unset($data["fp_user_id"]);
+                    //unset($data["fp_user_id"]);
                 }
                 if ($data['department_id'] != $model->getDepartmentId()) {
                     $sender->assignTicket($data);
@@ -117,6 +129,7 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                 $this->messageManager->addError(__('This ticket no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
+
             $mediaDirectory = $this->_objectManager->get('Magento\Framework\Filesystem')
                 ->getDirectoryRead(DirectoryList::MEDIA);
             $mediaFolder = 'lof/helpdesk/';
