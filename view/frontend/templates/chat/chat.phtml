@@ -131,36 +131,30 @@ if($this->isLogin()){
         (function() {
             $('.chat ul.tabs li').click(function(){
                 var tab_id = $(this).attr('data-tab');
-
                 $('.chat ul.tabs li').removeClass('current');
                 $('.chat .tab-content').removeClass('current');
-
                 $(this).addClass('current');
                 $("#"+tab_id).addClass('current');
             })
 
             $('#live-chat header').on('click', function() {
-
                 $('.chat').slideToggle(300, 'swing');
-                //$('.chat-message-counter').fadeToggle(300, 'swing');
-
             });
 
             $('.chat-close').on('click', function(e) {
-
                 e.preventDefault();
                 $('#live-chat').fadeOut(300);
 
             });
 
         }) ();
-        <?php //if($this->isLogin()) { ?>
         function sendMsg() {
-            $body_msg = $('#formSendMsg input[name="body_msg"]').val();
-            $chat_id = $('#formSendMsg input[name="chat_id"]').val();
-            $customer_id = $('#formSendMsg input[name="customer_id"]').val();
-            $customer_name = $('#formSendMsg input[name="customer_name"]').val();
-            $customer_email = $('#formSendMsg input[name="customer_email"]').val();
+            $body_msg = lofescapeHtml($('#formSendMsg input[name="body_msg"]').val());
+            $chat_id = lofescapeHtml($('#formSendMsg input[name="chat_id"]').val());
+            $customer_id = lofescapeHtml($('#formSendMsg input[name="customer_id"]').val());
+            $customer_name = lofescapeHtml($('#formSendMsg input[name="customer_name"]').val());
+            $customer_email = lofescapeHtml($('#formSendMsg input[name="customer_email"]').val());
+            $current_url = lofescapeHtml($('#formSendMsg input[name="current_url"]').val());
             if($.trim($body_msg) && $.trim($chat_id)) {
                 $('#formSendMsg input[type="text"]').val('');
                 $('.main-chat').append('<div class="msg-user"><p>'+$body_msg+'</p><div class="info-msg-user"><?= $block->escapeHtml(__("You"));?></div></div>');  
@@ -186,7 +180,15 @@ if($this->isLogin()){
             }
         }
 
-         $('#formSendMsg input[name="body_msg"]').keypress(function(event) {
+        function lofescapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        $('#formSendMsg input[name="body_msg"]').keypress(function(event) {
             //event.preventDefault();
             var keycode = (event.keyCode ? event.keyCode : event.which);
             console.log(keycode);
@@ -198,7 +200,7 @@ if($this->isLogin()){
                 }
                 $('.chat-message-counter').css('display','none');       
             }
-        }); 
+        });
 
         $('#formSendMsg input[type="text"]').click(function(e) {
              var div = document.getElementById('main-chat')
@@ -211,7 +213,5 @@ if($this->isLogin()){
              var div = document.getElementById('main-chat')
             div.scrollTop = div.scrollHeight - div.clientHeight;
         }, 5000);
-        <?php //} ?> 
-
     });
 </script>
