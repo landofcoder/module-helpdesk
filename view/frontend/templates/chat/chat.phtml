@@ -47,7 +47,7 @@ if($this->isLogin()){
                                 value="<?= $block->escapeHtmlAttr($this->getCustomer()->getData('firstname') . ' ' . $this->getCustomer()->getData('lastname')); ?>">
                         <input type="hidden" name="customer_email"
                                 value="<?= $block->escapeHtmlAttr($this->getCustomer()->getData('email')); ?>">
-                        <input type="text" name="body_msg" placeholder="<?= $block->escapeHtml(__('Please enter a message')); ?> ...">
+                        <input type="text" name="body_msg" placeholder="<?= $block->escapeHtmlAttr(__('Please enter a message')); ?> ...">
                     </form>
                 </div>
             </div> 
@@ -119,7 +119,7 @@ if($this->isLogin()){
                             value="<?= $block->escapeHtmlAttr($this->getCustomer()->getData('firstname') . ' ' . $this->getCustomer()->getData('lastname')); ?>">
                     <input type="hidden" name="customer_email"
                             value="<?= $block->escapeHtmlAttr($this->getCustomer()->getData('email')); ?>">
-                    <input type="text" name="body_msg" placeholder="<?= $block->escapeHtml(__('Please enter a message')); ?> ...">
+                    <input type="text" name="body_msg" placeholder="<?= $block->escapeHtmlAttr(__('Please enter a message')); ?> ...">
                 </form>
             </div>
         </div> 

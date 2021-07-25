@@ -47,16 +47,23 @@ class Main extends \Magento\Framework\View\Element\Template
 
     protected $messsage;
 
+    protected $_chatModelFactory;
+
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Lof\HelpDesk\Model\Ticket $ticketCollection
+     * @param \Magento\Backend\Block\Template\Context $context,
+     * @param \Magento\Framework\Registry $registry,
+     * @param \Magento\Backend\Model\Auth\Session $authSession,
+     * @param \Lof\HelpDesk\Model\Ticket $ticketCollection,
+     * @param \Lof\HelpDesk\Model\ChatMessage $messsage,
+     * @param \Lof\HelpDesk\Model\ChatFactory $chatModelFactory
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Lof\HelpDesk\Model\Ticket $ticketCollection,
-        \Lof\HelpDesk\Model\ChatMessage $messsage
+        \Lof\HelpDesk\Model\ChatMessage $messsage,
+        \Lof\HelpDesk\Model\ChatFactory $chatModelFactory
     )
     {
         parent::__construct($context);
@@ -65,6 +72,7 @@ class Main extends \Magento\Framework\View\Element\Template
         $this->formKey = $context->getFormKey();
         $this->authSession = $authSession;
         $this->messsage = $messsage;
+        $this->_chatModelFactory = $chatModelFactory;
 
     }
 
@@ -86,8 +94,7 @@ class Main extends \Magento\Framework\View\Element\Template
 
     public function isRead()
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $chat = $objectManager->create('Lof\HelpDesk\Model\Chat')->load($this->getCurrentChat()->getData('chat_id'));
+        $chat = $this->_chatModelFactory->create()->load($this->getCurrentChat()->getData('chat_id'));
         //$messsage = $objectManager->create('Lof\HelpDesk\Model\ChatMessage')->load()->getCollection(); 
         $messsage = $this->messsage->getCollection()->addFieldToFilter('chat_id', $this->getCurrentChat()->getData('chat_id'))->addFieldToFilter('is_read', 1);
         foreach ($messsage as $key => $_messsage) {
