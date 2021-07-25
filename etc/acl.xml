@@ -45,7 +45,6 @@
                         <resource id="Lof_HelpDesk::blacklist_delete" title="Delete Blacklist" sortOrder="30" />
                     </resource>
                     <resource id="Lof_HelpDesk::report" title="Report" sortOrder="70" />
-                    <resource id="Lof_HelpDesk::chat_delete" title="Delete Chat" sortOrder="75" />
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
