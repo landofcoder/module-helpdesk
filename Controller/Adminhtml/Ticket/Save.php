@@ -37,6 +37,21 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
     protected $helper;
 
     /**
+     * @var \Lof\HelpDesk\Model\SenderFactory
+     */
+    protected $senderFactory;
+
+    /**
+     * @var \Lof\HelpDesk\Model\DepartmentFactory
+     */
+    protected $departmentFactory;
+
+    /**
+     * @var \Magento\User\Model\UserFactory
+     */
+    protected $userFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Filesystem $filesystem
@@ -46,11 +61,19 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\Helper\Js $jsHelper,
         \Lof\HelpDesk\Helper\Data $helper,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        \Lof\HelpDesk\Model\SenderFactory $senderFactory,
+        \Lof\HelpDesk\Model\TicketFactory $ticketFactory,
+        \Lof\HelpDesk\Model\DepartmentFactory $departmentFactory,
+        \Magento\User\Model\UserFactory $userFactory
     ) {
         $this->helper = $helper;
         $this->_fileSystem = $filesystem;
         $this->jsHelper = $jsHelper;
+        $this->senderFactory = $senderFactory;
+        $this->ticketFactory = $ticketFactory;
+        $this->departmentFactory = $departmentFactory;
+        $this->userFactory = $userFactory;
         parent::__construct($context, $coreRegistry);
     }
 
@@ -64,34 +87,58 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
         if ($data) {
             $data['last_reply_name'] = $data['user_name'];
             $data['reply_cnt'] = 1;
-            $sender = $this->_objectManager->create('Lof\HelpDesk\Model\Sender');
+            $sender = $this->senderFactory->create();
 
-            if ($data['message']) {
+            if (isset($data['message']) && $data['message']) {
                 $sender->sendEmailTicket($data);
             }
-            if ($data['ticket_id']) {
-                $model = $this->_objectManager->create('Lof\HelpDesk\Model\Ticket')->load($data['ticket_id']);
+            $id = $this->getRequest()->getParam('ticket_id');
+            $model = $this->ticketFactory->create()->load($id);
+            if ($id && $model->getId()) {
                 if ($data['status_id'] != $model->getStatusId()) {
                     $data['status'] = $this->helper->getStatus($data['status_id'])->getText();
                     $data['urllogin'] = $this->helper->getStoreUrl('/customer/account/login');
                     $sender->statusTicket($data);
                 }
+                if(isset($data["fp_user_id"]) && $data["fp_user_id"]){
+                    if($data["fp_user_id"] != $model->getUserId()){
+                        $assignUser = $this->userFactory->create()->load((int)$data["fp_user_id"]);
+                        if($assignUser && $assignUser->getUserId()){
+                            $data["user_id"] = $data["fp_user_id"];
+                            $data["user_name"] = $assignUser->getFirstname() . ' ' . $assignUser->getLastname();
+                            $data["user_email"] = $assignUser->getEmail();
+                            //get Department Id by User Id
+                            $collection = $this->departmentFactory->create()->getCollection();
+                            $department_user = $collection->getTable('lof_helpdesk_department_user');
+                            $collection->getSelect()->join(['dpuser' => $department_user], 'dpuser.department_id  = main_table.department_id ', [
+                                "user_id"
+                            ])->where('dpuser.user_id = ' . (int)$data["fp_user_id"]);
+                            $collection->setOrder('position','asc');
+                            $foundDepartment = $collection->getFirstItem();
+                            if($foundDepartment && $foundDepartment->getId()){
+                                $data['department_id'] = $foundDepartment->getId();
+                            }
+                        }
+                    }
+                    unset($data["fp_user_id"]);
+                }
                 if ($data['department_id'] != $model->getDepartmentId()) {
                     $sender->assignTicket($data);
                 }
-            }
-
-            $id = $this->getRequest()->getParam('ticket_id');
-            $model = $this->_objectManager->create('Lof\HelpDesk\Model\Ticket')->load($id);
-            if (!$model->getId() && $id) {
+            }else{
                 $this->messageManager->addError(__('This ticket no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
+
             $mediaDirectory = $this->_objectManager->get('Magento\Framework\Filesystem')
                 ->getDirectoryRead(DirectoryList::MEDIA);
             $mediaFolder = 'lof/helpdesk/';
-            $path = $mediaDirectory->getAbsolutePath($mediaFolder);
-
+            $lofPath = $mediaDirectory->getAbsolutePath("lof");
+            $helpdeskPath = $mediaDirectory->getAbsolutePath("lof/helpdesk");
+            if (!file_exists($lofPath))
+                mkdir($lofPath, 0777, true);
+            if (!file_exists($helpdeskPath))
+                mkdir($helpdeskPath, 0777, true);
             // Delete, Upload Image
 
             $imagePath = $mediaDirectory->getAbsolutePath($model->getImage());
@@ -122,7 +169,7 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                     unset($data['ticket_id']);
                     $data['identifier'] = $data['identifier'] . time();
 
-                    $ticket = $this->_objectManager->create('Lof\HelpDesk\Model\Ticket');
+                    $ticket = $this->ticketFactory->create();
                     $ticket->setData($data);
                     try {
                         $ticket->save();

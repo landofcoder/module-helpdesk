@@ -73,12 +73,17 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_cacheTypeList;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context
-     * @param \Magento\Framework\Registry
-     * @param \Lof\HelpDesk\Model\Ticket
-     * @param \Lof\HelpDesk\Model\Category
-     * @param \Lof\HelpDesk\Helper\Data
-     * @param \Magento\Framework\App\ResourceConnection
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Lof\HelpDesk\Model\Ticket $ticketFactory
+     * @param \Lof\HelpDesk\Model\Message $message
+     * @param \Lof\HelpDesk\Model\Attachment $attachment
+     * @param \Lof\HelpDesk\Model\CategoryFactory $categoryFactory
+     * @param \Lof\HelpDesk\Helper\Data $helper
+     * @param \Lof\HelpDesk\Model\Like $like
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param array
      */
     public function __construct(
@@ -88,7 +93,7 @@ class View extends \Magento\Framework\View\Element\Template
         \Lof\HelpDesk\Model\Ticket $ticketFactory,
         \Lof\HelpDesk\Model\Message $message,
         \Lof\HelpDesk\Model\Attachment $attachment,
-        \Lof\HelpDesk\Model\Category $categoryFactory,
+        \Lof\HelpDesk\Model\CategoryFactory $categoryFactory,
         \Lof\HelpDesk\Helper\Data $helper,
         \Lof\HelpDesk\Model\Like $like,
         \Magento\Framework\App\ResourceConnection $resource,
@@ -96,7 +101,7 @@ class View extends \Magento\Framework\View\Element\Template
         array $data = []
     )
     {
-        parent::__construct($context);
+        parent::__construct($context, $data);
 
         $this->like = $like;
         $this->attachment = $attachment;
@@ -121,10 +126,10 @@ class View extends \Magento\Framework\View\Element\Template
     {
         parent::_prepareLayout();
         $ticket = $this->getTicket();
-        $this->pageConfig->getTitle()->set(__($ticket->getSubject()));
+        $this->pageConfig->getTitle()->set(__("Ticket: ").$ticket->getSubject());
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle(__($ticket->getSubject()));
+            $pageMainTitle->setPageTitle(__("Ticket: ").$ticket->getSubject());
         }
     }
 
@@ -146,25 +151,32 @@ class View extends \Magento\Framework\View\Element\Template
     public function getTicketCategory($catId)
     {
         $store = $this->_storeManager->getStore();
-        $cat = $this->_categoryFactory->getCollection()
+        $cat = $this->_categoryFactory->create()->getCollection()
             ->addFieldToFilter('is_active', ['eq' => 1])
             ->addFieldToFilter('main_table.category_id', ['eq' => $catId])
             ->addStoreFilter($store)->getFirstItem();
         return $cat;
     }
 
+    /**
+     * Get Current ticket id
+     * @return int
+     */
     public function getId()
     {
-        $id = explode('/', trim($this->request->getPathInfo(), '/'));
-        return end($id);
+        if(!isset($this->_ticket_id)){
+            $this->_ticket_id = $this->request->getParam("ticket_id");
+        }
+        return $this->_ticket_id;
     }
 
-    public function getOrderTicket($orderid)
+    public function getOrderTicket($orderid, $order_url = "")
     {
-        return $this->helper->getOrderTicket($orderid);
+        return $this->helper->getOrderTicket($orderid, $order_url);
     }
 
     /**
+     * @param int $id
      * @return object
      */
     public function getStatus($id)
@@ -184,6 +196,7 @@ class View extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @param int $id
      * @return object
      */
     public function getPriority($id)
@@ -203,49 +216,66 @@ class View extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @param int $catid
      * @return object
      */
     public function getCategoryName($catid)
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $category = $objectManager->get('Lof\HelpDesk\Model\Category')->load($catid);
+        $category = $this->_categoryFactory->create()->load($catid);
         $name = $category->getTitle();
-
         return $name;
     }
 
+    /**
+     * get current ticket
+     * @return \Lof\HelpDesk\Model\Ticket|Object
+     */
     public function getTicket()
     {
-        $customerSession = $this->session->getCustomer();
-        $customerId = $customerSession->getId();
         $ticket = $this->_ticketFactory->getCollection()
             ->addFieldToFilter('main_table.ticket_id', $this->getId())
             ->getFirstItem();
         return $ticket;
     }
 
+    /**
+     * Get Message by Id
+     * @param int $ticket_id
+     * @return \Lof\HelpDesk\Model\Message[]
+     */
     public function getMessage($ticket_id)
     {
         $message = $this->message->getCollection()->addFieldToFilter('ticket_id', $ticket_id);
+        $message->setOrder('created_at','desc');
         return $message;
     }
 
+    /**
+     * Get Attachment by Id
+     * @param int $message_id
+     * @return \Lof\HelpDesk\Model\Attachment[]
+     */
     public function getAttachment($message_id)
     {
         $attachment = $this->attachment->getCollection()
             ->addFieldToFilter('message_id', $message_id);
         return $attachment;
     }
-
-    public function getSumLike($id, $customer_id)
+    /**
+     * @param string $id
+     * @param int $message_id
+     * @return int
+     */
+    public function getSumLike($id, $message_id)
     {
-        $like = $this->like->getCollection()->addFieldToFilter($id, $customer_id);
-        return count($like);
+        $like = $this->like->getCollection()->addFieldToFilter($id, ['neq' => 'NULL']);
+        $like->addFieldToFilter("message_id", $message_id);
+        return $like->count();
     }
 
     /**
      * Retrive image URL
-     *
+     * @param string $image
      * @return string
      */
     public function getAvatarUrl($image)

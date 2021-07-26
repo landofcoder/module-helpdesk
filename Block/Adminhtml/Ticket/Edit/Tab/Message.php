@@ -131,7 +131,11 @@ class Message extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
         $fieldset->addField(
             'message',
             'textarea',
-            ['name' => 'message', 'label' => __('Message'), 'title' => __('Message'), 'required' => true,
+            [
+                'name' => 'message', 
+                'label' => __('Message'), 
+                'title' => __('Message'), 
+                'required' => false,
                 //'style' => 'height:10em;',
                 'disabled' => $isElementDisabled,
                 //'config' => $wysiwygConfig,
@@ -150,8 +154,8 @@ class Message extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
         $data = '';
         $quickanswer = $this->quickanswer->getCollection()->addFieldToFilter('is_active', 1);
         $data .= '<select id="quickanswer">';
-        $data .= '<option value="0">Quick Answer</option>';
-        foreach ($quickanswer as $key => $_quickanswer) {
+        $data .= '<option value="0">'.__("Quick Answer").'</option>';
+        foreach ($quickanswer as $_quickanswer) {
             $data .= '<option value=' . $_quickanswer->getQuickanswerId() . '>';
             $data .= $_quickanswer->getTitle();
             $data .= '</option>';
@@ -159,28 +163,34 @@ class Message extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
         $data .= '</select>';
         return $data;
     }
-
-    public function getSumLike($id, $customer_id)
+    /**
+     * @param string $id
+     * @param int $message_id
+     * @return int
+     */
+    public function getSumLike($id, $message_id)
     {
-        $like = $this->like->getCollection()->addFieldToFilter($id, $customer_id);
-        return count($like);
+        $like = $this->like->getCollection()->addFieldToFilter($id, ['neq' => 'NULL']);
+        $like->addFieldToFilter("message_id", $message_id);
+        return $like->count();
     }
 
     protected function _getTicketContentAfterHtml($ticket_id)
     {
         if ($ticket_id) {
             $message = $this->message->getCollection()->addFieldToFilter('ticket_id', $ticket_id);
+            $message->setOrder('created_at','desc');
             $data = '';
             $class = '';
-            foreach ($message as $key => $_message) {
+            foreach ($message as $_message) {
                 if ($_message->getData('user_name')) {
                     $name = $_message->getData('user_name');
                     $class = 'user';
-                    $countlike = $this->getSumLike('user_id', $_message->getData('user_id'));
+                    $countlike = $this->getSumLike('user_id', $_message->getId());
                 } else {
                     $name = $_message->getData('customer_name');
                     $class = '';
-                    $countlike = $this->getSumLike('customer_id', $_message->getData('customer_id'));
+                    $countlike = $this->getSumLike('customer_id', $_message->getId());
                 }
                 $data .= '<div class="lof-ticket-history">';
                 $data .= '<div class="lof-message">';
@@ -206,7 +216,6 @@ class Message extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
                     $data .= '</a>';
                     $data .= '</span>';
                     $data .= '<div class="thank-like message_id_' . $_message->getMessageId() . '">';
-
                     $data .= '</div>';
                     $data .= '</div>';
                 }

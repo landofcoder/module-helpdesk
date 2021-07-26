@@ -22,6 +22,7 @@
 namespace Lof\HelpDesk\Controller\Ticket;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Controller\ResultFactory;
 
 class Savemessage extends \Magento\Framework\App\Action\Action
 {
@@ -162,7 +163,7 @@ class Savemessage extends \Magento\Framework\App\Action\Action
         $this->_redirect('lofhelpdesk/ticket/view/id/' . $data['ticket_id']);
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultPageFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath("*/*/id/" . $data['ticket_id']);
         //}
     }

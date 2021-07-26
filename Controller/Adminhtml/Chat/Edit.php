@@ -91,7 +91,7 @@ class Edit extends \Lof\HelpDesk\Controller\Adminhtml\Chat
             $id ? __('Edit Chat') : __('New Chat')
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Chats'));
-        $resultPage->getConfig()->getTitle()->prepend($model->getId() ? $model->getTitle() : __('New Chat'));
+        $resultPage->getConfig()->getTitle()->prepend($model->getId() ? $model->getCustomerName() : __('New Chat'));
         return $resultPage;
     }
 }

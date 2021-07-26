@@ -13,7 +13,7 @@
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  *
- * @category   Landofcoder
+ * @chat   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
  * @license    http://www.landofcoder.com/LICENSE-1.0.html
@@ -21,10 +21,7 @@
 
 namespace Lof\HelpDesk\Controller\Adminhtml\Chat;
 
-use Magento\Customer\Controller\AccountInterface;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Display Hello on screen
@@ -65,37 +62,30 @@ class Msglog extends \Magento\Framework\App\Action\Action
     protected $_message;
 
     protected $chat;
+    protected $_chatModelFactory;
 
-    /**
-     * @param Context $context
-     * @param \Magento\Store\Model\StoreManager $storeManager
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Lof\HelpDesk\Helper\Data $helper
-     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Framework\Registry $registry
-     */
     public function __construct(
         Context $context,
-        \Magento\Store\Model\StoreManager $storeManager,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Lof\HelpDesk\Helper\Data $helper,
         \Lof\HelpDesk\Model\ChatMessage $message,
         \Lof\HelpDesk\Model\Chat $chat,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Customer\Model\Session $customerSession
-    )
-    {
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList, 
+        \Magento\Customer\Model\Session $customerSession,
+        \Lof\HelpDesk\Model\ChatFactory $chatModelFactory
+        ) {
         $this->chat = $chat;
-        $this->resultPageFactory = $resultPageFactory;
-        $this->_helper = $helper;
-        $this->_message = $message;
+        $this->resultPageFactory    = $resultPageFactory;
+        $this->_helper              = $helper;
+        $this->_message             = $message;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->_coreRegistry = $registry;
-        $this->_cacheTypeList = $cacheTypeList;
-        $this->_customerSession = $customerSession;
-        $this->_request = $context->getRequest();
+        $this->_coreRegistry        = $registry;
+        $this->_cacheTypeList       = $cacheTypeList;
+        $this->_customerSession     = $customerSession;
+        $this->_request             = $context->getRequest();
+        $this->_chatModelFactory    = $chatModelFactory;
         parent::__construct($context);
     }
 
@@ -105,31 +95,32 @@ class Msglog extends \Magento\Framework\App\Action\Action
      * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
-    {
-        $id = $this->getRequest()->getparam('chat_id');
-        $chat = $this->_objectManager->create('Lof\HelpDesk\Model\Chat')->load($id);
+    { 
+        $id = $this->getRequest()->getParam('chat_id');
+        $chat = $this->_chatModelFactory->create()->load($id);
 
-        if ($this->_customerSession->getCustomer()->getEmail()) {
-            $message = $this->_message->getCollection()->addFieldToFilter('customer_email', $this->_customerSession->getCustomer()->getEmail());
+        if($this->_customerSession->getCustomer()->getEmail()) {
+            $message = $this->_message->getCollection()->addFieldToFilter('customer_email',$this->_customerSession->getCustomer()->getEmail());
         } else {
-            $message = $this->_message->getCollection()->addFieldToFilter('chat_id', $id);
+           $message = $this->_message->getCollection()->addFieldToFilter('chat_id',$id); 
         }
 
-        foreach ($message as $key => $_message) {
+        foreach ($message->getData() as $key => $_message) {
 
             $date_sent = $_message['created_at'];
-            $day_sent = substr($date_sent, 8, 2);
-            $month_sent = substr($date_sent, 5, 2);
-            $year_sent = substr($date_sent, 0, 4);
-            $hour_sent = substr($date_sent, 11, 2);
-            $min_sent = substr($date_sent, 14, 2);
-
-            if ($_message['user_id']) {
+            $day_sent = substr($date_sent, 8, 2); 
+            $month_sent = substr($date_sent, 5, 2); 
+            $year_sent = substr($date_sent, 0, 4); 
+            $hour_sent = substr($date_sent, 11, 2); 
+            $min_sent = substr($date_sent, 14, 2); 
+            $body_msg = $this->_helper->xss_clean($_message['body_msg']);
+            if ($_message['user_id'])
+            {
                 echo '
                     <div class="msg-user">
-                        <p>' . $_message['body_msg'] . '</p>
+                        <p>'.$body_msg.'</p>
                         <div class="info-msg-user">
-                            You
+                            '.__("You").'
                         </div>
                     </div>
                     
@@ -137,19 +128,19 @@ class Msglog extends \Magento\Framework\App\Action\Action
             } else {
                 echo '
                 <div class="msg">
-                    <p>' . $_message['body_msg'] . '</p>
+                    <p>'.$body_msg.'</p>
                     <div class="info-msg">';
-                if ($chat->getData('ip')) {
-                    echo 'Guest';
-                } else {
-                    echo $_message['customer_name'];
-                }
+                    if($chat->getData('ip')) {
+                        echo __('Guest');
+                    } else {
+                        echo $_message['customer_name'];
+                    }
                 echo '</div>
                 </div>
             ';
             }
         }
         exit;
-
+          
     }
 }

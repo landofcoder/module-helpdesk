@@ -57,82 +57,98 @@
     <preference for="Lof\HelpDesk\Api\Data\ChatMessageInterface" type="Lof\HelpDesk\Model\Data\ChatMessage"/>
     <preference for="Lof\HelpDesk\Api\Data\ChatMessageSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
 
+    <type name="Magento\Framework\Console\CommandList">
+		<arguments>
+			<argument name="commands" xsi:type="array">
+				<item name="Cleanchat" xsi:type="object">Lof\HelpDesk\Console\Command\Cleanlogs</item>
+			</argument>
+		</arguments>
+	</type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-    <arguments>
-        <argument name="collections" xsi:type="array">
-            <item name="lofhelpdesk_ticket_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Ticket\Grid\Collection</item>
-            <item name="lofhelpdesk_category_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Category\Grid\Collection</item>
-            <item name="lofhelpdesk_department_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Department\Grid\Collection</item>
-            <item name="lofhelpdesk_permission_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Permission\Grid\Collection</item>
-            <item name="lofhelpdesk_spam_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Spam\Grid\Collection</item>
-            <item name="lofhelpdesk_quickanswer_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Quickanswer\Grid\Collection</item>
-            <item name="lofhelpdesk_chat_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Chat\Grid\Collection</item>
-        </argument>
-    </arguments>
-</type>
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="lofhelpdesk_ticket_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Ticket\Grid\Collection</item>
+                <item name="lofhelpdesk_category_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Category\Grid\Collection</item>
+                <item name="lofhelpdesk_department_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Department\Grid\Collection</item>
+                <item name="lofhelpdesk_permission_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Permission\Grid\Collection</item>
+                <item name="lofhelpdesk_spam_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Spam\Grid\Collection</item>
+                <item name="lofhelpdesk_quickanswer_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Quickanswer\Grid\Collection</item>
+                <item name="lofhelpdesk_chat_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Chat\Grid\Collection</item>
+                <item name="lofhelpdesk_blacklist_listing_data_source" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Blacklist\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Lof\HelpDesk\Model\ResourceModel\Ticket\Grid\Collection">
-    <arguments>
-        <argument name="mainTable" xsi:type="string">lof_helpdesk_ticket</argument>
-        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_ticket_grid_collection</argument>
-        <argument name="eventObject" xsi:type="string">ticket_grid_collection</argument>
-        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Ticket</argument>
-    </arguments>
+        <arguments>
+            <argument name="mainTable" xsi:type="string">lof_helpdesk_ticket</argument>
+            <argument name="eventPrefix" xsi:type="string">lofhelpdesk_ticket_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">ticket_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Ticket</argument>
+        </arguments>
     </type>
     <type name="Lof\HelpDesk\Model\ResourceModel\Category\Grid\Collection">
-    <arguments>
-        <argument name="mainTable" xsi:type="string">lof_helpdesk_category</argument>
-        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_category_grid_collection</argument>
-        <argument name="eventObject" xsi:type="string">category_grid_collection</argument>
-        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Category</argument>
-    </arguments>
+        <arguments>
+            <argument name="mainTable" xsi:type="string">lof_helpdesk_category</argument>
+            <argument name="eventPrefix" xsi:type="string">lofhelpdesk_category_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">category_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Category</argument>
+        </arguments>
     </type>
     <type name="Lof\HelpDesk\Model\ResourceModel\Department\Grid\Collection">
-    <arguments>
-        <argument name="mainTable" xsi:type="string">lof_helpdesk_department</argument>
-        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_department_grid_collection</argument>
-        <argument name="eventObject" xsi:type="string">department_grid_collection</argument>
-        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Department</argument>
-    </arguments>
+        <arguments>
+            <argument name="mainTable" xsi:type="string">lof_helpdesk_department</argument>
+            <argument name="eventPrefix" xsi:type="string">lofhelpdesk_department_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">department_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Department</argument>
+        </arguments>
     </type>
     <type name="Lof\HelpDesk\Model\ResourceModel\Permission\Grid\Collection">
-    <arguments>
-        <argument name="mainTable" xsi:type="string">lof_helpdesk_permission</argument>
-        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_permission_grid_collection</argument>
-        <argument name="eventObject" xsi:type="string">permission_grid_collection</argument>
-        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Permission</argument>
-    </arguments>
+        <arguments>
+            <argument name="mainTable" xsi:type="string">lof_helpdesk_permission</argument>
+            <argument name="eventPrefix" xsi:type="string">lofhelpdesk_permission_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">permission_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Permission</argument>
+        </arguments>
     </type>
     <type name="Lof\HelpDesk\Model\ResourceModel\Spam\Grid\Collection">
-    <arguments>
-        <argument name="mainTable" xsi:type="string">lof_helpdesk_spam</argument>
-        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_spam_grid_collection</argument>
-        <argument name="eventObject" xsi:type="string">spam_grid_collection</argument>
-        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Spam</argument>
-    </arguments>
+        <arguments>
+            <argument name="mainTable" xsi:type="string">lof_helpdesk_spam</argument>
+            <argument name="eventPrefix" xsi:type="string">lofhelpdesk_spam_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">spam_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Spam</argument>
+        </arguments>
     </type>
     <type name="Lof\HelpDesk\Model\ResourceModel\Quickanswer\Grid\Collection">
-    <arguments>
-        <argument name="mainTable" xsi:type="string">lof_helpdesk_quickanswer</argument>
-        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_quickanswer_grid_collection</argument>
-        <argument name="eventObject" xsi:type="string">quickanswer_grid_collection</argument>
-        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Quickanswer</argument>
-    </arguments>
+        <arguments>
+            <argument name="mainTable" xsi:type="string">lof_helpdesk_quickanswer</argument>
+            <argument name="eventPrefix" xsi:type="string">lofhelpdesk_quickanswer_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">quickanswer_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Quickanswer</argument>
+        </arguments>
     </type>
     <type name="Lof\HelpDesk\Model\ResourceModel\Chat\Grid\Collection">
-    <arguments>
-        <argument name="mainTable" xsi:type="string">lof_helpdesk_chat</argument>
-        <argument name="eventPrefix" xsi:type="string">lofhelpdesk_chat_grid_collection</argument>
-        <argument name="eventObject" xsi:type="string">chat_grid_collection</argument>
-        <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Chat</argument>
-    </arguments>
+        <arguments>
+            <argument name="mainTable" xsi:type="string">lof_helpdesk_chat</argument>
+            <argument name="eventPrefix" xsi:type="string">lofhelpdesk_chat_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">chat_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Chat</argument>
+        </arguments>
+    </type>
+     <type name="Lof\HelpDesk\Model\ResourceModel\Blacklist\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">lof_helpdesk_blacklist</argument>
+            <argument name="eventPrefix" xsi:type="string">lofhelpdesk_blacklist_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">blacklist_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Lof\HelpDesk\Model\ResourceModel\Blacklist</argument>
+        </arguments>
     </type>
     <virtualType name="HelpDeskGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
-    <arguments>
-        <argument name="appliers" xsi:type="array">
-            <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-            <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
-        </argument>
-    </arguments>
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
     </virtualType>
     <virtualType name="TicketGridDataProvider" type="Lof\HelpDesk\Ui\DataProvider\HelpDesk\TicketDataProvider">
     <arguments>

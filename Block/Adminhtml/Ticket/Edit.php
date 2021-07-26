@@ -105,7 +105,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('lofhelpdesk_ticket')->getId()) {
-            return __("View Ticket '%1'", $this->escapeHtml($this->_coreRegistry->registry('lofhelpdesk_ticket')->getTitle()));
+            return __("View Ticket '%1'", $this->escapeHtml($this->_coreRegistry->registry('lofhelpdesk_ticket')->getSubject()));
         } else {
             return __('New Ticket');
         }
@@ -119,8 +119,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     protected function _afterToHtml($html)
     {
-
-
         return parent::_afterToHtml($html . $this->_getJsInitScripts());
     }
 
@@ -132,11 +130,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $dataModel = $model->getData();
 
         $quickanswer = $this->quickanswer->getCollection()->addFieldToFilter('is_active', 1);
-        $data .= '<script>
-            require(["jquery"], function(jQuery){
-                jQuery(document).ready(function() {
-                    jQuery("#quickanswer").change(function() {';
-        foreach ($quickanswer as $key => $_quickanswer) {
+        foreach ($quickanswer as $_quickanswer) {
             $content = $_quickanswer->getContent();
             $content = str_replace('[ticket_customer_name]', $dataModel['customer_name'], $content);
             $content = str_replace('[ticket_customer_email]', $dataModel['customer_email'], $content);
@@ -144,12 +138,17 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $content = str_replace('[user_firstname]', $user->getFirstname(), $content);
             $content = str_replace('[user_lastname]', $user->getLastname(), $content);
             $content = str_replace('[user_email]', $user->getEmail(), $content);
-            $data .= '
-                        if(jQuery(this).val() == ' . $_quickanswer->getQuickanswerId() . ') {
-                            jQuery("#ticket_message").val("' . $content . '");
-                        }
-                        ';
+            $data .= '<textarea id="quickresponseText'.$_quickanswer->getQuickanswerId().'" style="width:0px; height:0px; opacity:0;">'.$content.'</textarea>';
         }
+        $data .= '<script>
+            require(["jquery"], function(jQuery){
+                jQuery(document).ready(function() {
+                    jQuery("#quickanswer").change(function() {';
+        $data .= '
+        const answerId = jQuery(this).val()
+        if(answerId) {
+            jQuery("#ticket_message").val(jQuery("#quickresponseText"+answerId).val());
+        }';
         $data .= "});
                     jQuery('.like-button .like-comment').click(function() {
                         var customerid = jQuery(this).data('customerid');

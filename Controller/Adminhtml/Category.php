@@ -21,9 +21,6 @@
 
 namespace Lof\HelpDesk\Controller\Adminhtml;
 
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
-
 abstract class Category extends \Magento\Backend\App\Action
 {
     /**

@@ -126,7 +126,6 @@ class Ticket extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if ($object->getMessage()) {
-
             $user = $this->authSession->getUser();
             $data_message = [];
             $data_message = [

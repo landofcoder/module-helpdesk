@@ -59,6 +59,17 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
         $this->buttonList->remove('save');
+        $chat = $this->_coreRegistry->registry('lofhelpdesk_chat');
+        $chat_id = $chat?$chat->getId():0;
+        $this->buttonList->add(
+            'blacklist',
+            [
+                'label' => __('Add to Blacklist'),
+                'class' => 'save primary',
+                'onclick' => 'setLocation(\'' . $this->getUrl('lofhelpdesk/*/addBlacklist', ["chat_id"=>(int)$chat_id]) . '\')'
+            ]
+            
+);
 
 
     }
@@ -71,7 +82,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('lofhelpdesk_chat')->getId()) {
-            return __("Edit Chat '%1'", $this->escapeHtml($this->_coreRegistry->registry('lofhelpdesk_chat')->getTitle()));
+            return __("Edit Chat '%1'", $this->escapeHtml($this->_coreRegistry->registry('lofhelpdesk_chat')->getCustomerName()));
         } else {
             return __('New Chat');
         }

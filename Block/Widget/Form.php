@@ -39,6 +39,10 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
 
     protected $currentCustomer;
 
+    /**
+     * @var \Magento\Customer\Model\SessionFactory
+     */
+    protected $customerSessionFactory;
 
     /**
      * @var int
@@ -51,6 +55,7 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
         \Magento\Contact\Helper\Data $contactHelper,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
+        \Magento\Customer\Model\SessionFactory $customerSessionFactory,
         array $data = []
     )
     {
@@ -58,12 +63,17 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
         $this->customerFactory = $customerFactory;
         $this->customerSession = $customerSession;
         $this->contactHelper = $contactHelper;
+        $this->customerSessionFactory = $customerSessionFactory;
         parent::__construct($context, $data);
     }
 
     public function getCustomerId()
     {
         return $this->currentCustomer->getCustomerId();
+    }
+
+    public function getCustomerSession(){
+        return $this->customerSessionFactory->create();
     }
 
     public function _toHtml()

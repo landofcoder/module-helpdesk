@@ -26,4 +26,6 @@
     <template id="lofhelpdesk_email_settings_status_ticket_template" label="Status Message" file="notification_status_ticket_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
     <template id="lofhelpdesk_email_settings_reminder_template" label="Ticket Reminder" file="notification_reminder_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
     <template id="lofhelpdesk_email_settings_assign_ticket_template" label="Assign Ticket" file="notification_assign_ticket_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
+    <template id="lofhelpdesk_email_settings_customer_chat_template" label="Customer Chat" file="notification_new_chat_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
+    <template id="lofhelpdesk_email_settings_admin_reply_template" label="Admin Chat" file="notification_admin_reply_template.html" type="html" module="Lof_HelpDesk" area="frontend"/>
 </config>

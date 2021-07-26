@@ -8,69 +8,66 @@ $currentPage = $block->getCurrentPage();
 $start       = $size - (($currentPage - 1) * $limit);
 $modId       = time() . rand();
 $helper = $this->helper("Lof\HelpDesk\Helper\Data");
-
 ?>
-<?php if($count){ ?>
+<?php if($count): ?>
 <div class="block lrw-block lrw-account-summary-listing">
 	<div class="block-content">
 		<div class="table-wrapper orders-recent">
 			<table class="data-table table">
 				<thead>
 					<tr>
-						<th><?php echo __('Ticket ID'); ?></th>
-						<th><?php echo __('Subject'); ?></th>
-						<th><?php echo __('Category'); ?></th>
-						<th><?php echo __('Last Activity'); ?></th>
-						<th><?php echo __('Status'); ?></th>
+						<th><?= __('Ticket ID'); ?></th>
+						<th><?= __('Subject'); ?></th>
+						<th><?= __('Category'); ?></th>
+						<th><?= __('Last Activity'); ?></th>
+						<th><?= __('Status'); ?></th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php $i = 0; ?>
-					<?php foreach ($collection as $_ticket) {
-
-					?>
+					<?php foreach ($collection as $_ticket): ?>
 					<?php $amount = $_ticket->getAmount(); ?>
-					<tr class="<?php echo $i % 2 ? 'odd' : 'even' ?> <?php echo ($i == $count-1) ? 'last' : '' ?>">
-						<td><?php echo $_ticket->getId(); ?></td>
-						<td><a class="box-body" href="<?php echo $block->getUrl('lofhelpdesk/ticket/view', ['ticket_id' => $_ticket->getData('ticket_id')]); ?>"><?php echo $_ticket->getSubject() ?></a></td>
-						<td><?php echo $this->getCategoryName($_ticket->getCategoryId()); ?>
+					<tr class="<?= $i % 2 ? 'odd' : 'even' ?> <?= ($i == $count-1) ? 'last' : '' ?>">
+						<td><?= $_ticket->getId(); ?></td>
+						<td><a class="box-body" href="<?= $block->getUrl('lofhelpdesk/ticket/view', ['ticket_id' => $_ticket->getData('ticket_id')]); ?>"><?= $_ticket->getSubject() ?></a></td>
+						<td><?= $this->getCategoryName($_ticket->getCategoryId()); ?>
 						</td>
-						<td><?php echo $_ticket->getLastReplyAt(); ?></td>
-						<td class="lrw-status-<?php echo str_replace(" ", "-", strtolower($this->getStatus($_ticket->getStatusId()))); ?>">
-							<?php echo $this->getStatus($_ticket->getStatusId()); ?>
+						<td><?= $_ticket->getLastReplyAt(); ?></td>
+						<td class="lrw-status-<?= str_replace(" ", "-", strtolower($this->getStatus($_ticket->getStatusId()))); ?>">
+							<?= $this->getStatus($_ticket->getStatusId()); ?>
 						</td>
 						<td>
-							<?php  if($this->getUnreadMessageCount($_ticket->getData('ticket_id')) >0 ) { ?><i class="fa fa-circle unread" aria-hidden="true"></i>
-							<?php } else { ?>
+							<?php  if($this->getUnreadMessageCount($_ticket->getData('ticket_id')) >0 ): ?><i class="fa fa-circle unread" aria-hidden="true"></i>
+							<?php else: ?>
 							<i class="fa fa-circle" aria-hidden="true"></i>
-							<?php } ?>
+							<?php endif; ?>
 						</td>
 					</tr>
 					<?php $i++; ?>
-					<?php } ?>
+					<?php endforeach; ?>
 				</tbody>
 			</table>
 		</div>
-		<?php echo $block->getChildHtml('toolbar'); ?>
+		<?= $block->getChildHtml('toolbar'); ?>
 	</div>
 </div>
 
-<?php } ?>
+<?php endif; ?>
 <div class="block lrw-block lrw-account-summary-listing">
 	<div class="block-title">
-		<strong><?php echo __('Create New Ticket');?></strong>
+		<strong><?= __('Create New Ticket');?></strong>
 	</div>
 	<div class="block-content">
 		<div class="orders-recent">
-			<div id="lofform<?php echo $modId;?>" class="helpdesk-form">
+			<div id="lofform<?= $modId;?>" class="helpdesk-form">
 				<div class="form-content">
-					<form id="helpdesk<?php echo $modId;?>" class="helpdesk form" action="<?php  echo $block->getUrl('*/*/saveticket')?>" method="post" data-hasrequired="<?php echo __('* Required Fields') ?>" data-mage-init='{"validation":{}}' enctype="multipart/form-data">
+					<form id="helpdesk<?= $modId;?>" class="helpdesk form" action="<?php  echo $block->getUrl('*/*/saveticket')?>" method="post" data-hasrequired="<?= __('* Required Fields') ?>" data-mage-init='{"validation":{}}' enctype="multipart/form-data">
 						<div class="form-list row">
 							<div class="field col-sm-6">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper" style="">
-										<label for="subject" class="required"><?php echo __('Subject'); ?><em>*</em>
+										<label for="subject" class="required"><?= __('Subject'); ?><em>*</em>
 										</label>
 										<div class="row">
 											<div class="col-sm-12">
@@ -85,22 +82,23 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 							<div class="field col-sm-3">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper" style="">
-										<label for="category_id" class="required"><?php echo __('Category'); ?><em>*</em>
+										<label for="category_id" class="required"><?= __('Category'); ?><em>*</em>
 										</label>
 										<div class="row">
 											<div class="col-sm-12">
 												<div class="subtemplate-inner">
 													<select id="category_id" name="category_id" class="form-control select2 required-entry" style="width: 100%;">
-														<option value><?php echo __('Select a category'); ?></option>
+														<option value><?= __('Select a category'); ?></option>
 								                  		<?php
-								                  		foreach ($block->getCategory() as $key => $category) {
+								                  		foreach ($block->getCategory() as $key => $category):
                                                             $category->load($category->getId());
-									                  		if(in_array($helper->getStoreId(), $category->getStoreId()) || in_array(0, $category->getStoreId()))  {
+									                  		if(in_array($helper->getStoreId(), $category->getStoreId()) || in_array(0, $category->getStoreId())):
 									                  			?>
 
-										                  		<option value="<?php echo $category->getData('category_id'); ?>"><?php echo $category->getData('title'); ?></option>
-										                  		<?php }
-										                  	}?>
+										                  		<option value="<?= $category->getData('category_id'); ?>"><?= $category->getData('title'); ?></option>
+										                  		<?php
+															endif;
+										                endforeach; ?>
 								                	</select>
 												</div>
 											</div>
@@ -111,16 +109,16 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 							<div class="field col-sm-3">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper" style="">
-										<label for="priority_id" class="required"><?php echo __('Priority'); ?><em>*</em>
+										<label for="priority_id" class="required"><?= __('Priority'); ?><em>*</em>
 										</label>
 										<div class="row">
 											<div class="col-sm-12">
 												<div class="subtemplate-inner">
 													<select id="priority_id" name="priority_id" class="form-control select2 required-entry" style="width: 100%;">
-														<option value><?php echo __('Select a priority'); ?></option>
-								                  		<?php foreach ($block->getPriority() as $key => $priority) { ?>
-								                  		<option value="<?php echo $priority['id']; ?>"><?php echo $priority['title']; ?></option>
-								                  		<?php } ?>
+														<option value><?= __('Select a priority'); ?></option>
+								                  		<?php foreach ($block->getPriority() as $key => $priority): ?>
+								                  		<option value="<?= $priority['id']; ?>"><?= $priority['title']; ?></option>
+								                  		<?php endforeach; ?>
 								                	</select>
 												</div>
 											</div>
@@ -131,7 +129,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 							<div class="field col-sm-12">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper" style="">
-										<label for="description " class="required"><?php echo __('Message '); ?><em>*</em>
+										<label for="description " class="required"><?= __('Message '); ?><em>*</em>
 										</label>
 										<div class="row">
 											<div class="col-sm-12">
@@ -146,27 +144,27 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 							<div class="field col-sm-12 ">
 								<div class="response-field-file_upload">
 									<div class="subtemplate-wrapper" style="">
-										<label for="attachment" style="" class="required"><?php echo __('Attachment (Up to 2.0 MB per image.Acceptable image formats: jpg, jpeg, png)');?></label>
+										<label for="attachment" style="" class="required"><?= __('Attachment (Up to 2.0 MB per image.Acceptable image formats: jpg, jpeg, png)');?></label>
 										<div class="input-box">
 											<input name="attachment" id="attachment" style="" title="Attachment" class="input-text validate-filesize validate-fileextensions" type="file">
 										</div>
 									</div>
 								</div>
 							</div>
-							<?php if(count($block->getOrder()) > 0) { ?>
+							<?php if(count($block->getOrder()) > 0): ?>
 							<div class="field col-sm-6">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper" style="">
-										<label for="order_id" class="required"><?php echo __('Order'); ?><em>*</em>
+										<label for="order_id" class="required"><?= __('Order'); ?><em>*</em>
 										</label>
 										<div class="row">
 											<div class="col-sm-12">
 												<div class="subtemplate-inner">
 													<select id="order_id" name="order_id" class="form-control select2 required-entry">
-													<option value><?php echo __('Select an order'); ?></option>
-							                  		<?php foreach ($block->getOrder() as $key => $order) { ?>
-							                  		<option value="<?php echo $order['id']; ?>"><?php echo $order['name']; ?></option>
-							                  		<?php } ?>
+													<option value><?= __('Select an order'); ?></option>
+							                  		<?php foreach ($block->getOrder() as $key => $order): ?>
+							                  		<option value="<?= $order['id']; ?>"><?= $order['name']; ?></option>
+							                  		<?php endforeach; ?>
 								                	</select>
 												</div>
 											</div>
@@ -177,7 +175,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 							<div class="field col-sm-6">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper" style="">
-										<label for="product_id" class="required"><?php echo __('Product'); ?><em>*</em>
+										<label for="product_id" class="required"><?= __('Product'); ?><em>*</em>
 										</label>
 										<div class="row">
 											<div class="col-sm-12">
@@ -185,7 +183,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 													<select multiple id="product_id" name="products[]" class="form-control multiple  required-entry _required">
 
 							                  		<?php foreach ($block->getProduct() as $key => $product) { ?>
-							                  		<option value="<?php echo $product['value']; ?>" data-order-id="<?php echo $product['order_id']; ?>" style="display: none;"><?php echo $product['label']; ?></option>
+							                  		<option value="<?= $product['value']; ?>" data-order-id="<?= $product['order_id']; ?>" style="display: none;"><?= $product['label']; ?></option>
 							                  		<?php } ?>
 								                	</select>
 												</div>
@@ -194,13 +192,13 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 									</div>
 								</div>
 							</div>
-							<?php } ?>
+							<?php endif; ?>
 						</div>
 						<div class="row">
 							<div class="buttons-set col-sm-12">
 							<button type="submit" title="Submit" class="formbuilder-button button">
 								<span>
-									<?php echo __('Submit Ticket'); ?>
+									<?= __('Submit Ticket'); ?>
 								</span>
 							</button>
 						</div>
