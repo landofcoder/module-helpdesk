@@ -8,6 +8,7 @@ $currentPage = $block->getCurrentPage();
 $start       = $size - (($currentPage - 1) * $limit);
 $modId       = time() . rand();
 $helper = $this->helper("Lof\HelpDesk\Helper\Data");
+$is_enable_qty = $helper->getConfig("advanced_settings/enable_qty_request");
 ?>
 <?php if($count): ?>
 <div class="block lrw-block lrw-account-summary-listing">
@@ -192,6 +193,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 									</div>
 								</div>
 							</div>
+							<?php if ($is_enable_qty) : ?>
 							<div class="field col-sm-6">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper">
@@ -199,20 +201,14 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 										<div class="row">
 											<div class="col-sm-12">
 												<div class="subtemplate-inner">
-													<select id="qty_requested" name="qty_requested" class="form-control">
-													<option value=""><?= __("Select an option") ?></option>
-							                  		<?php foreach ($block->getProduct() as $key => $product): ?>
-														<?php for ($i = 0; $i <= (int)$product['qty']; $i++){ ?>
-															<option data-maxvalue="<?= $product['qty']; ?>" value="<?= $i; ?>" data-order-id="<?= $product['order_id']; ?>" data-product-id="<?= $product['value']; ?>" style="display: none;"><?= $i; ?></option>
-														<?php } ?>
-														<?php endforeach; ?>
-								                	</select>
+													<input type="text" id="qty_requested" name="qty_requested" class="form-control">
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
+							<?php endif; ?>
 							<?php endif; ?>
 						</div>
 						<div class="row">
@@ -246,17 +242,6 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 	    	}
 	    });
   	});
-	$('#product_id').change(function () {
-		var product_id = $(this).val();
-		var order_id = $( "#order_id" ).val();
-		$('#qty_requested').val("");
-		$('#qty_requested option').css('display','none');
-		$('#qty_requested option').each(function(){
-	    	if($(this).data('productId') == product_id && $(this).data('orderId') == order_id) {
-	    		$(this).css('display','block');
-	    	}
-	    });
-	})
     //Validate Image FileSize
 
     $.validator.addMethod(
