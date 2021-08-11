@@ -202,7 +202,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 													<select id="qty_requested" name="qty_requested" class="form-control">
 							                  		<?php foreach ($block->getProduct() as $key => $product): ?>
 														<?php for ($i = 0; $i <= (int)$product['qty']; $i++){ ?>
-															<option value="<?= $i; ?>" data-order-id="<?= $product['order_id']; ?>" data-product-id="<?= $product['value']; ?>" style="display: none;"><?= $i; ?></option>
+															<option data-maxvalue="<?= $product['qty']; ?>" value="<?= $i; ?>" data-order-id="<?= $product['order_id']; ?>" data-product-id="<?= $product['value']; ?>" style="display: none;"><?= $i; ?></option>
 														<?php } ?>
 														<?php endforeach; ?>
 								                	</select>

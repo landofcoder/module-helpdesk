@@ -375,7 +375,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $products[] = [
                     'value' => $item->getProductId(),
                     'label' => $item->getName(),
-                    'qty'   => $item->getQty(),
+                    'qty'   => ((int)$item->getQtyOrdered() - (int)$item->getQtyRefunded()),
                     'order_id' => $order->getId()
                 ];
             }
