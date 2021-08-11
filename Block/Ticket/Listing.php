@@ -21,8 +21,6 @@
 
 namespace Lof\HelpDesk\Block\Ticket;
 
-use Lof\HelpDesk\Model\Config as Config;
-
 class Listing extends \Magento\Framework\View\Element\Template
 {
 
@@ -75,6 +73,8 @@ class Listing extends \Magento\Framework\View\Element\Template
      * @var \Lof\HelpDesk\Model\ResourceModel\Ticket\CollectionFactory
      */
     protected $_collection;
+
+    protected $_products = null;
 
     /**
      * @param \Lof\HelpDesk\Model\PriorityFactory $priorityFactory
@@ -203,7 +203,10 @@ class Listing extends \Magento\Framework\View\Element\Template
 
     public function getProduct()
     {
-        return $this->helper->getProduct($this->helper->getCustomerEmail());
+        if (!$this->_products){
+            $this->_products = $this->helper->getProduct($this->helper->getCustomerEmail());
+        }
+        return $this->_products;
     }
 
     public function getPriority()

@@ -206,6 +206,26 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
                 'disabled' => $isElementDisabled
             ]
         );
+        $field = $fieldset->addField(
+            'qty_requested',
+            'text',
+            [
+                'name' => 'qty_requested',
+                'label' => __('QTY Requested'),
+                'title' => __('QTY Requested'),
+                'disabled' => $isElementDisabled
+            ]
+        );
+        $field = $fieldset->addField(
+            'qty_returned',
+            'text',
+            [
+                'name' => 'qty_returned',
+                'label' => __('QTY Returned'),
+                'title' => __('QTY Returned'),
+                'disabled' => $isElementDisabled
+            ]
+        );
         $department = $this->department->getCollection();
         $departments = [];
         foreach ($department as $k => $v) {

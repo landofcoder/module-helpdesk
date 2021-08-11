@@ -48,7 +48,14 @@ class Savemessage extends \Magento\Framework\App\Action\Action
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Lof\HelpDesk\Model\Sender $sender
+     * @param \Lof\HelpDesk\Helper\Data $helper
+     * @param \Lof\HelpDesk\Model\Spam $spam
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Lof\HelpDesk\Model\MessageFactory $messageFactory
+     * @param \Lof\HelpDesk\Model\DepartmentFactory $departmentFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -85,6 +92,7 @@ class Savemessage extends \Magento\Framework\App\Action\Action
             $data['customer_id'] = $customerId;
             $data['customer_name'] = $customerSession->getCustomer()->getName();
             $data['customer_email'] = $customerSession->getCustomer()->getEmail();
+            $data['email'] = $customerSession->getCustomer()->getEmail();
             $data['is_read'] = 0;
             //$data['department_id'] = $helper->getDepartmentByCategory($data['category_id']);          
             $messageModel = $this->messageFactory->create();
@@ -96,7 +104,7 @@ class Savemessage extends \Magento\Framework\App\Action\Action
                     return;
                 }
             }
-
+            $data["body"] = $this->helper->xss_clean($data["body"]);
             $messageModel->setData($data)->save();
             $this->messageManager->addSuccessMessage(__('Message was successfully sent'));
             $department = $this->departmentFactory->create();
@@ -159,12 +167,11 @@ class Savemessage extends \Magento\Framework\App\Action\Action
 
             }
         }
-
-        $this->_redirect('lofhelpdesk/ticket/view/id/' . $data['ticket_id']);
+        $this->_redirect('lofhelpdesk/ticket/view/ticket_id/' . $data['ticket_id']);
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setPath("*/*/id/" . $data['ticket_id']);
+        return $resultRedirect->setPath("lofhelpdesk/ticket/view/ticket_id/" . $data['ticket_id']);
         //}
     }
 

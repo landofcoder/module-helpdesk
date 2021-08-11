@@ -346,7 +346,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             foreach ($order->getAllItems() as $key => $item) {
                 $products[] = [
                     'value' => $item->getProductId(),
-                    'label' => $item->getName()
+                    'name'  => $item->getName(),
+                    'label' => $item->getName().__(" - SKU: %1 (Ordered QTY: %2 items)", $item->getSku(), (int)$item->getQtyOrdered())
                 ];
             }
         }
@@ -374,7 +375,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             foreach ($order->getAllItems() as $key => $item) {
                 $products[] = [
                     'value' => $item->getProductId(),
+                    'sku'   => $item->getSku(),
                     'label' => $item->getName(),
+                    'qty'   => ((int)$item->getQtyOrdered() - (int)$item->getQtyRefunded()),
                     'order_id' => $order->getId()
                 ];
             }

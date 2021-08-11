@@ -232,10 +232,7 @@ class View extends \Magento\Framework\View\Element\Template
      */
     public function getTicket()
     {
-        $ticket = $this->_ticketFactory->getCollection()
-            ->addFieldToFilter('main_table.ticket_id', $this->getId())
-            ->getFirstItem();
-        return $ticket;
+        return $this->_ticketFactory->load($this->getId());
     }
 
     /**

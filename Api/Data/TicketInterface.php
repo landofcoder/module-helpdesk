@@ -53,6 +53,9 @@ interface TicketInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     const USER_ID = 'user_id';
     const LOF_HELPDESK_TICKET_ID = 'lof_helpdesk_ticket_id';
     const FP_PRIORITY_ID = 'fp_priority_id';
+    const ADMIN_NOTE = 'admin_note';
+    const QTY_REQUESTED = 'qty_requested';
+    const QTY_RETURNED = 'qty_returned';
 
     /**
      * Get lof_helpdesk_ticket_id
@@ -627,5 +630,44 @@ interface TicketInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return \Lof\HelpDesk\Api\Data\TicketInterface
      */
     public function setMergedTicketId($mergedTicketId);
+
+    /**
+     * Get admin_note
+     * @return string|null
+     */
+    public function getAdminNote();
+
+    /**
+     * Set admin_note
+     * @param string $adminNote
+     * @return \Lof\HelpDesk\Api\Data\TicketInterface
+     */
+    public function setAdminNote($adminNote);
+
+    /**
+     * Get qty_requested
+     * @return float|int|null
+     */
+    public function getQtyRequested();
+
+    /**
+     * Set qty_requested
+     * @param float|int|null $qtyRequested
+     * @return \Lof\HelpDesk\Api\Data\TicketInterface
+     */
+    public function setQtyRequested($qtyRequested);
+
+    /**
+     * Get qty_returned
+     * @return float|int|null
+     */
+    public function getQtyReturned();
+
+    /**
+     * Set qty_returned
+     * @param float|int|null $qtyReturned
+     * @return \Lof\HelpDesk\Api\Data\TicketInterface
+     */
+    public function setQtyReturned($qtyReturned);
 }
 

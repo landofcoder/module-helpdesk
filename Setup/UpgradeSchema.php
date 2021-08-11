@@ -280,6 +280,45 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
+        /**
+         * Upgrade version 1.0.8
+         */
+        if (version_compare($context->getVersion(), '1.0.8', '<')) {
+            $lof_helpdesk_ticket = $installer->getTable('lof_helpdesk_ticket');
+            $installer->getConnection()->addColumn(
+                $lof_helpdesk_ticket,
+                'qty_requested',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                    'nullable' => true,
+                    'length'   => "10,2",
+                    'default' => "0",
+                    'comment' => 'Ticket Product Qty Request'
+                ]
+            );
+            $installer->getConnection()->addColumn(
+                $lof_helpdesk_ticket,
+                'qty_returned',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                    'nullable' => true,
+                    'length'   => "10,2",
+                    'default' => "0",
+                    'comment' => 'Ticket Product Qty Returned'
+                ]
+            );
+            $installer->getConnection()->addColumn(
+                $lof_helpdesk_ticket,
+                'creditmemo_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'nullable' => true,
+                    'unsigned' => true,
+                    'default' => "0",
+                    'comment' => 'Ticket Creditmemo id link to table sales_creditmemo'
+                ]
+            );
+        }
         $installer->endSetup();
     }
 }

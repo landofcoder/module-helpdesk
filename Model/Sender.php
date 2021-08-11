@@ -355,7 +355,7 @@ class Sender
 
     public function newMessage($data)
     {
-        if ($data) {
+        if ($data && isset($data['email']) && $data['email']) {
             try {
                 $postObject = new \Magento\Framework\DataObject();
 

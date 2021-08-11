@@ -4,6 +4,17 @@ $this->isRead();
 $messageCollection = $this->getMessage($ticket->getTicketId());
 $modId       = time() . rand();
 $helper = $this->helper("Lof\HelpDesk\Helper\Data");
+$is_enable_qty = $helper->getConfig("advanced_settings/enable_qty_request");
+$products =  $helper->getProductByOrder($ticket->getCustomerEmail());
+$ticket_product_ids = $ticket->getProducts();
+$result_products = [];
+if ($ticket_product_ids && $products) {
+	foreach ($products as $_item) {
+		if (in_array($_item["value"], $ticket_product_ids)) {
+			$result_products[$_item["value"]] = $_item["label"];
+		}
+	}
+}
 ?>
 <div class="block lrw-block lrw-account-summary-listing">
 	<div class="block-content">
@@ -66,9 +77,49 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 					<!-- <tr>	
 						<th><?php //echo __('Product'); ?></th>
 						<td>
-							<?php //echo $ticket->getOrderId(); ?>
+							<?php //echo $ticket->getProductId(); ?>
+						</td>
+					</tr>
+					<tr>	
+						<th><?php //echo __('Qty Requested'); ?></th>
+						<td>
+							<?php //echo $ticket->getQtyRequested(); ?>
+						</td>
+					</tr>
+					<tr>	
+						<th><?php //echo __('Qty Returned'); ?></th>
+						<td>
+						<?php //echo $ticket->getQtyReturnedd(); ?>
 						</td>
 					</tr> -->
+					<?php if ($is_enable_qty) : ?>
+						<?php if ($result_products) : ?>
+						<tr>	
+							<th><?= __('Products'); ?></th>
+							<td>
+								<ul>
+									<?php foreach ($result_products as $key=>$value): ?>
+									<li><?= $value; ?></li>
+									<?php endforeach; ?>
+								</ul>
+							</td>
+						</tr>
+						<?php endif; ?>
+						<tr>	
+							<th><?= __('Qty Requested'); ?></th>
+							<td>
+								<?= (int)$ticket->getQtyRequested(); ?>
+							</td>
+						</tr>
+						<?php if ($ticket->getQtyReturnedd()) : ?>
+							<tr>	
+							<th><?= __('Qty Returned'); ?></th>
+							<td>
+							<?= (int)$ticket->getQtyReturnedd(); ?>
+							</td>
+						</tr>
+						<?php endif; ?>
+					<?php endif; ?>
 				</tbody>
 			</table>
 		</div>	
