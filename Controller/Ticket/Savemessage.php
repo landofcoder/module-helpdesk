@@ -85,6 +85,7 @@ class Savemessage extends \Magento\Framework\App\Action\Action
             $data['customer_id'] = $customerId;
             $data['customer_name'] = $customerSession->getCustomer()->getName();
             $data['customer_email'] = $customerSession->getCustomer()->getEmail();
+            $data['email'] = $customerSession->getCustomer()->getEmail();
             $data['is_read'] = 0;
             //$data['department_id'] = $helper->getDepartmentByCategory($data['category_id']);          
             $messageModel = $this->messageFactory->create();
