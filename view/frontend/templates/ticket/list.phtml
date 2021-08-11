@@ -200,6 +200,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 											<div class="col-sm-12">
 												<div class="subtemplate-inner">
 													<select id="qty_requested" name="qty_requested" class="form-control">
+													<option value=""><?= __("Select an option") ?></option>
 							                  		<?php foreach ($block->getProduct() as $key => $product): ?>
 														<?php for ($i = 0; $i <= (int)$product['qty']; $i++){ ?>
 															<option data-maxvalue="<?= $product['qty']; ?>" value="<?= $i; ?>" data-order-id="<?= $product['order_id']; ?>" data-product-id="<?= $product['value']; ?>" style="display: none;"><?= $i; ?></option>
@@ -248,6 +249,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 	$('#product_id').change(function () {
 		var product_id = $(this).val();
 		var order_id = $( "#order_id" ).val();
+		$('#qty_requested').val("");
 		$('#qty_requested option').each(function(){
 	    	if($(this).data('productId') == product_id && $(this).data('orderId') == order_id) {
 	    		$('#qty_requested option').css('display','none');
