@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Config/etc/system_file.xsd">
     <system>
-        <tab id="landofcoder" translate="label" sortOrder="300">
-            <label>Lof Extensions</label>
-        </tab>
         <section id="lofhelpdesk" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Help Desk</label>
             <tab>landofcoder</tab>
