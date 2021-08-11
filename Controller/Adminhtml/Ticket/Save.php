@@ -100,10 +100,10 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                     $data['urllogin'] = $this->helper->getStoreUrl('/customer/account/login');
                     $sender->statusTicket($data);
                 }
-                if(isset($data["fp_user_id"]) && $data["fp_user_id"]){
-                    if($data["fp_user_id"] != $model->getUserId()){
+                if (isset($data["fp_user_id"]) && $data["fp_user_id"]) {
+                    if ($data["fp_user_id"] != $model->getUserId()) {
                         $assignUser = $this->userFactory->create()->load((int)$data["fp_user_id"]);
-                        if($assignUser && $assignUser->getUserId()){
+                        if ($assignUser && $assignUser->getUserId()) {
                             $data["user_id"] = $data["fp_user_id"];
                             $data["user_name"] = $assignUser->getFirstname() . ' ' . $assignUser->getLastname();
                             $data["user_email"] = $assignUser->getEmail();
@@ -125,7 +125,7 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                 if ($data['department_id'] != $model->getDepartmentId()) {
                     $sender->assignTicket($data);
                 }
-            }else{
+            } else {
                 $this->messageManager->addError(__('This ticket no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }

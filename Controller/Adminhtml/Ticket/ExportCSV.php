@@ -85,7 +85,7 @@ class ExportCSV extends Action
             $stream = $this->directory->openFile($file, 'w+');
             $stream->lock();
             $headers = $fields = [];
-            $headers = array('ticket_id','subject','content','customer_name','last_reply_name','created_at','updated_at','status_id','priority_id','is_read');
+            $headers = array('ticket_id','subject','content','customer_name','last_reply_name','created_at','updated_at','status_id','priority_id','is_read','qty_requested','qty_returned');
             $stream->writeCsv($headers);
             foreach ($params as $row) {
                 $rowData = $fields;
@@ -99,7 +99,8 @@ class ExportCSV extends Action
                     $rowData['updated_at'] = $row['updated_at'];
                     $rowData['status_id'] = $row['status_id'];
                     $rowData['priority_id'] = $row['priority_id'];
-                    $rowData['is_read'] = $row['is_read'];
+                    $rowData['qty_requested'] = $row['qty_requested'];
+                    $rowData['qty_returned'] = $row['qty_returned'];
                 }
                 $stream->writeCsv($rowData);
             }
