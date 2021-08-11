@@ -48,7 +48,14 @@ class Savemessage extends \Magento\Framework\App\Action\Action
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Lof\HelpDesk\Model\Sender $sender
+     * @param \Lof\HelpDesk\Helper\Data $helper
+     * @param \Lof\HelpDesk\Model\Spam $spam
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Lof\HelpDesk\Model\MessageFactory $messageFactory
+     * @param \Lof\HelpDesk\Model\DepartmentFactory $departmentFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -97,7 +104,7 @@ class Savemessage extends \Magento\Framework\App\Action\Action
                     return;
                 }
             }
-
+            $data["body"] = $this->helper->xss_clean($data["body"]);
             $messageModel->setData($data)->save();
             $this->messageManager->addSuccessMessage(__('Message was successfully sent'));
             $department = $this->departmentFactory->create();
