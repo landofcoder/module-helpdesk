@@ -319,6 +319,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
+        /**
+         * Upgrade version 1.0.9
+         */
+        if (version_compare($context->getVersion(), '1.0.9', '<')) {
+            $lof_helpdesk_ticket = $installer->getTable('lof_helpdesk_ticket');
+            $installer->getConnection()->addColumn(
+                $lof_helpdesk_ticket,
+                'increment_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'nullable' => true,
+                    'length'   => "50",
+                    'default' => null,
+                    'comment' => 'Ticket increment id'
+                ]
+            );
+        }
         $installer->endSetup();
     }
 }
