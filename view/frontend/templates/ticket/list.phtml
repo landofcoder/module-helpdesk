@@ -152,7 +152,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 								</div>
 							</div>
 							<?php if(count($block->getOrder()) > 0): ?>
-							<div class="field col-sm-6">
+							<div class="field col-sm-4">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper" style="">
 										<label for="order_id" class="required"><?= __('Order'); ?><em>*</em>
@@ -172,7 +172,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 									</div>
 								</div>
 							</div>
-							<div class="field col-sm-6">
+							<div class="field col-sm-4">
 								<div class="response-field-text">
 									<div class="subtemplate-wrapper" style="">
 										<label for="product_id" class="required"><?= __('Product'); ?><em>*</em>
@@ -185,6 +185,27 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 							                  		<?php foreach ($block->getProduct() as $key => $product) { ?>
 							                  		<option value="<?= $product['value']; ?>" data-order-id="<?= $product['order_id']; ?>" style="display: none;"><?= $product['label']; ?></option>
 							                  		<?php } ?>
+								                	</select>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="field col-sm-4">
+								<div class="response-field-text">
+									<div class="subtemplate-wrapper" style="">
+										<label for="qty_requested" class=""><?= __('Request QTY'); ?><em>*</em>
+										</label>
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="subtemplate-inner">
+													<select id="qty_requested" name="qty_requested" class="form-control">
+							                  		<?php foreach ($block->getProduct() as $key => $product): ?>
+														<?php for ($i = 0; $i <= (int)$product['qty']; $i++){ ?>
+															<option value="<?= $i; ?>" data-order-id="<?= $product['order_id']; ?>" data-product-id="<?= $product['value']; ?>" style="display: none;"><?= $i; ?></option>
+														<?php } ?>
+														<?php endforeach; ?>
 								                	</select>
 												</div>
 											</div>
