@@ -307,6 +307,17 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'comment' => 'Ticket Product Qty Returned'
                 ]
             );
+            $installer->getConnection()->addColumn(
+                $lof_helpdesk_ticket,
+                'creditmemo_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'nullable' => true,
+                    'unsigned' => true,
+                    'default' => "0",
+                    'comment' => 'Ticket Creditmemo id link to table sales_creditmemo'
+                ]
+            );
         }
         $installer->endSetup();
     }

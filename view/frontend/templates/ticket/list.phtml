@@ -183,7 +183,7 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 													<select multiple id="product_id" name="products[]" class="form-control multiple  required-entry _required">
 
 							                  		<?php foreach ($block->getProduct() as $key => $product) { ?>
-							                  		<option value="<?= $product['value']; ?>" data-order-id="<?= $product['order_id']; ?>" style="display: none;"><?= $product['label']; ?></option>
+							                  		<option value="<?= $product['value']; ?>" data-order-id="<?= $product['order_id']; ?>" style="display: none;"><?= $product['label']." - ".$product['sku'].' '.__('(%1 items)', $product['qty']); ?></option>
 							                  		<?php } ?>
 								                	</select>
 												</div>
@@ -239,9 +239,9 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
     ], function ($) {
     $( "#order_id" ).change(function () {
     	var order_id = $(this).val();
+		$('#product_id option').css('display','none');
     	$('#product_id option').each(function(){
 	    	if($(this).data('orderId') == order_id) {
-	    		$('#product_id option').css('display','none');
 	    		$(this).css('display','block');
 	    	}
 	    });
@@ -250,9 +250,9 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 		var product_id = $(this).val();
 		var order_id = $( "#order_id" ).val();
 		$('#qty_requested').val("");
+		$('#qty_requested option').css('display','none');
 		$('#qty_requested option').each(function(){
 	    	if($(this).data('productId') == product_id && $(this).data('orderId') == order_id) {
-	    		$('#qty_requested option').css('display','none');
 	    		$(this).css('display','block');
 	    	}
 	    });
