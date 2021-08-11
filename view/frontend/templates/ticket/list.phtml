@@ -237,7 +237,6 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
         'jquery/validate',
         'mage/translate'
     ], function ($) {
-
     $( "#order_id" ).change(function () {
     	var order_id = $(this).val();
     	$('#product_id option').each(function(){
@@ -247,6 +246,16 @@ $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 	    	}
 	    });
   	});
+	$('#product_id').change(function () {
+		var product_id = $(this).val();
+		var order_id = $( "#order_id" ).val();
+		$('#qty_requested option').each(function(){
+	    	if($(this).data('productId') == product_id && $(this).data('orderId') == order_id) {
+	    		$('#qty_requested option').css('display','none');
+	    		$(this).css('display','block');
+	    	}
+	    });
+	})
     //Validate Image FileSize
 
     $.validator.addMethod(
