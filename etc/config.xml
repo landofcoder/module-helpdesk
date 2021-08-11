@@ -56,6 +56,9 @@
 				<auto_message>Thanks you for contacting with us!</auto_message>
 				<auto_user_name>Bot</auto_user_name>
 			</chat>
+			<advanced_settings>
+				<enable_qty_request>0</enable_qty_request>
+			</advanced_settings>
 		</lofhelpdesk>
 	</default>
 </config>	
