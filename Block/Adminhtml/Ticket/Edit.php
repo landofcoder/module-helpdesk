@@ -128,7 +128,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $user = $this->authSession->getUser();
         $model = $this->_coreRegistry->registry('lofhelpdesk_ticket');
         $dataModel = $model->getData();
-
+        $dataModel['customer_name'] = isset($dataModel['customer_name'])?$dataModel['customer_name']:"";
+        $dataModel['customer_email'] = isset($dataModel['customer_email'])?$dataModel['customer_email']:"";
+        $dataModel['ticket_id'] = isset($dataModel['ticket_id'])?$dataModel['ticket_id']:"0";
         $quickanswer = $this->quickanswer->getCollection()->addFieldToFilter('is_active', 1);
         foreach ($quickanswer as $_quickanswer) {
             $content = $_quickanswer->getContent();
