@@ -167,12 +167,11 @@ class Savemessage extends \Magento\Framework\App\Action\Action
 
             }
         }
-
-        $this->_redirect('lofhelpdesk/ticket/view/id/' . $data['ticket_id']);
+        $this->_redirect('lofhelpdesk/ticket/view/ticket_id/' . $data['ticket_id']);
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setPath("*/*/id/" . $data['ticket_id']);
+        return $resultRedirect->setPath("lofhelpdesk/ticket/view/ticket_id/" . $data['ticket_id']);
         //}
     }
 
