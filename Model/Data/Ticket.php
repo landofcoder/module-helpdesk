@@ -848,5 +848,53 @@ class Ticket extends \Magento\Framework\Api\AbstractExtensibleObject implements 
     {
         return $this->setData(self::MERGED_TICKET_ID, $mergedTicketId);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAdminNote()
+    {
+        return $this->_get(self::ADMIN_NOTE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdminNote($adminNote)
+    {
+        return $this->setData(self::ADMIN_NOTE, $adminNote);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getQtyRequested()
+    {
+        return $this->_get(self::QTY_REQUESTED);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQtyRequested($qtyRequested)
+    {
+        return $this->setData(self::QTY_REQUESTED, $qtyRequested);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getQtyReturned()
+    {
+        return $this->_get(self::QTY_RETURNED);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQtyReturned($qtyReturned)
+    {
+        return $this->setData(self::QTY_RETURNED, $qtyReturned);
+    }
 }
 
