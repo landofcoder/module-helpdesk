@@ -35,7 +35,7 @@ class Ticket extends \Magento\Framework\Api\AbstractExtensibleObject implements 
      * Get code
      * @return string|null
      */
-    public function getCode()
+    public function getTicketCode()
     {
         return $this->_get(self::CODE);
     }
@@ -45,7 +45,7 @@ class Ticket extends \Magento\Framework\Api\AbstractExtensibleObject implements 
      * @param string $code
      * @return \Lof\HelpDesk\Api\Data\TicketInterface
      */
-    public function setCode($code)
+    public function setTicketCode($code)
     {
         return $this->setData(self::CODE, $code);
     }

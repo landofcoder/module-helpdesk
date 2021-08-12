@@ -108,6 +108,7 @@ class Saveticket extends \Magento\Framework\App\Action\Action
             $data['namestore'] = $this->helper->getStoreName();
             $data['urllogin'] = $this->helper->getCustomerLoginUrl();
             $data['department_id'] = $this->helper->getDepartmentByCategory($data['category_id']);
+            $data['code'] = $this->helper->generateTicketCode();
 
             $department = $this->departmentFactory->create()->load($data['department_id']);
             $data['email_to'] = [];

@@ -7,7 +7,7 @@
  * 
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
- * http://landofcoder.com/license
+ * https://landofcoder.com/license
  * 
  * DISCLAIMER
  * 
@@ -16,8 +16,8 @@
  * 
  * @category   Landofcoder
  * @package    Lof_HelpDesk
- * @copyright  Copyright (c) 2017 Landofcoder (http://www.landofcoder.com/)
- * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ * @copyright  Copyright (c) 2017 Landofcoder (https://landofcoder.com/)
+ * @license    https://landofcoder.com/LICENSE-1.0.html
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -58,6 +58,12 @@
 			</chat>
 			<advanced_settings>
 				<enable_qty_request>0</enable_qty_request>
+				<enabled_ticket_code>0</enabled_ticket_code>
+				<use_longcode>0</use_longcode>
+                <secret_key>TICKET</secret_key>
+                <chunks>1</chunks>
+                <letters>9</letters>
+                <separate_text>-</separate_text>
 			</advanced_settings>
 		</lofhelpdesk>
 	</default>

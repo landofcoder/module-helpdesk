@@ -7,7 +7,7 @@
  * 
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
- * http://landofcoder.com/license
+ * https://landofcoder.com/license
  * 
  * DISCLAIMER
  * 
@@ -16,8 +16,8 @@
  * 
  * @category   Landofcoder
  * @package    Lof_HelpDesk
- * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
- * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ * @copyright  Copyright (c) 2016 Landofcoder (https://landofcoder.com/)
+ * @license    https://landofcoder.com/LICENSE-1.0.html
  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -203,6 +203,15 @@
                     <item name="filter" xsi:type="string">textRange</item>
                     <item name="sorting" xsi:type="string">desc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
+                </item>
+            </argument>
+        </column>
+        <column name="code">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="sorting" xsi:type="string">desc</item>
+                    <item name="label" xsi:type="string" translate="true">Ticket Code</item>
                 </item>
             </argument>
         </column>

@@ -130,6 +130,36 @@
                     <label>Enable QTY Request</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="enabled_ticket_code" translate="label comment" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enabled Ticket Code</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="use_longcode" translate="label comment" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Use long tracking code?</label>
+					<comment>Use short or long tracking code. The long tracking code use sha1 to encode.</comment>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<depends><field id="enabled_qrcode">1</field></depends>
+				</field>
+				<field id="secret_key" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Secret Key</label>
+					<comment>Input the key which you want to use to generate tracking code.</comment>
+					<depends><field id="use_longcode">1</field></depends>
+				</field>
+				<field id="chunks" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Number Chunks</label>
+					<comment><![CDATA[is number of chunks, default = 1.<br/>If you just want to generate random string, set this to 1. It required at least number 1.<br/>Example: If number of chunk is 3. XXXXX-XXXXX-XXXXX]]></comment>
+					<depends><field id="use_longcode">0</field></depends>
+				</field>
+				<field id="letters" translate="label comment" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Number Letters Per Chunk</label>
+					<comment><![CDATA[is number of letters per chunk, default = 9.<br/>Example: If number of letters per chunk is 2 and number of chunk is 3. XX-XX-XX]]></comment>
+					<depends><field id="use_longcode">0</field></depends>
+				</field>
+				<field id="separate_text" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Separate Chunk Text</label>
+					<comment><![CDATA[is separator text to separate chunks, default = -.<br/>Example: If separator is colon. XXXXX:XXXXX:XXXXX:XXXXX:XXXXX]]></comment>
+					<depends><field id="use_longcode">0</field></depends>
+				</field>
             </group>
         </section>
     </system>

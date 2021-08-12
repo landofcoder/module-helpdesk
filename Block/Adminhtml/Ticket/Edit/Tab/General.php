@@ -6,7 +6,7 @@
  *
  * This source file is subject to the landofcoder.com license that is
  * available through the world-wide-web at this URL:
- * http://landofcoder.com/license
+ * https://landofcoder.com/license
  *
  * DISCLAIMER
  *
@@ -15,8 +15,8 @@
  *
  * @ticket   Landofcoder
  * @package    Lof_HelpDesk
- * @copyright  Copyright (c) 2016 Landofcoder (http://www.landofcoder.com/)
- * @license    http://www.landofcoder.com/LICENSE-1.0.html
+ * @copyright  Copyright (c) 2016 Landofcoder (https://landofcoder.com/)
+ * @license    https://landofcoder.com/LICENSE-1.0.html
  */
 
 namespace Lof\HelpDesk\Block\Adminhtml\Ticket\Edit\Tab;
@@ -145,6 +145,14 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
             $ticket = $this->ticket->create()->load($model->getTicketId())->setData('is_read', 1);
             $ticket->save();
             $fieldset->addField('ticket_id', 'hidden', ['name' => 'ticket_id']);
+            
+            if($model->getCode()){
+                $fieldset->addField('code', 'label', [
+                    'label' => __('Ticket Code'),
+                    'name'  => 'code',
+                    'value' => $model->getCode()
+                ]);
+            }
         }
 
 
