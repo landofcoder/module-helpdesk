@@ -6,7 +6,7 @@
         "landofcoder/module-setup" : "1.*"
       },
       "type": "magento2-module",
-      "version": "1.0.4",
+      "version": "1.0.8",
       "keywords": [
         "landofcoder",
         "landofcoder HelpDesk",
