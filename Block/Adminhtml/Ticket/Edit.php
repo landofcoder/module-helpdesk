@@ -104,8 +104,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        if ($this->_coreRegistry->registry('lofhelpdesk_ticket')->getId()) {
-            return __("View Ticket '%1'", $this->escapeHtml($this->_coreRegistry->registry('lofhelpdesk_ticket')->getSubject()));
+        $ticket = $this->_coreRegistry->registry('lofhelpdesk_ticket');
+        if ($ticket->getId()) {
+            $ticketCode = $ticket->getCode()?$ticket->getCode():$ticket->getId();
+            return __("View Ticket #%1 - '%2'", $this->escapeHtml($ticketCode), $this->escapeHtml($ticket->getSubject()));
         } else {
             return __('New Ticket');
         }

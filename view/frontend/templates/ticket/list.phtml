@@ -9,6 +9,7 @@ $start       = $size - (($currentPage - 1) * $limit);
 $modId       = time() . rand();
 $helper = $this->helper("Lof\HelpDesk\Helper\Data");
 $is_enable_qty = $helper->getConfig("advanced_settings/enable_qty_request");
+$enabled_ticket_code = $helper->getConfig("advanced_settings/enabled_ticket_code");
 ?>
 <?php if($count): ?>
 <div class="block lrw-block lrw-account-summary-listing">
@@ -17,7 +18,7 @@ $is_enable_qty = $helper->getConfig("advanced_settings/enable_qty_request");
 			<table class="data-table table">
 				<thead>
 					<tr>
-						<th><?= __('Ticket ID'); ?></th>
+						<th><?= $enabled_ticket_code?__('Ticket Code'):__('Ticket ID'); ?></th>
 						<th><?= __('Subject'); ?></th>
 						<th><?= __('Category'); ?></th>
 						<th><?= __('Last Activity'); ?></th>
@@ -30,7 +31,7 @@ $is_enable_qty = $helper->getConfig("advanced_settings/enable_qty_request");
 					<?php foreach ($collection as $_ticket): ?>
 					<?php $amount = $_ticket->getAmount(); ?>
 					<tr class="<?= $i % 2 ? 'odd' : 'even' ?> <?= ($i == $count-1) ? 'last' : '' ?>">
-						<td><?= $_ticket->getId(); ?></td>
+						<td><?= $enabled_ticket_code && $_ticket->getCode()?$_ticket->getCode():$_ticket->getId(); ?></td>
 						<td><a class="box-body" href="<?= $block->getUrl('lofhelpdesk/ticket/view', ['ticket_id' => $_ticket->getData('ticket_id')]); ?>"><?= $_ticket->getSubject() ?></a></td>
 						<td><?= $this->getCategoryName($_ticket->getCategoryId()); ?>
 						</td>

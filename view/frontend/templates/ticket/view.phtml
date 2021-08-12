@@ -25,6 +25,12 @@ if ($ticket_product_ids && $products) {
 						<th><?= __('Ticket ID:'); ?></th>
 						<td><strong><?= $ticket->getId(); ?></strong></td>
 					</tr>
+					<?php if ($ticket->getCode()) : ?>
+					<tr>
+						<th><?= __('Ticket Code:'); ?></th>
+						<td><strong><?= $ticket->getCode(); ?></strong></td>
+					</tr>
+					<?php endif; ?>
 					<tr>
 						<th><?= __('Department'); ?></th>
 						<td><?= $helper->getDepartmentById($ticket->getDepartmentId())->getTitle(); ?></td>

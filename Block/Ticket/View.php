@@ -135,7 +135,9 @@ class View extends \Magento\Framework\View\Element\Template
 
     public function isRead()
     {
-        foreach ($this->message->getCollection()->addFieldToFilter('customer_email', '')->addFieldToFilter('ticket_id', $this->getId()) as $key => $message) {
+        $messageCollection = $this->message->getCollection()->addFieldToFilter('customer_email', '')
+                                                            ->addFieldToFilter('ticket_id', $this->getId());
+        foreach ($messageCollection as $key => $message) {
             $message->setData('is_read', 1)->save();
             $this->_cacheTypeList->cleanType('full_page');
         }
@@ -168,6 +170,18 @@ class View extends \Magento\Framework\View\Element\Template
             $this->_ticket_id = $this->request->getParam("ticket_id");
         }
         return $this->_ticket_id;
+    }
+
+    /**
+     * Get Current ticket code
+     * @return int
+     */
+    public function getTicketCode()
+    {
+        if(!isset($this->_ticket_code)){
+            $this->_ticket_code = $this->request->getParam("code");
+        }
+        return $this->_ticket_code;
     }
 
     public function getOrderTicket($orderid, $order_url = "")

@@ -145,6 +145,19 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
             $ticket = $this->ticket->create()->load($model->getTicketId())->setData('is_read', 1);
             $ticket->save();
             $fieldset->addField('ticket_id', 'hidden', ['name' => 'ticket_id']);
+
+            $fieldset->addField(
+                'code',
+                'text',
+                ['name' => 'code', 'label' => __('Ticket Code'), 'title' => __('Ticket Code')]
+            );
+            if($model->getCode()){
+                $fieldset->addField('code', 'label', [
+                    'label' => __('Ticket Code'),
+                    'name'  => 'code',
+                    'value' => $model->getCode()
+                ]);
+            }
         }
 
 

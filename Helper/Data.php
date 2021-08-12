@@ -64,22 +64,45 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $localeDate;
 
+    /**
+     * @var \Lof\HelpDesk\Model\Department
+     */
     protected $department;
 
+    /**
+     * @var \Magento\Customer\Model\Url
+     */
     protected $_customerUrl;
 
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     private $_urlInterface;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime 
+     */
     protected $date;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context
-     * @param \Magento\Store\Model\StoreManagerInterface
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @param \Magento\Cms\Model\Template\FilterProvider
-     * @param \Magento\Framework\Registry
+     * @var Trackcode
+     */
+    protected $trackcode;
+
+    /**
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Lof\HelpDesk\Model\Department $department
+     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\UrlInterface $urlInterface
+     * @param Trackcode $trackcode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -93,7 +116,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\UrlInterface $urlInterface
+        \Magento\Framework\UrlInterface $urlInterface,
+        Trackcode $trackcode
     ) {
         parent::__construct($context);
         $this->department = $department;
@@ -107,8 +131,32 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_customerUrl = $customerUrl;
         $this->_urlInterface = $urlInterface;
         $this->date = $date;
+        $this->trackcode = $trackcode;
+
+        $chunks = $this->getConfig("advanced_settings/chunks", null, 1);
+        $letters = $this->getConfig("advanced_settings/letters", null, 9);
+        $separate_text = $this->getConfig("advanced_settings/separate_text", null, "-");
+
+        $this->trackcode->numberChunks = (int)$chunks;
+        $this->trackcode->numberLettersPerChunk = (int)$letters;
+        $this->trackcode->separateChunkText = (int)$separate_text;
     }
 
+    /**
+     * @return string
+     */
+    public function generateTicketCode() {
+        if($this->enableTicketCode()){
+            return $this->trackcode->generate();
+        }
+        return "";
+    }
+    /**
+     * @return int|null
+     */
+    public function enableTicketCode() {
+        return $this->getConfig("advanced_settings/enabled_ticket_code");
+    }
     /**
      * @return string
      */
@@ -387,18 +435,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $products;
     }
 
-    public function getConfig($key, $store = null)
+    /**
+     * @param $key
+     * @param null $store
+     * @param null $default
+     * @return mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getConfig($key, $store = null, $default = null)
     {
         $store = $this->_storeManager->getStore($store);
-        $websiteId = $store->getWebsiteId();
 
         $result = $this->scopeConfig->getValue(
             'lofhelpdesk/' . $key,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
-        return $result;
+        if ($default != null) {
+            return $result ? $result : $default;
+        } else {
+            return $result;
+        }
     }
+
     public function getConfigs($key, $store = null)
     {
         $store = $this->_storeManager->getStore($store);

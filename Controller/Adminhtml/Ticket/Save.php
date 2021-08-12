@@ -125,9 +125,11 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
                 if ($data['department_id'] != $model->getDepartmentId()) {
                     $sender->assignTicket($data);
                 }
-            } else {
+            } else if($id && !$model->getId()) {
                 $this->messageManager->addError(__('This ticket no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
+            } else{
+                $data["code"] = $this->helper->generateTicketCode();
             }
 
             $mediaDirectory = $this->_objectManager->get('Magento\Framework\Filesystem')

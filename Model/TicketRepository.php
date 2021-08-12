@@ -10,6 +10,7 @@ namespace Lof\HelpDesk\Model;
 use Lof\HelpDesk\Api\Data\TicketInterfaceFactory;
 use Lof\HelpDesk\Api\Data\TicketSearchResultsInterfaceFactory;
 use Lof\HelpDesk\Api\TicketRepositoryInterface;
+use Lof\HelpDesk\Helper\Data;
 use Lof\HelpDesk\Model\ResourceModel\Ticket as ResourceTicket;
 use Lof\HelpDesk\Model\ResourceModel\Ticket\CollectionFactory as TicketCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
@@ -38,20 +39,25 @@ class TicketRepository implements TicketRepositoryInterface
 
     protected $resource;
 
-    protected $TicketFactory;
+    protected $ticketFactory;
 
-    protected $TicketCollectionFactory;
+    protected $ticketCollectionFactory;
 
     protected $dataObjectHelper;
 
     protected $dataTicketFactory;
 
+    /**
+     * @var Data
+     */
+    protected $helperData;
+
 
     /**
      * @param ResourceTicket $resource
-     * @param TicketFactory $TicketFactory
+     * @param TicketFactory $ticketFactory
      * @param TicketInterfaceFactory $dataTicketFactory
-     * @param TicketCollectionFactory $TicketCollectionFactory
+     * @param TicketCollectionFactory $ticketCollectionFactory
      * @param TicketSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
@@ -59,23 +65,25 @@ class TicketRepository implements TicketRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param Data $helperData
      */
     public function __construct(
         ResourceTicket $resource,
-        TicketFactory $TicketFactory,
+        TicketFactory $ticketFactory,
         TicketInterfaceFactory $dataTicketFactory,
-        TicketCollectionFactory $TicketCollectionFactory,
+        TicketCollectionFactory $ticketCollectionFactory,
         TicketSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
         CollectionProcessorInterface $collectionProcessor,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        Data $helperData
     ) {
         $this->resource = $resource;
-        $this->TicketFactory = $TicketFactory;
-        $this->TicketCollectionFactory = $TicketCollectionFactory;
+        $this->ticketFactory = $ticketFactory;
+        $this->ticketCollectionFactory = $ticketCollectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->dataTicketFactory = $dataTicketFactory;
@@ -84,49 +92,58 @@ class TicketRepository implements TicketRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->helperData = $helperData;
     }
 
     /**
      * {@inheritdoc}
      */
     public function save(
-        \Lof\HelpDesk\Api\Data\TicketInterface $Ticket
+        \Lof\HelpDesk\Api\Data\TicketInterface $ticket
     ) {
-        /* if (empty($Ticket->getStoreId())) {
+        /* if (empty($ticket->getStoreId())) {
             $storeId = $this->storeManager->getStore()->getId();
-            $Ticket->setStoreId($storeId);
+            $ticket->setStoreId($storeId);
         } */
 
-        $TicketData = $this->extensibleDataObjectConverter->toNestedArray(
-            $Ticket,
+        $ticketData = $this->extensibleDataObjectConverter->toNestedArray(
+            $ticket,
             [],
             \Lof\HelpDesk\Api\Data\TicketInterface::class
         );
-
-        $TicketModel = $this->TicketFactory->create()->setData($TicketData);
+        $ticketCode = "";
+        if($ticket->getTicketId()){
+            $oldTicketModel = $this->get((int)$ticket->getTicketId());
+            $ticketCode = $oldTicketModel->getCode();
+        }
+        $ticketModel = $this->ticketFactory->create()->setData($ticketData);
 
         try {
-            $this->resource->save($TicketModel);
+            if(!$ticketModel->getId()){
+                $ticketCode = $this->helperData->generateTicketCode();
+            }
+            $ticketModel->setData("code", $ticketCode);
+            $this->resource->save($ticketModel);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__(
                 'Could not save the Ticket: %1',
                 $exception->getMessage()
             ));
         }
-        return $TicketModel;
+        return $ticketModel;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($TicketId)
+    public function get($ticketId)
     {
-        $Ticket = $this->TicketFactory->create();
-        $this->resource->load($Ticket, $TicketId);
-        if (!$Ticket->getId()) {
-            throw new NoSuchEntityException(__('lof_helpdesk_ticket with id "%1" does not exist.', $TicketId));
+        $ticket = $this->ticketFactory->create();
+        $this->resource->load($ticket, $ticketId);
+        if (!$ticket->getId()) {
+            throw new NoSuchEntityException(__('lof_helpdesk_ticket with id "%1" does not exist.', $ticketId));
         }
-        return $Ticket;
+        return $ticket;
     }
 
     /**
@@ -135,7 +152,7 @@ class TicketRepository implements TicketRepositoryInterface
     public function getList(
         \Magento\Framework\Api\SearchCriteriaInterface $criteria
     ) {
-        $collection = $this->TicketCollectionFactory->create();
+        $collection = $this->ticketCollectionFactory->create();
 
         $this->extensionAttributesJoinProcessor->process(
             $collection,
@@ -161,12 +178,12 @@ class TicketRepository implements TicketRepositoryInterface
      * {@inheritdoc}
      */
     public function delete(
-        \Lof\HelpDesk\Api\Data\TicketInterface $Ticket
+        \Lof\HelpDesk\Api\Data\TicketInterface $ticket
     ) {
         try {
-            $TicketModel = $this->TicketFactory->create();
-            $this->resource->load($TicketModel, $Ticket->getTicketId());
-            $this->resource->delete($TicketModel);
+            $ticketModel = $this->ticketFactory->create();
+            $this->resource->load($ticketModel, $ticket->getTicketId());
+            $this->resource->delete($ticketModel);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(__(
                 'Could not delete the lof_helpdesk_ticket: %1',
@@ -179,9 +196,9 @@ class TicketRepository implements TicketRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteById($TicketId)
+    public function deleteById($ticketId)
     {
-        return $this->delete($this->get($TicketId));
+        return $this->delete($this->get($ticketId));
     }
 }
 
