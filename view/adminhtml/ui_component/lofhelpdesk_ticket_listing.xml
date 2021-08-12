@@ -206,6 +206,15 @@
                 </item>
             </argument>
         </column>
+        <column name="code">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="sorting" xsi:type="string">desc</item>
+                    <item name="label" xsi:type="string" translate="true">Ticket Code</item>
+                </item>
+            </argument>
+        </column>
         <column name="subject">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
