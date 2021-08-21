@@ -127,7 +127,7 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
                     ->setData('answered',0)
                     ->setData('number_message',$number_message)
                     ->save();
-                $this->_cacheTypeList->cleanType('full_page'); 
+                //$this->_cacheTypeList->cleanType('full_page'); 
                 if($data['customer_name'] && $this->_helper->getConfig('email_settings/enable_email_customer_chat')) {
                     $data['url'] = $this->_helper->getUrl();
                     $this->sender->sendAdminChat($data);

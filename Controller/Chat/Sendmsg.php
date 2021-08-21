@@ -226,7 +226,7 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
                     ->setData('current_url',$data['current_url'])
                     ->setData('ip', $this->_helper->getIp())
                     ->save();
-                $this->_cacheTypeList->cleanType('full_page');  
+                //$this->_cacheTypeList->cleanType('full_page');  
                 
                 if($this->_helper->getConfig('email_settings/email_admin_chat')) {
                     $chatId = $chat->getId();

@@ -112,7 +112,7 @@ class Login extends \Magento\Framework\App\Action\Action
                     $message = __('Thanks for your like!');
                     $count = $data['countlike'] + 1;
                     $like->setData('user_id', $data['userid'])->setData('message_id', $data['messageid'])->save();
-                    $this->_cacheTypeList->cleanType('full_page');
+                    //$this->_cacheTypeList->cleanType('full_page');
                 } catch (\Exception $e) {
                     $this->messageManager->addError(
                         __('We can\'t process your request right now. Sorry, that\'s all we know.')
