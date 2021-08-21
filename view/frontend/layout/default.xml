@@ -31,7 +31,7 @@
 	</head>
 	<body>
 		<referenceBlock name="header.links">
-			 <block class="Lof\HelpDesk\Block\Ticket\Link" ifconfig="lofhelpdesk/general_settings/enable" name="helpdesk.messages" after="-" template="message/link.phtml" cacheable="false"/>
+			 <block class="Lof\HelpDesk\Block\Ticket\Link" ifconfig="lofhelpdesk/general_settings/enable" name="helpdesk.messages" after="-" template="message/link.phtml"/>
 		</referenceBlock>	
         <referenceBlock name="top.links">
             <block class="Lof\HelpDesk\Block\Ticket\Link" ifconfig="lofhelpdesk/general_settings/enable" name="helpdesk-link" after="my-account-link"/>
