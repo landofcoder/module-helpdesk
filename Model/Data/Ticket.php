@@ -51,6 +51,24 @@ class Ticket extends \Magento\Framework\Api\AbstractExtensibleObject implements 
     }
 
     /**
+     * {@inheritdoc}
+     * 
+     */
+    public function getCode()
+    {
+        return $this->_get(self::CODE);
+    }
+
+    /**
+     * {@inheritdoc}
+     * 
+     */
+    public function setCode($code)
+    {
+        return $this->setData(self::CODE, $code);
+    }
+
+    /**
      * Retrieve existing extension attributes object or create a new one.
      * @return \Lof\HelpDesk\Api\Data\TicketExtensionInterface|null
      */
