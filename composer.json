@@ -23,7 +23,8 @@
         {
             "name": "Landofcoder",
             "email": "landofcoder@gmail.com",
-            "role": "Magento 2 Lof HelpDesk"
+            "role": "Magento 2 Lof HelpDesk",
+            "home": "https://landofcoder.com"
         }
     ],
     "autoload": {
