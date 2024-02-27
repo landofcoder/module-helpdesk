@@ -11,3 +11,8 @@
 - New settings show request qty field on create ticket form
 - New settings show ticket code, generate ticket code
 - Show ticket code, qty requested on admin ticket view, frontend ticket view
+
+# Version 1.0.9 - 02/27/2024
+- Upgrade to magento 2.4.6 - latest
+- Fix error with php 8.2
+- Fix error automation reminder email not send 
