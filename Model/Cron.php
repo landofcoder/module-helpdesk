@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2021 Landofcoder (https://landofcoder.com/)
@@ -20,8 +20,6 @@
  */
 
 namespace Lof\HelpDesk\Model;
-
-use Magento\Cron\Model\Schedule;
 
 class Cron
 {
@@ -31,19 +29,42 @@ class Cron
      */
     protected $logger;
 
+    /**
+     * @var \Lof\HelpDesk\Model\Ticket
+     */
     protected $helper;
 
     protected $ticket;
 
+    /**
+     * @var \Lof\HelpDesk\Model\Sender
+     */
+    protected $sender;
+
+    /**
+     * @var \Magento\User\Model\UserFactory
+     */
+    protected $userFactory;
+
+    /**
+     * @var \Lof\HelpDesk\Model\DepartmentFactory
+     */
+    protected $departmentFactory;
+
     public function __construct(
         \Lof\HelpDesk\Helper\Data $helper,
         \Lof\HelpDesk\Model\Ticket $ticket,
-        \Psr\Log\LoggerInterface $logger
-    )
-    {
+        \Psr\Log\LoggerInterface $logger,
+        \Lof\HelpDesk\Model\Sender $sender,
+        \Magento\User\Model\UserFactory $userFactory,
+        \Lof\HelpDesk\Model\DepartmentFactory $departmentFactory
+    ) {
         $this->ticket = $ticket;
         $this->logger = $logger;
         $this->helper = $helper;
+        $this->sender = $sender;
+        $this->userFactory = $userFactory;
+        $this->departmentFactory = $departmentFactory;
     }
 
     /**
@@ -56,6 +77,9 @@ class Cron
         $this->closeTicket();
     }
 
+    /**
+     * close ticket
+     */
     public function closeTicket()
     {
         $data_time = time() - ($this->helper->getConfig('automation/auto_close_ticket') * 24 * 60 * 60);
@@ -66,19 +90,27 @@ class Cron
         }
     }
 
+    /**
+     * auto reminder ticket
+     *
+     * @return void
+     */
     public function autoReminderTicket()
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $data_time = time() - ($this->helper->getConfig('automation/auto_reminder_ticket') * 24 * 60 * 60);
         $time = date(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT, $data_time);
         $ticket = $this->ticket->getCollection()->addFieldToFilter('last_reply_at', ['gteq' => $time])->addFieldToFilter('reply_cnt', 1);
-        $user = $objectManager->create('\Magento\User\Model\User');
-        foreach ($ticket as $key => $_ticket) {
-            $department = $objectManager->create('Lof\HelpDesk\Model\Department')->load($_ticket->getData('department_id'));
+
+        foreach ($ticket as  $_ticket) {
+            if (!$_ticket->getData('department_id')) {
+                continue;
+            }
+            $department = $this->departmentFactory->create()->load((int)$_ticket->getData('department_id'));
             $data = $_ticket->getData();
             $data['email_to'] = [];
-            if (count($department->getData()) > 0) {
+            if ($department->getId() && count($department->getData()) > 0) {
                 foreach ($department->getData('users') as $key => $_user) {
+                    $user = $this->userFactory->create();
                     $user->load($_user, 'user_id');
                     $data['email_to'][] = $user->getEmail();
                 }

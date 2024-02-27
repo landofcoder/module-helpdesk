@@ -251,8 +251,17 @@ class Sender
         }
     }
 
+    /**
+     * reminder ticket
+     *
+     * @param mixed $data
+     * @return void
+     */
     public function reminderTicket($data)
     {
+        if (!isset($data['email_to']) || !$data['email_to']) {
+            return;
+        }
         foreach ($data['email_to'] as $key => $email_to) {
             try {
                 $postObject = new \Magento\Framework\DataObject();
@@ -400,7 +409,7 @@ class Sender
     }
 
     public function sendEmailChat($data)
-    {       
+    {
          try {
             $postObject = new \Magento\Framework\DataObject();
             $postObject->setData($data);
@@ -423,7 +432,7 @@ class Sender
             ->addTo($admin_email)
             ->setReplyTo($admin_email)
             ->getTransport();
- 
+
             try  {
                 $transport->sendMessage();
                 $this->inlineTranslation->resume();
@@ -448,7 +457,7 @@ class Sender
                 ->addTo($default_admin_email)
                 ->setReplyTo($default_admin_email)
                 ->getTransport();
-    
+
                 try  {
                     $transport->sendMessage();
                     $this->inlineTranslation->resume();
@@ -474,7 +483,7 @@ class Sender
     }
 
     public function sendAdminChat($data)
-    {       
+    {
          try {
             $postObject = new \Magento\Framework\DataObject();
             $postObject->setData($data);

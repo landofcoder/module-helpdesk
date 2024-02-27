@@ -67,6 +67,10 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
 
     protected $authSession;
 
+    protected $resultPageFactory;
+    protected $_coreRegistry;
+    protected $_customerSession;
+
     public function __construct(
         Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
@@ -75,7 +79,7 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Registry $registry,
         \Lof\HelpDesk\Model\Sender $sender,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList, 
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Customer\Model\Session $customerSession,
         \Lof\HelpDesk\Model\ChatFactory $chatModelFactory,
         \Magento\Backend\Model\Auth\Session $authSession
@@ -100,14 +104,14 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
      * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
-    { 
+    {
         $data = $this->_request->getPostValue();
         $data['current_time'] = $this->_helper->getCurrentTime();
         $data = $this->_helper->xss_clean_array($data);
         if(!empty($data)){
-            $responseData = []; 
+            $responseData = [];
             $message = $this->_message;
-           
+
             try{
                 $user_id = $this->getUser()->getData('user_id');
                 $user_name = $this->getUser()->getData('firstname').' '.$this->getUser()->getData('lastname');
@@ -127,7 +131,7 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
                     ->setData('answered',0)
                     ->setData('number_message',$number_message)
                     ->save();
-                //$this->_cacheTypeList->cleanType('full_page'); 
+                //$this->_cacheTypeList->cleanType('full_page');
                 if($data['customer_name'] && $this->_helper->getConfig('email_settings/enable_email_customer_chat')) {
                     $data['url'] = $this->_helper->getUrl();
                     $this->sender->sendAdminChat($data);

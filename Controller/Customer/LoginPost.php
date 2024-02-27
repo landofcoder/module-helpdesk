@@ -46,6 +46,8 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      */
     protected $session;
 
+    protected $customerUrl;
+
     /**
      *
      * @param Context $context

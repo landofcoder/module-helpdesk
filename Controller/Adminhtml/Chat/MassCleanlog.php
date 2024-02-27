@@ -54,15 +54,14 @@ class MassCleanlog extends \Magento\Backend\App\Action
      * @param ChatCollectionFactory $chatCollectionFactory
      */
     public function __construct(
-        
-        Context $context, 
-        Filter $filter, 
+
+        Context $context,
+        Filter $filter,
         CollectionFactory $collectionFactory,
         \Lof\HelpDesk\Helper\Data $helper,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         ChatCollectionFactory $chatCollectionFactory
-        )
-    {
+    ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         $this->chatCollectionFactory = $chatCollectionFactory;

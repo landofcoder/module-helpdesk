@@ -63,6 +63,8 @@ class Post extends \Magento\Framework\App\Action\Action
     protected $resultForwardFactory;
 
     protected $_ticket;
+    protected $resultPageFactory;
+    protected $_coreRegistry;
 
     /**
      * @param Context $context

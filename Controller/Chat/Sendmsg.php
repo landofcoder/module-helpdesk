@@ -79,6 +79,10 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
 
     protected $blacklistFactory;
 
+    protected $resultPageFactory;
+    protected $_coreRegistry;
+    protected $_customerSession;
+
     public function __construct(
         Context $context,
         \Magento\Store\Model\StoreManager $storeManager,
@@ -88,13 +92,13 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
         \Lof\HelpDesk\Model\Sender $sender,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList, 
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Customer\Model\Session $customerSession,
         \Lof\HelpDesk\Model\ChatFactory $chatModelFactory,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\App\Request\Http $httpRequest,
         \Lof\HelpDesk\Model\BlacklistFactory $blacklistFactory
-        ) {
+    ) {
         $this->sender = $sender;
         $this->resultPageFactory    = $resultPageFactory;
         $this->_helper              = $helper;
@@ -117,11 +121,11 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
      * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
-    { 
+    {
         $data = $this->_request->getPostValue();
         $data['is_read'] =1;
         $data['current_time'] = $this->_helper->getCurrentTime();
-        
+
         if($customer_email = $this->_customerSession->getCustomer()->getEmail()) {
             $customer_id = $this->_customerSession->getCustomerId();
             if(!isset($data["customer_id"]) || (empty($data["customer_id"]))){
@@ -200,7 +204,7 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
             }
         }
         if(!empty($data) && !empty($data['body_msg'])){
-            $responseData = []; 
+            $responseData = [];
             $message = $this->_message;
             try{
                 $data['chat_id'] = isset($data['chat_id'])?$data['chat_id']:null;
@@ -226,8 +230,8 @@ class Sendmsg extends \Magento\Framework\App\Action\Action
                     ->setData('current_url',$data['current_url'])
                     ->setData('ip', $this->_helper->getIp())
                     ->save();
-                //$this->_cacheTypeList->cleanType('full_page');  
-                
+                //$this->_cacheTypeList->cleanType('full_page');
+
                 if($this->_helper->getConfig('email_settings/email_admin_chat')) {
                     $chatId = $chat->getId();
                     if(!$data['chat_id'] || ($data['chat_id'] != $chatId)){ //only send email at first chat

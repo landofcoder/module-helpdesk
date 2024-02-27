@@ -63,6 +63,9 @@ class Msglog extends \Magento\Framework\App\Action\Action
 
     protected $chat;
     protected $_chatModelFactory;
+    protected $resultPageFactory;
+    protected $_coreRegistry;
+    protected $_customerSession;
 
     public function __construct(
         Context $context,
@@ -72,10 +75,10 @@ class Msglog extends \Magento\Framework\App\Action\Action
         \Lof\HelpDesk\Model\Chat $chat,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList, 
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Customer\Model\Session $customerSession,
         \Lof\HelpDesk\Model\ChatFactory $chatModelFactory
-        ) {
+    ) {
         $this->chat = $chat;
         $this->resultPageFactory    = $resultPageFactory;
         $this->_helper              = $helper;
@@ -95,24 +98,24 @@ class Msglog extends \Magento\Framework\App\Action\Action
      * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
-    { 
+    {
         $id = $this->getRequest()->getParam('chat_id');
         $chat = $this->_chatModelFactory->create()->load($id);
 
         if($this->_customerSession->getCustomer()->getEmail()) {
             $message = $this->_message->getCollection()->addFieldToFilter('customer_email',$this->_customerSession->getCustomer()->getEmail());
         } else {
-           $message = $this->_message->getCollection()->addFieldToFilter('chat_id',$id); 
+           $message = $this->_message->getCollection()->addFieldToFilter('chat_id',$id);
         }
 
         foreach ($message->getData() as $key => $_message) {
 
             $date_sent = $_message['created_at'];
-            $day_sent = substr($date_sent, 8, 2); 
-            $month_sent = substr($date_sent, 5, 2); 
-            $year_sent = substr($date_sent, 0, 4); 
-            $hour_sent = substr($date_sent, 11, 2); 
-            $min_sent = substr($date_sent, 14, 2); 
+            $day_sent = substr($date_sent, 8, 2);
+            $month_sent = substr($date_sent, 5, 2);
+            $year_sent = substr($date_sent, 0, 4);
+            $hour_sent = substr($date_sent, 11, 2);
+            $min_sent = substr($date_sent, 14, 2);
             $body_msg = $this->_helper->xss_clean($_message['body_msg']);
             if ($_message['user_id'])
             {
@@ -123,7 +126,7 @@ class Msglog extends \Magento\Framework\App\Action\Action
                             '.__("You").'
                         </div>
                     </div>
-                    
+
                 ';
             } else {
                 echo '
@@ -141,6 +144,6 @@ class Msglog extends \Magento\Framework\App\Action\Action
             }
         }
         exit;
-          
+
     }
 }
