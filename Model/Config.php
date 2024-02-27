@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2021 Landofcoder (https://landofcoder.com/)
@@ -41,6 +41,8 @@ class Config
      */
     protected $context;
 
+    protected $configAdminCustom;
+
     /**
      * @param \Magento\Config\Model\Config\Backend\Admin\Custom $configAdminCustom
      * @param \Magento\Framework\Module\Manager $moduleManager
@@ -52,8 +54,7 @@ class Config
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\Context $context
-    )
-    {
+    ) {
         $this->configAdminCustom = $configAdminCustom;
         $this->moduleManager = $moduleManager;
         $this->scopeConfig = $scopeConfig;

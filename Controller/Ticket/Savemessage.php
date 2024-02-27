@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2021 Landofcoder (https://landofcoder.com/)
@@ -45,6 +45,8 @@ class Savemessage extends \Magento\Framework\App\Action\Action
     protected $helper;
 
     protected $spam;
+    protected $messageFactory;
+    protected $departmentFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -67,8 +69,7 @@ class Savemessage extends \Magento\Framework\App\Action\Action
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Lof\HelpDesk\Model\MessageFactory $messageFactory,
         \Lof\HelpDesk\Model\DepartmentFactory $departmentFactory
-    )
-    {
+    ) {
         $this->spam = $spam;
         $this->sender = $sender;
         $this->resultPageFactory = $resultPageFactory;
@@ -94,7 +95,7 @@ class Savemessage extends \Magento\Framework\App\Action\Action
             $data['customer_email'] = $customerSession->getCustomer()->getEmail();
             $data['email'] = $customerSession->getCustomer()->getEmail();
             $data['is_read'] = 0;
-            //$data['department_id'] = $helper->getDepartmentByCategory($data['category_id']);          
+            //$data['department_id'] = $helper->getDepartmentByCategory($data['category_id']);
             $messageModel = $this->messageFactory->create();
 
             foreach ($this->spam->getCollection()->addFieldToFilter('is_active', 1) as $key => $spam) {

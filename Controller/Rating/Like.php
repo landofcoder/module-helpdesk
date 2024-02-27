@@ -63,6 +63,10 @@ class Like extends \Magento\Framework\App\Action\Action
      */
     protected $_likeFactory;
 
+    protected $resultPageFactory;
+    protected $_coreRegistry;
+    protected $_customerSession;
+
     /**
      * @param Context $context
      * @param \Magento\Store\Model\StoreManager $storeManager

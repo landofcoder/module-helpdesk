@@ -51,6 +51,8 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Ticket
      */
     protected $userFactory;
 
+    protected $ticketFactory;
+
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

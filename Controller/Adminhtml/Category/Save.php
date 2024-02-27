@@ -32,6 +32,7 @@ class Save extends \Lof\HelpDesk\Controller\Adminhtml\Category
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
+    protected $jsHelper;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context

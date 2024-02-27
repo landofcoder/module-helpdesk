@@ -1,18 +1,18 @@
 <?php
 /**
  * Landofcoder
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the landofcoder.com license that is
  * available through the world-wide-web at this URL:
  * https://landofcoder.com/license
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category   Landofcoder
  * @package    Lof_HelpDesk
  * @copyright  Copyright (c) 2016 Landofcoder (https://landofcoder.com/)
@@ -80,6 +80,10 @@ class Msglog extends \Magento\Framework\App\Action\Action
      */
     protected $blacklistFactory;
 
+    protected $resultPageFactory;
+    protected $_coreRegistry;
+    protected $_customerSession;
+
     /**
      * @param Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -91,7 +95,7 @@ class Msglog extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
-     * @param \Lof\HelpDesk\Model\BlacklistFactory $blacklistFactory         
+     * @param \Lof\HelpDesk\Model\BlacklistFactory $blacklistFactory
      */
     public function __construct(
         Context $context,
@@ -101,7 +105,7 @@ class Msglog extends \Magento\Framework\App\Action\Action
         \Lof\HelpDesk\Model\ChatFactory $chatFactory,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList, 
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Lof\HelpDesk\Model\BlacklistFactory $blacklistFactory
@@ -137,7 +141,7 @@ class Msglog extends \Magento\Framework\App\Action\Action
         //check if enabled config blacklist, then check if ip in blacklist, then redirect it to home, else continue action
         if ($enable_blacklist) {
             $client_ip = $this->remoteAddress->getRemoteAddress();
-            $blacklist_model = $this->blacklistFactory->create(); 
+            $blacklist_model = $this->blacklistFactory->create();
             if ($client_ip) {
                 $blacklist_model->loadByIp($client_ip);
                 if ((0 < $blacklist_model->getId()) && $blacklist_model->getStatus()) {
@@ -179,7 +183,7 @@ class Msglog extends \Magento\Framework\App\Action\Action
                 $message = $this->_messageFactory->create()
                             ->getCollection()
                             ->addFieldToFilter('chat_id',$chat_id)
-                            ->addFieldToFilter('customer_id', 
+                            ->addFieldToFilter('customer_id',
                             [
                                 ['null' => true],
                                 ['eq' => 0],
@@ -209,13 +213,13 @@ class Msglog extends \Magento\Framework\App\Action\Action
         foreach ($message as $key => $_message) {
             $i++;
             $date_sent = $_message->getCreatedAt();
-            $day_sent = substr($date_sent, 8, 2); 
-            $month_sent = substr($date_sent, 5, 2); 
-            $year_sent = substr($date_sent, 0, 4); 
-            $hour_sent = substr($date_sent, 11, 2); 
-            $min_sent = substr($date_sent, 14, 2); 
+            $day_sent = substr($date_sent, 8, 2);
+            $month_sent = substr($date_sent, 5, 2);
+            $year_sent = substr($date_sent, 0, 4);
+            $hour_sent = substr($date_sent, 11, 2);
+            $min_sent = substr($date_sent, 14, 2);
             $body_msg = $this->helper->xss_clean($_message['body_msg']);
-            
+
             if (!$_message['user_id'])
             {
                 echo '<div class="msg-user">

@@ -80,7 +80,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     private $_urlInterface;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime 
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
 
@@ -88,6 +88,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var Trackcode
      */
     protected $trackcode;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    protected $_localeDate;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -168,7 +173,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if($dateTime === "today" || !$dateTime){
             $dateTime = $this->date->gmtDate();
         }
-        
+
         $today = $this->_localeDate
             ->date(
                 new \DateTime($dateTime)

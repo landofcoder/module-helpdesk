@@ -51,6 +51,11 @@ class Saveticket extends \Magento\Framework\App\Action\Action
      */
     protected $spam;
 
+    protected $ticketFactory;
+    protected $categoryFactory;
+    protected $userFactory;
+    protected $storeManagement;
+
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory

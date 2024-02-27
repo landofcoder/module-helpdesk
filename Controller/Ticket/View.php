@@ -70,6 +70,8 @@ class View extends \Magento\Framework\App\Action\Action
      */
     protected $session;
 
+    protected $resultPageFactory;
+
     /**
      * @param Context
      * @param \Magento\Store\Model\StoreManager
