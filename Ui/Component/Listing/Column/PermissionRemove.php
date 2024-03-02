@@ -50,6 +50,7 @@ class PermissionRemove extends Column
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param UrlInterface $urlBuilder
+     * @param \Magento\Authorization\Model\Role $role
      * @param array $components
      * @param array $data
      */
@@ -57,8 +58,8 @@ class PermissionRemove extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         UrlInterface $urlBuilder,
-        array $components = [],
         \Magento\Authorization\Model\Role $role,
+        array $components = [],
         array $data = []
     )
     {
